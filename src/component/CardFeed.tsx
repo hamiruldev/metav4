@@ -61,7 +61,7 @@ const CardFeed = ({ data }: { data: any }) => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
-  console.log("data", data);
+  // console.log("data", data);
 
   return (
     <>
