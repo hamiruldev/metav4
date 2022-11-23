@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useLayoutEffect, useState } from "react";
 import _uniqueId from "lodash/uniqueId";
 
 import { usePreload, useWindowSize } from "lingo3d-react";
@@ -155,37 +155,10 @@ const World = () => {
                     },
                 }}
             >
-
-                {/* <DialogTitle sx={{ textAlign: "center", p: 0, m: 0 }}> */}
-
-                <BootstrapDialogTitle
-                    id="customized-dialog-title"
-                    onClose={handleClose}
-                ></BootstrapDialogTitle>
-
-
-                {/* <IconButton
-                    edge='end'
-                    aria-label="close"
-                    onClick={handleClose}
-                    size="large"
-                    sx={{
-                        position: 'absolute',
-                        right: 20,
-                        top: 2,
-                        color: "#FFC000",
-                        fontSize: "300px"
-                    }}
-                >
-                    <CloseIcon sx={{ fontSize: "10%" }} />
-                </IconButton> */}
-
-                {/* </DialogTitle> */}
+                <BootstrapDialogTitle id="customized-dialog-title" onClose={handleClose} />
 
                 <DialogContent>
-                    <DialogContentText id="alert-dialog-description">
-                        <Form />
-                    </DialogContentText>
+                    <Form />
                 </DialogContent>
             </Dialog>
 

@@ -50,18 +50,14 @@ const ReactPhoneInput = import.meta.env.PROD ? (PI).default : PI;
 const Form = () => {
     const [isLoading, setLoading] = useState(false);
     const [message, setMessage] = useState();
-    const [isTime, setTime] = useState(false)
-
     const matches = useMediaQuery("(max-width:425px)");
-
-
 
     return (
         <>
 
             {message != 'Message is sent.' ?
                 <>
-                    <Typography variant="h5" sx={{ color: 'white', textAlign: "center", pt: 4 }}>
+                    <Typography component={'h5'} variant="h5" sx={{ color: 'white', textAlign: "center", pt: 4 }}>
                         How can we <span style={{ color: 'red' }}> HELP  </span> you?
                     </Typography>
                     <Formik
@@ -258,22 +254,25 @@ const Form = () => {
                         )}
                     </Formik >
                 </> :
-                <Stack sx={{ alignItems: "center", p: 3 }}>
-                    <CheckCircleIcon sx={{ color: "#FFC000", fontSize: '5em' }} />
-                    <Typography variant="h3" sx={{ color: "white", textAlign: "center" }}>
-                        Message is sent.
-                    </Typography>
-                    <Typography variant="h6" sx={{ color: "white", textAlign: "center" }}>
-                        We’ll get in touch with you soon.
-                    </Typography>
-                </Stack>
-            }
+                <>
+                    <Stack sx={{ alignItems: "center", p: 3 }}>
+                        <CheckCircleIcon sx={{ color: "#FFC000", fontSize: '5em' }} />
+                        <Typography component={'h3'} variant="h3" sx={{ color: "white", textAlign: "center" }}>
+                            Message is sent.
+                        </Typography>
+                        <Typography component={'h6'} variant="h6" sDx={{ color: "white", textAlign: "center" }}>
+                            We’ll get in touch with you soon.
+                        </Typography>
+                    </Stack>
+                </>}
 
 
             {message == 'Something went wrong, please try again' &&
-                <FormHelperText sx={{ color: "red", textAlign: 'center', p: 2 }}>
-                    {message}
-                </FormHelperText>}
+                <>
+                    <FormHelperText sx={{ color: "red", textAlign: 'center', p: 2 }}>
+                        {message}
+                    </FormHelperText>
+                </>}
         </>
     );
 };

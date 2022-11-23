@@ -1,7 +1,7 @@
 import * as React from "react";
 import PropTypes from "prop-types";
 
-import { useLocation, useNavigate } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import {
   Box,
   Collapse,
@@ -16,6 +16,7 @@ import {
   Divider,
   CssBaseline,
   Drawer,
+  useMediaQuery,
 } from "@mui/material";
 import { ExpandMore, ExpandLess, Menu as MenuIcon } from "@mui/icons-material";
 import AudioBcg from "./AudioBcg";
@@ -28,8 +29,6 @@ const drawerWidth = 248;
 const submenu = ["SOUND ON / OFF", `SINGAPORE SGT ${date1}`];
 
 const SubDrawer = () => {
-  // const [open, setOpen] = React.useState(true)
-  // const [menu, setMenu] = React.useState('1 HOME')
 
   //Home & Index
   const [openHome, setOpenHome] = React.useState(true);
@@ -43,13 +42,7 @@ const SubDrawer = () => {
     setOpenServices(!openServices);
   };
 
-  const route = useLocation();
   const navigate = useNavigate();
-
-  // const handleClick = (key) => {
-  //     setMenu(key)
-  //     open ? setOpen(!open) : setOpen(true)
-  // }
 
   return (
     <>
@@ -85,7 +78,7 @@ const SubDrawer = () => {
         aria-labelledby="nested-list-subheader"
       >
         <ListItemButton
-          
+
           onClick={() => {
             navigate(`../`);
             handleClickHome;
@@ -205,7 +198,7 @@ const SubDrawer = () => {
 
         <ListItemButton>
           <ListItemText>
-            <a href="mailto:info@sysniq.my">
+            <a href="mailto:info@i-smart.com.sg">
               CONTACT US
               <br />
               info@i-smart.com.sg
@@ -214,7 +207,7 @@ const SubDrawer = () => {
         </ListItemButton>
         <ListItemButton>
           <ListItemText>
-            <a href="https://api.whatsapp.com/send?phone=6567176778">
+            <a href="tel:6567176778">
               GENERAL LINE
               <br />
               +6567176778
@@ -234,13 +227,14 @@ const SubDrawer = () => {
 function ResponsiveDrawer(props) {
   const { window } = props;
   const [mobileOpen, setMobileOpen] = React.useState(false);
-
+  const matches = useMediaQuery("(max-width:599px)");
+  const navigate = useNavigate();
+  
   const handleDrawerToggle = () => {
     setMobileOpen(!mobileOpen);
   };
 
-  const container =
-    window !== undefined ? () => window().document.body : undefined;
+  const container = window !== undefined ? () => window().document.body : undefined;
 
   return (
     <Box sx={{ display: "flex" }}>
@@ -255,7 +249,9 @@ function ResponsiveDrawer(props) {
         }}
       >
         <Toolbar>
-          <Typography variant="h6" noWrap sx={{ flexGrow: 1 }} component="div">
+          <Typography onClick={() => {
+            navigate(`../`);
+          }} variant="h6" noWrap sx={{ flexGrow: 1 }} component="div">
             iSmart Support
           </Typography>
           <IconButton
@@ -275,39 +271,42 @@ function ResponsiveDrawer(props) {
         aria-label="mailbox folders"
       >
         {/* The implementation can be swapped with js to avoid SEO duplication of links. */}
-        <Drawer
-          container={container}
-          // variant="temporary"
-          variant="persistent"
-          open={mobileOpen}
-          onClose={handleDrawerToggle}
-          ModalProps={{
-            keepMounted: true, // Better open performance on mobile.
-          }}
-          sx={{
-            display: { xs: "block", sm: "none" },
-            "& .MuiDrawer-paper": {
-              boxSizing: "border-box",
-              width: drawerWidth,
-              pt: 8,
-            },
-          }}
-        >
-          <SubDrawer />
-        </Drawer>
-        <Drawer
-          variant="permanent"
-          sx={{
-            display: { xs: "none", sm: "block" },
-            "& .MuiDrawer-paper": {
-              boxSizing: "border-box",
-              width: drawerWidth,
-            },
-          }}
-          open
-        >
-          <SubDrawer />
-        </Drawer>
+        {matches ?
+          <Drawer
+            container={container}
+            // variant="temporary"
+            variant="persistent"
+            open={mobileOpen}
+            onClose={handleDrawerToggle}
+            ModalProps={{
+              keepMounted: true, // Better open performance on mobile.
+            }}
+            sx={{
+              display: { xs: "block", sm: "none" },
+              "& .MuiDrawer-paper": {
+                boxSizing: "border-box",
+                width: drawerWidth,
+                pt: 8,
+              },
+            }}
+          >
+            <SubDrawer />
+          </Drawer>
+          :
+          <Drawer
+            variant="permanent"
+            sx={{
+              display: { xs: "none", sm: "block" },
+              "& .MuiDrawer-paper": {
+                boxSizing: "border-box",
+                width: drawerWidth,
+              },
+            }}
+            open
+          >
+            <SubDrawer />
+          </Drawer>
+        }
       </Box>
     </Box>
   );
