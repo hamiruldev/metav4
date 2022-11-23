@@ -49,7 +49,7 @@ const World = () => {
     const [open, setOpen] = useState(false);
 
     const windowSize = useWindowSize();
-    const matches = useMediaQuery("(max-width:425px)");
+    const matches = useMediaQuery("(max-width:599px)");
     const isInital = sessionStorage.getItem("inital")
 
     const progress = usePreload(
@@ -126,7 +126,7 @@ const World = () => {
 
 
             <Button className="button-glow" variant="contained" sx={{
-                top: 'calc(100vh - 90vh)',
+                top: `calc(100vh - ${matches ? "90vh" : "95vh"})`,
                 border: "2px solid #c4a300 !important",
                 backgroundColor: "rgb(0 0 0 / 80%)",
                 position: "relative",

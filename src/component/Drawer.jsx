@@ -229,7 +229,6 @@ function ResponsiveDrawer(props) {
   const [mobileOpen, setMobileOpen] = React.useState(false);
   const matches = useMediaQuery("(max-width:599px)");
   const navigate = useNavigate();
-  
   const handleDrawerToggle = () => {
     setMobileOpen(!mobileOpen);
   };
@@ -239,7 +238,8 @@ function ResponsiveDrawer(props) {
   return (
     <Box sx={{ display: "flex" }}>
       <CssBaseline />
-      <AppBar
+
+      {matches && <AppBar
         position="fixed"
         sx={{
           width: { sm: `calc(100 % - ${drawerWidth}px)` },
@@ -264,7 +264,8 @@ function ResponsiveDrawer(props) {
             <MenuIcon />
           </IconButton>
         </Toolbar>
-      </AppBar>
+      </AppBar>}
+
       <Box
         component="nav"
         sx={{ width: { sm: drawerWidth }, flexShrink: { sm: 0 } }}
@@ -274,8 +275,8 @@ function ResponsiveDrawer(props) {
         {matches ?
           <Drawer
             container={container}
-            // variant="temporary"
-            variant="persistent"
+            variant="temporary"
+            // variant="persistent"
             open={mobileOpen}
             onClose={handleDrawerToggle}
             ModalProps={{
