@@ -1,9 +1,9 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import _uniqueId from "lodash/uniqueId";
 
 import { usePreload, useWindowSize } from "lingo3d-react";
 
-import { Button, Dialog, DialogContent, DialogTitle, IconButton, Stack, useMediaQuery } from "@mui/material";
+import { Button, Dialog, DialogContent, DialogTitle, IconButton, Slide, Stack, useMediaQuery } from "@mui/material";
 import CloseIcon from '@mui/icons-material/Close'
 
 import CircularStatic from "../component/CircularProgressWithLabel";
@@ -42,6 +42,7 @@ const BootstrapDialogTitle = (props) => {
 const World = () => {
     const [isGame, setGame] = useState(false);
     const [open, setOpen] = useState(false);
+    const [startAnimate, setAnimate] = useState(false);
 
     const windowSize = useWindowSize();
     const matches = useMediaQuery("(max-width:599px)");
@@ -65,6 +66,13 @@ const World = () => {
     const handleClose = () => {
         setOpen(false);
     };
+
+    useEffect(() => {
+        const timer = setTimeout(() => {
+            isInital && setAnimate(true);
+        }, 6000);
+        return () => clearTimeout(timer);
+    }, []);
 
     if (progress < 100)
         return (
@@ -121,21 +129,26 @@ const World = () => {
 
 
 
-            {!matches && <Button className="button-glow" variant="contained"
+            {!matches && <Slide
+                direction="down"
+                in={startAnimate}
+                mountOnEnter
+                unmountOnExit
+            > <Button className="button-glow" variant="contained"
                 sx={{
                     top: `calc(100vh - ${matches ? "90vh" : "95vh"})`,
                     border: "2px solid #c4a300 !important",
                     backgroundColor: "rgb(0 0 0 / 80%)",
                     position: "relative",
-                    zIndex: "1000",
+                    zIndex: "10000",
                 }}
 
                 onClick={(() => {
                     setOpen(true)
                 })}
             >
-                Need help ?
-            </Button>}
+                    Need help ?
+                </Button></Slide>}
 
             <Dialog
                 maxWidth={"md"}
@@ -150,7 +163,6 @@ const World = () => {
                         color: "white",
                         width: "-webkit-fill-available",
                         borderRadius: "50px",
-
                     },
                 }}
             >
@@ -162,24 +174,31 @@ const World = () => {
 
             <ResponsiveDrawer />
 
-            {matches && <Button className="button-glow" variant="contained"
-                sx={{
-                    top: `calc(100vh - ${matches ? "95vh" : "95vh"})`,
-                    border: "2px solid #c4a300 !important",
-                    backgroundColor: "rgb(0 0 0 / 80%)",
-                    position: "relative",
-                    zIndex: "1000",
-                }}
+            {matches &&
+                <Slide
+                    direction="down"
+                    in={startAnimate}
+                    mountOnEnter
+                    unmountOnExit
+                >
+                    <Button className="button-glow" variant="contained"
+                        sx={{
+                            top: `calc(100vh - ${matches ? "95vh" : "95vh"})`,
+                            border: "2px solid #c4a300 !important",
+                            backgroundColor: "rgb(0 0 0 / 80%)",
+                            position: "relative",
+                            zIndex: "1000",
+                        }}
 
-                onClick={(() => {
-                    setOpen(true)
-                })}
-            >
-                Need help ?
-            </Button>}
-
+                        onClick={(() => {
+                            setOpen(true)
+                        })}
+                    >
+                        Need help ?
+                    </Button>
+                </Slide>
+            }
             <Game />
-
         </>
     );
 };
