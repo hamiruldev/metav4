@@ -6,5 +6,4 @@ export default defineConfig({
   plugins: [react()],
   base: "/", // mode: "development",
   // base: "/testing10/", // mode: "production",
-  
 });
