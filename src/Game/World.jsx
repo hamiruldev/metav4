@@ -1,9 +1,9 @@
-import React, { useLayoutEffect, useState } from "react";
+import React, { useState } from "react";
 import _uniqueId from "lodash/uniqueId";
 
 import { usePreload, useWindowSize } from "lingo3d-react";
 
-import { Button, Dialog, DialogContent, DialogContentText, DialogTitle, IconButton, Stack, useMediaQuery, styled } from "@mui/material";
+import { Button, Dialog, DialogContent, DialogTitle, IconButton, Stack, useMediaQuery } from "@mui/material";
 import CloseIcon from '@mui/icons-material/Close'
 
 import CircularStatic from "../component/CircularProgressWithLabel";
@@ -24,11 +24,6 @@ const BootstrapDialogTitle = (props) => {
                     aria-label="close"
                     onClick={onClose}
                     sx={{
-                        // position: "absolute",
-                        // right: 8,
-                        // top: 8,
-                        // color: (theme) => theme.palette.grey[500],
-
                         position: 'absolute',
                         right: 20,
                         top: 10,
@@ -125,44 +120,63 @@ const World = () => {
             }
 
 
-            <Button className="button-glow" variant="contained" sx={{
-                top: `calc(100vh - ${matches ? "90vh" : "95vh"})`,
-                border: "2px solid #c4a300 !important",
-                backgroundColor: "rgb(0 0 0 / 80%)",
-                position: "relative",
-                zIndex: "1000",
-            }}
+
+            {!matches && <Button className="button-glow" variant="contained"
+                sx={{
+                    top: `calc(100vh - ${matches ? "90vh" : "95vh"})`,
+                    border: "2px solid #c4a300 !important",
+                    backgroundColor: "rgb(0 0 0 / 80%)",
+                    position: "relative",
+                    zIndex: "1000",
+                }}
 
                 onClick={(() => {
                     setOpen(true)
                 })}
             >
                 Need help ?
-            </Button>
-
+            </Button>}
 
             <Dialog
                 maxWidth={"md"}
                 open={open}
                 onClose={handleClose}
                 sx={{
+                    position: "relative",
+                    zIndex: "10000000000000000",
                     '& .MuiDialog-paper': {
                         background: "black",
                         border: "2px solid #FFC000",
                         color: "white",
                         width: "-webkit-fill-available",
-                        borderRadius: "50px"
+                        borderRadius: "50px",
+
                     },
                 }}
             >
                 <BootstrapDialogTitle id="customized-dialog-title" onClose={handleClose} />
-
                 <DialogContent>
                     <Form />
                 </DialogContent>
             </Dialog>
 
             <ResponsiveDrawer />
+
+            {matches && <Button className="button-glow" variant="contained"
+                sx={{
+                    top: `calc(100vh - ${matches ? "95vh" : "95vh"})`,
+                    border: "2px solid #c4a300 !important",
+                    backgroundColor: "rgb(0 0 0 / 80%)",
+                    position: "relative",
+                    zIndex: "1000",
+                }}
+
+                onClick={(() => {
+                    setOpen(true)
+                })}
+            >
+                Need help ?
+            </Button>}
 
             <Game />
 

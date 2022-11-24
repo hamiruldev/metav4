@@ -13,22 +13,22 @@ import {
   IconButton,
   ListItem,
   List,
-  Divider,
   CssBaseline,
   Drawer,
   useMediaQuery,
 } from "@mui/material";
 import { ExpandMore, ExpandLess, Menu as MenuIcon } from "@mui/icons-material";
 import AudioBcg from "./AudioBcg";
+import FullScreenDialog from "./FullScreenDialog";
 
 let dateNew = new Date();
 let date1 = dateNew.toLocaleTimeString();
 
 const drawerWidth = 248;
 
-const submenu = ["SOUND ON / OFF", `SINGAPORE SGT ${date1}`];
+const SubDrawer = (props) => {
 
-const SubDrawer = () => {
+  const { handleIframe, handleIframeClose } = props
 
   //Home & Index
   const [openHome, setOpenHome] = React.useState(true);
@@ -51,6 +51,7 @@ const SubDrawer = () => {
           <img
             onClick={() => {
               navigate(`../`);
+              handleIframeClose("");
             }}
             src={`https://360xp.co/metagallery/wp-content/uploads/2022/10/ISMART-Logo-White-01.png`}
             style={{ width: 110, cursor: "pointer" }}
@@ -80,7 +81,8 @@ const SubDrawer = () => {
         <ListItemButton
 
           onClick={() => {
-            navigate(`../`);
+            // navigate(`../`);
+            handleIframe("");
             handleClickHome;
           }}
         >
@@ -92,7 +94,7 @@ const SubDrawer = () => {
           <List component="div" disablePadding>
             <ListItemButton
               onClick={() => {
-                navigate(`../portfolio`);
+                handleIframe("portfolio");
               }}
               sx={{ pl: 4 }}
             >
@@ -102,9 +104,6 @@ const SubDrawer = () => {
         </Collapse>
 
         <ListItemButton
-          // onClick={() => {
-          //     navigate(`../services`)
-          // }}
           onClick={handleClickServices}
         >
           <ListItemText primary="2 SERVICES" />
@@ -115,7 +114,7 @@ const SubDrawer = () => {
           <List component="div" disablePadding>
             <ListItemButton
               onClick={() => {
-                navigate(`../services/softwaredev`);
+                handleIframe("services/#softwaredev_section");
               }}
               sx={{ pl: 4 }}
             >
@@ -123,7 +122,7 @@ const SubDrawer = () => {
             </ListItemButton>
             <ListItemButton
               onClick={() => {
-                navigate(`../services/ecommerce`);
+                handleIframe("services/#ecommerce_section");
               }}
               sx={{ pl: 4 }}
             >
@@ -131,7 +130,7 @@ const SubDrawer = () => {
             </ListItemButton>
             <ListItemButton
               onClick={() => {
-                navigate(`../services/websitedesign`);
+                handleIframe("services/#websitedesign_section")
               }}
               sx={{ pl: 4 }}
             >
@@ -139,7 +138,7 @@ const SubDrawer = () => {
             </ListItemButton>
             <ListItemButton
               onClick={() => {
-                navigate(`../services/webminigame`);
+                handleIframe("services/#webminigame_section")
               }}
               sx={{ pl: 4 }}
             >
@@ -147,7 +146,8 @@ const SubDrawer = () => {
             </ListItemButton>
             <ListItemButton
               onClick={() => {
-                navigate(`../services/virtualevent`);
+                handleIframe("services/#virtualevent_section")
+
               }}
               sx={{ pl: 4 }}
             >
@@ -155,7 +155,7 @@ const SubDrawer = () => {
             </ListItemButton>
             <ListItemButton
               onClick={() => {
-                navigate(`../services/onlineshowroom`);
+                handleIframe(`services/#onlineshowroom_section`);
               }}
               sx={{ pl: 4 }}
             >
@@ -163,7 +163,7 @@ const SubDrawer = () => {
             </ListItemButton>
             <ListItemButton
               onClick={() => {
-                navigate(`../services/3dvisualization`);
+                handleIframe(`services/#3dvisualization_section`);
               }}
               sx={{ pl: 4 }}
             >
@@ -171,7 +171,7 @@ const SubDrawer = () => {
             </ListItemButton>
             <ListItemButton
               onClick={() => {
-                navigate(`../services/metaverse`);
+                handleIframe(`services/#metaverse_section`);
               }}
               sx={{ pl: 4 }}
             >
@@ -182,7 +182,7 @@ const SubDrawer = () => {
 
         <ListItemButton
           onClick={() => {
-            navigate(`../contact-us`);
+            handleIframe(`contact-us`);
           }}
         >
           <ListItemText primary="3 CONTACT" />
@@ -215,8 +215,6 @@ const SubDrawer = () => {
           </ListItemText>
         </ListItemButton>
       </List>
-
-
     </>
   );
 };
@@ -227,89 +225,122 @@ const SubDrawer = () => {
 function ResponsiveDrawer(props) {
   const { window } = props;
   const [mobileOpen, setMobileOpen] = React.useState(false);
+  const [iframeUrl, setIframe] = React.useState('');
+  const [open, setOpen] = React.useState(false);
   const matches = useMediaQuery("(max-width:599px)");
   const navigate = useNavigate();
+  const container = window !== undefined ? () => window().document.body : undefined;
   const handleDrawerToggle = () => {
     setMobileOpen(!mobileOpen);
   };
 
-  const container = window !== undefined ? () => window().document.body : undefined;
+  const handleIframeClose = () => {
+    setIframe('')
+  }
+
+  const handleIframe = (url) => {
+    setIframe(url)
+    setOpen(true);
+  }
+
+  const handleClickOpen = () => {
+    setOpen(true);
+  };
+
+  const handleClose = () => {
+    setOpen(false);
+  };
+
 
   return (
-    <Box sx={{ display: "flex" }}>
-      <CssBaseline />
+    <>
+      <Box sx={{ display: "flex", width: "100%" }}>
+        <CssBaseline />
 
-      {matches && <AppBar
-        position="fixed"
-        sx={{
-          width: { sm: `calc(100 % - ${drawerWidth}px)` },
-          ml: { sm: `${drawerWidth}px` },
-          bgcolor: "text.primary",
-          display: { xs: "block", md: "none", lg: "none" }, // Hidden on desktop
-        }}
-      >
-        <Toolbar>
-          <Typography onClick={() => {
-            navigate(`../`);
-          }} variant="h6" noWrap sx={{ flexGrow: 1 }} component="div">
-            iSmart Support
-          </Typography>
-          <IconButton
-            color="inherit"
-            aria-label="open drawer"
-            edge="end"
-            onClick={handleDrawerToggle}
-            sx={{ mr: 2, display: { sm: "none" } }}
-          >
-            <MenuIcon />
-          </IconButton>
-        </Toolbar>
-      </AppBar>}
+        {matches && <AppBar
+          position="fixed"
+          sx={{
+            width: { sm: `calc(100 % - ${drawerWidth}px)` },
+            ml: { sm: `${drawerWidth}px` },
+            bgcolor: "text.primary",
+            display: { xs: "block", md: "none", lg: "none" }, // Hidden on desktop
+            position: "relative",
+            zIndex: "1000000"
+          }}
+        >
+          <Toolbar>
+            <Typography onClick={() => {
+              navigate(`../`);
+              setIframe("");
+            }} variant="h6" noWrap sx={{ flexGrow: 1 }} component="div">
+              iSmart Support
+            </Typography>
+            <IconButton
+              color="inherit"
+              aria-label="open drawer"
+              edge="end"
+              onClick={handleDrawerToggle}
+              sx={{ mr: 2, display: { sm: "none" } }}
+            >
+              <MenuIcon />
+            </IconButton>
+          </Toolbar>
+        </AppBar>}
 
-      <Box
-        component="nav"
-        sx={{ width: { sm: drawerWidth }, flexShrink: { sm: 0 } }}
-        aria-label="mailbox folders"
-      >
-        {/* The implementation can be swapped with js to avoid SEO duplication of links. */}
-        {matches ?
-          <Drawer
-            container={container}
-            variant="temporary"
-            // variant="persistent"
-            open={mobileOpen}
-            onClose={handleDrawerToggle}
-            ModalProps={{
-              keepMounted: true, // Better open performance on mobile.
-            }}
-            sx={{
-              display: { xs: "block", sm: "none" },
-              "& .MuiDrawer-paper": {
-                boxSizing: "border-box",
-                width: drawerWidth,
-                pt: 8,
-              },
-            }}
-          >
-            <SubDrawer />
-          </Drawer>
-          :
-          <Drawer
-            variant="permanent"
-            sx={{
-              display: { xs: "none", sm: "block" },
-              "& .MuiDrawer-paper": {
-                boxSizing: "border-box",
-                width: drawerWidth,
-              },
-            }}
-            open
-          >
-            <SubDrawer />
-          </Drawer>
-        }
+        <Box
+          component="nav"
+          sx={{ width: { sm: drawerWidth }, flexShrink: { sm: 0 } }}
+          aria-label="mailbox folders"
+        >
+          {/* The implementation can be swapped with js to avoid SEO duplication of links. */}
+          {matches ?
+            <Drawer
+              container={container}
+              variant="temporary"
+              // variant="persistent"
+              open={mobileOpen}
+              onClose={handleDrawerToggle}
+              ModalProps={{
+                keepMounted: true, // Better open performance on mobile.
+              }}
+              sx={{
+                display: { xs: "block", sm: "none" },
+                position: "relative",
+                zIndex: "1000000",
+                "& .MuiDrawer-paper": {
+                  boxSizing: "border-box",
+                  width: drawerWidth,
+                  pt: 8,
+                },
+              }}
+            >
+              <SubDrawer handleIframeClose={handleIframeClose} handleIframe={handleIframe} />
+            </Drawer>
+            :
+            <Drawer
+              variant="permanent"
+              sx={{
+                display: { xs: "none", sm: "block" },
+                position: "relative",
+                zIndex: "1000000",
+                "& .MuiDrawer-paper": {
+                  boxSizing: "border-box",
+                  width: drawerWidth,
+                },
+              }}
+              open
+            >
+              <SubDrawer handleIframeClose={handleIframeClose} handleIframe={handleIframe} />
+            </Drawer>
+          }
+        </Box>
       </Box>
-    </Box>
+
+      {iframeUrl !== '' && <>
+        <FullScreenDialog handleClose={handleClose} open={open} url={`https://360xp.co/ismartwebsite/${iframeUrl == "portfolio" ? "" : iframeUrl}`} />
+      </>}
+    </>
+
   );
 }
 
