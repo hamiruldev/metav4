@@ -4,6 +4,7 @@ import { Button, Stack } from "@mui/material";
 
 import {
   Dummy,
+  HTML,
   Cylinder,
   Torus,
   Find,
@@ -17,10 +18,11 @@ import {
   World,
   Plane,
   Cube,
+  useSpring,
 } from "lingo3d-react";
 
 import LightArea from "../component/World/LightArea";
-
+import AnimText from "@lincode/react-anim-text";
 
 const Game = () => {
   const { width } = useWindowSize();
@@ -29,7 +31,20 @@ const Game = () => {
   const [arrowPosition, setArrowPosition] = useState({ x: 0, y: 0, z: 0 });
   const [isVisible, setVisible] = useState({ state: false, name: "" });
 
-  const viteBaseUrl = import.meta.env.VITE_BASE_URL
+  //mouseOver
+  const [mouseOver, setMouseOver] = useState(false);
+
+  const camX = mouseOver ? 50 : 0;
+  const camY = mouseOver ? 100 : 100;
+  const camZ = mouseOver ? 100 : 300;
+
+  // Camera spring animation
+  // 相机的弹簧动画
+  const xSpring = useSpring({ to: camX, bounce: 0 });
+  const ySpring = useSpring({ to: camY, bounce: 0 });
+  const zSpring = useSpring({ to: camZ, bounce: 0 });
+
+  const viteBaseUrl = import.meta.env.VITE_BASE_URL;
 
   //player movement
   const handleClick = (e) => {
@@ -60,8 +75,6 @@ const Game = () => {
       setRunning(false);
     };
   };
-
-
 
   return (
     <>
@@ -94,14 +107,7 @@ const Game = () => {
           scale={70}
           src="maps/tunnel1.glb"
           onClick={handleClick}
-        >
-
-          <Find name="Object002"
-            videoTexture="video/1SingaporeFoodFestival2022.mp4"
-            texture="img/1SingaporeFoodFestival2022.png"
-            color="#ffffff" />
-
-        </Model>
+        ></Model>
 
         <ThirdPersonCamera
           mouseControl={"drag"}
@@ -109,7 +115,12 @@ const Game = () => {
           lockTargetRotation={false}
           fov={width < 640 ? 110 : 90}
           enableDamping
-          innerY={90}
+          // innerY={90}
+          // Basiir
+          innerY={ySpring}
+          innerZ={zSpring}
+          innerX={xSpring}
+          // --Basiir
           y={100}
           zoom={1}
         >
@@ -124,7 +135,6 @@ const Game = () => {
             width={50}
             depth={50}
             rotationY={180.74}
-
             x={108.52}
             y={-2004.04}
             z={6631.41}
@@ -191,12 +201,11 @@ const Game = () => {
           </>
         )}
 
-        {/* 
-        ***TV PANEL  difference Z = 1,518.1
-        */}
+        {/*
+         ***TV PANEL  difference Z = 1,518.1
+         */}
 
         <Group y={-2079.95} name="tvscreengroup">
-
           <Plane
             name="tvkiri01"
             x={-410.94}
@@ -205,23 +214,41 @@ const Game = () => {
             scaleX={5.73}
             scaleY={3.72}
             rotationY={20}
-
             videoTexture={
-              isVisible?.state == true && isVisible?.name == "tvkiri01" ? "video/1SingaporeFoodFestival2022.mp4" : null
+              isVisible?.state == true && isVisible?.name == "tvkiri01"
+                ? "video/1SingaporeFoodFestival2022.mp4"
+                : null
             }
-
             lightMap={
-              isVisible?.state == false ? "img/1SingaporeFoodFestival2022.png" : "img/1SingaporeFoodFestival2022.png"
+              isVisible?.state == false
+                ? "img/1SingaporeFoodFestival2022.png"
+                : "img/1SingaporeFoodFestival2022.png"
             }
-
             texture={
-              isVisible?.state == false ? "img/1SingaporeFoodFestival2022.png" : "img/1SingaporeFoodFestival2022.png"
+              isVisible?.state == false
+                ? "img/1SingaporeFoodFestival2022.png"
+                : "img/1SingaporeFoodFestival2022.png"
             }
-
             onClick={(e) => {
               movePlayer(e, "tvkiri01");
             }}
-          />
+            // outline={mouseOver}
+            onMouseOver={() => setMouseOver(true)}
+            onMouseOut={() => setMouseOver(false)}
+          >
+            {mouseOver && (
+              <HTML>
+                <div style={{ color: "white" }}>
+                  <AnimText
+                    style={{ fontWeight: "bold", fontSize: 22 }}
+                    duration={1000}
+                  >
+                    Singapore Food Festival
+                  </AnimText>
+                </div>
+              </HTML>
+            )}
+          </Plane>
 
           <Plane
             name="tvkiri02"
@@ -231,24 +258,25 @@ const Game = () => {
             scaleX={5.73}
             scaleY={3.72}
             rotationY={20}
-
             videoTexture={
-              isVisible?.state == true && isVisible?.name == "tvkiri02" ? "video/3Iloomination.mp4" : null
+              isVisible?.state == true && isVisible?.name == "tvkiri02"
+                ? "video/3Iloomination.mp4"
+                : null
             }
-
             lightMapIntensity={2}
             lightMap={
-              isVisible?.state == false ? "img/3Iloomination.png" : "img/3Iloomination.png"
+              isVisible?.state == false
+                ? "img/3Iloomination.png"
+                : "img/3Iloomination.png"
             }
-
             texture={
-              isVisible?.state == false ? "img/3Iloomination.png" : "img/3Iloomination.png"
+              isVisible?.state == false
+                ? "img/3Iloomination.png"
+                : "img/3Iloomination.png"
             }
-
             onClick={(e) => {
               movePlayer(e, "tvkiri02");
             }}
-
           />
 
           <Plane
@@ -259,27 +287,26 @@ const Game = () => {
             scaleX={5.73}
             scaleY={3.72}
             rotationY={20}
-
             videoTexture={
-              isVisible?.state == true && isVisible?.name == "tvkiri03" ? "video/5Curiography.mp4" : null
+              isVisible?.state == true && isVisible?.name == "tvkiri03"
+                ? "video/5Curiography.mp4"
+                : null
             }
-
-
             lightMapIntensity={1.5}
-
             lightMap={
-              isVisible?.state == false ? "img/5Curiography.png" : "img/5Curiography.png"
+              isVisible?.state == false
+                ? "img/5Curiography.png"
+                : "img/5Curiography.png"
             }
-
             texture={
-              isVisible?.state == false ? "img/5Curiography.png" : "img/5Curiography.png"
+              isVisible?.state == false
+                ? "img/5Curiography.png"
+                : "img/5Curiography.png"
             }
-
             onClick={(e) => {
               movePlayer(e, "tvkiri03");
             }}
           />
-
 
           <Plane
             name="tvkiri04"
@@ -289,22 +316,22 @@ const Game = () => {
             scaleX={5.73}
             scaleY={3.72}
             rotationY={20}
-
             videoTexture={
-              isVisible?.state == true && isVisible?.name == "tvkiri04" ? "video/7StarPropertyAwards.mp4" : null
+              isVisible?.state == true && isVisible?.name == "tvkiri04"
+                ? "video/7StarPropertyAwards.mp4"
+                : null
             }
-
             texture={
-              isVisible?.state == false ? "img/7StarPropertyAwards.png" : "img/7StarPropertyAwards.png"
+              isVisible?.state == false
+                ? "img/7StarPropertyAwards.png"
+                : "img/7StarPropertyAwards.png"
             }
-
-
             lightMapIntensity={1}
-
             lightMap={
-              isVisible?.state == false ? "img/7StarPropertyAwards.png" : "img/7StarPropertyAwards.png"
+              isVisible?.state == false
+                ? "img/7StarPropertyAwards.png"
+                : "img/7StarPropertyAwards.png"
             }
-
             onClick={(e) => {
               movePlayer(e, "tvkiri04");
             }}
@@ -318,21 +345,22 @@ const Game = () => {
             scaleX={5.73}
             scaleY={3.72}
             rotationY={20}
-
             videoTexture={
-              isVisible?.state == true && isVisible?.name == "tvkiri05" ? "video/9InternationalConference.mp4" : null
+              isVisible?.state == true && isVisible?.name == "tvkiri05"
+                ? "video/9InternationalConference.mp4"
+                : null
             }
-
             texture={
-              isVisible?.state == false ? "img/9InternationalConference.png" : "img/9InternationalConference.png"
+              isVisible?.state == false
+                ? "img/9InternationalConference.png"
+                : "img/9InternationalConference.png"
             }
-
             lightMapIntensity={1.5}
-
             lightMap={
-              isVisible?.state == false ? "img/9InternationalConference.png" : "img/9InternationalConference.png"
+              isVisible?.state == false
+                ? "img/9InternationalConference.png"
+                : "img/9InternationalConference.png"
             }
-
             onClick={(e) => {
               movePlayer(e, "tvkiri05");
             }}
@@ -346,26 +374,26 @@ const Game = () => {
             scaleX={5.73}
             scaleY={3.72}
             rotationY={20}
-
             videoTexture={
-              isVisible?.state == true && isVisible?.name == "tvkiri06" ? "video/11VirtualStationery.mp4" : null
+              isVisible?.state == true && isVisible?.name == "tvkiri06"
+                ? "video/11VirtualStationery.mp4"
+                : null
             }
-
             texture={
-              isVisible?.state == false ? "img/11VirtualStationery.png" : "img/11VirtualStationery.png"
+              isVisible?.state == false
+                ? "img/11VirtualStationery.png"
+                : "img/11VirtualStationery.png"
             }
-
             lightMapIntensity={1}
-
             lightMap={
-              isVisible?.state == false ? "img/11VirtualStationery.png" : "img/11VirtualStationery.png"
+              isVisible?.state == false
+                ? "img/11VirtualStationery.png"
+                : "img/11VirtualStationery.png"
             }
-
             onClick={(e) => {
               movePlayer(e, "tvkiri06");
             }}
           />
-
 
           <Plane
             name="tvkiri07"
@@ -375,21 +403,22 @@ const Game = () => {
             scaleX={5.73}
             scaleY={3.72}
             rotationY={20}
-
             videoTexture={
-              isVisible?.state == true && isVisible?.name == "tvkiri07" ? "video/13VirtualPhotography.mp4" : null
+              isVisible?.state == true && isVisible?.name == "tvkiri07"
+                ? "video/13VirtualPhotography.mp4"
+                : null
             }
-
             texture={
-              isVisible?.state == false ? "img/13VirtualPhotography.png" : "img/13VirtualPhotography.png"
+              isVisible?.state == false
+                ? "img/13VirtualPhotography.png"
+                : "img/13VirtualPhotography.png"
             }
-
             lightMapIntensity={1.5}
-
             lightMap={
-              isVisible?.state == false ? "img/13VirtualPhotography.png" : "img/13VirtualPhotography.png"
+              isVisible?.state == false
+                ? "img/13VirtualPhotography.png"
+                : "img/13VirtualPhotography.png"
             }
-
             onClick={(e) => {
               movePlayer(e, "tvkiri07");
             }}
@@ -403,21 +432,22 @@ const Game = () => {
             scaleX={5.73}
             scaleY={3.72}
             rotationY={20}
-
             videoTexture={
-              isVisible?.state == true && isVisible?.name == "tvkiri08" ? "video/15HorizonSquare.mp4" : null
+              isVisible?.state == true && isVisible?.name == "tvkiri08"
+                ? "video/15HorizonSquare.mp4"
+                : null
             }
-
             texture={
-              isVisible?.state == false ? "img/15HorizonSquare.png" : "img/15HorizonSquare.png"
+              isVisible?.state == false
+                ? "img/15HorizonSquare.png"
+                : "img/15HorizonSquare.png"
             }
-
             lightMapIntensity={1.5}
-
             lightMap={
-              isVisible?.state == false ? "img/15HorizonSquare.png" : "img/15HorizonSquare.png"
+              isVisible?.state == false
+                ? "img/15HorizonSquare.png"
+                : "img/15HorizonSquare.png"
             }
-
             onClick={(e) => {
               movePlayer(e, "tvkiri08");
             }}
@@ -431,26 +461,26 @@ const Game = () => {
             scaleX={5.73}
             scaleY={3.72}
             rotationY={20}
-
             videoTexture={
-              isVisible?.state == true && isVisible?.name == "tvkiri09" ? "video/17MemeBistroBar.mp4" : null
+              isVisible?.state == true && isVisible?.name == "tvkiri09"
+                ? "video/17MemeBistroBar.mp4"
+                : null
             }
-
             texture={
-              isVisible?.state == false ? "img/17MemeBistroBar.png" : "img/17MemeBistroBar.png"
+              isVisible?.state == false
+                ? "img/17MemeBistroBar.png"
+                : "img/17MemeBistroBar.png"
             }
-
             lightMapIntensity={1.5}
-
             lightMap={
-              isVisible?.state == false ? "img/17MemeBistroBar.png" : "img/17MemeBistroBar.png"
+              isVisible?.state == false
+                ? "img/17MemeBistroBar.png"
+                : "img/17MemeBistroBar.png"
             }
-
             onClick={(e) => {
               movePlayer(e, "tvkiri09");
             }}
           />
-
 
           <Plane
             name="tvkanan01"
@@ -459,23 +489,23 @@ const Game = () => {
             z={5315.74}
             scaleX={5.73}
             scaleY={3.72}
-            rotationY={-19.70}
-
+            rotationY={-19.7}
             videoTexture={
-              isVisible?.state == true && isVisible?.name == "tvkanan01" ? "video/2VirtualPhD.mp4" : null
+              isVisible?.state == true && isVisible?.name == "tvkanan01"
+                ? "video/2VirtualPhD.mp4"
+                : null
             }
-
             texture={
-              isVisible?.state == false ? "img/2VirtualPhD.png" : "img/2VirtualPhD.png"
+              isVisible?.state == false
+                ? "img/2VirtualPhD.png"
+                : "img/2VirtualPhD.png"
             }
-
             lightMapIntensity={2.5}
-
             lightMap={
-              isVisible?.state == false ? "img/2VirtualPhD.png" : "img/2VirtualPhD.png"
+              isVisible?.state == false
+                ? "img/2VirtualPhD.png"
+                : "img/2VirtualPhD.png"
             }
-
-
             onClick={(e) => {
               movePlayer(e, "tvkanan01");
             }}
@@ -488,28 +518,23 @@ const Game = () => {
             z={3795.46}
             scaleX={5.73}
             scaleY={3.72}
-            rotationY={-20.00}
-
+            rotationY={-20.0}
             videoTexture={
-              isVisible?.state == true && isVisible?.name == "tvkanan02" ? "video/4BYD.mp4" : null
+              isVisible?.state == true && isVisible?.name == "tvkanan02"
+                ? "video/4BYD.mp4"
+                : null
             }
-
             texture={
               isVisible?.state == false ? "img/4BYD.png" : "img/4BYD.png"
             }
-
-
             lightMapIntensity={1.2}
-
             lightMap={
               isVisible?.state == false ? "img/4BYD.png" : "img/4BYD.png"
             }
-
             onClick={(e) => {
               movePlayer(e, "tvkanan02");
             }}
           />
-
 
           <Plane
             name="tvkanan03"
@@ -518,22 +543,23 @@ const Game = () => {
             z={2270.09}
             scaleX={5.73}
             scaleY={3.72}
-            rotationY={-20.00}
-
+            rotationY={-20.0}
             videoTexture={
-              isVisible?.state == true && isVisible?.name == "tvkanan03" ? "video/6Environmental.mp4" : null
+              isVisible?.state == true && isVisible?.name == "tvkanan03"
+                ? "video/6Environmental.mp4"
+                : null
             }
-
             texture={
-              isVisible?.state == false ? "img/6Environmental.png" : "img/6Environmental.png"
+              isVisible?.state == false
+                ? "img/6Environmental.png"
+                : "img/6Environmental.png"
             }
-
             lightMapIntensity={1.2}
-
             lightMap={
-              isVisible?.state == false ? "img/6Environmental.png" : "img/6Environmental.png"
+              isVisible?.state == false
+                ? "img/6Environmental.png"
+                : "img/6Environmental.png"
             }
-
             onClick={(e) => {
               movePlayer(e, "tvkanan03");
             }}
@@ -546,24 +572,20 @@ const Game = () => {
             z={751.29}
             scaleX={5.73}
             scaleY={3.72}
-            rotationY={-20.00}
-
+            rotationY={-20.0}
             videoTexture={
-              isVisible?.state == true && isVisible?.name == "tvkanan04" ? "video/8SabahVirtualTravelFair.mp4" : null
+              isVisible?.state == true && isVisible?.name == "tvkanan04"
+                ? "video/8SabahVirtualTravelFair.mp4"
+                : null
             }
-
             texture={
-              isVisible?.state == false ? "img/8SabahVirtualTravelFair.png" : "img/8SabahVirtualTravelFair.png"
+              isVisible?.state == false
+                ? "img/8SabahVirtualTravelFair.png"
+                : "img/8SabahVirtualTravelFair.png"
             }
-
             color="#ec7c7c"
-
             lightMapIntensity={7.5}
-
-            lightMap={
-              "img/8SabahVirtualTravelFair.png"
-            }
-
+            lightMap={"img/8SabahVirtualTravelFair.png"}
             onClick={(e) => {
               movePlayer(e, "tvkanan04");
             }}
@@ -576,27 +598,28 @@ const Game = () => {
             z={-598.72}
             scaleX={5.73}
             scaleY={3.72}
-            rotationY={-20.00} s
-
+            rotationY={-20.0}
+            s
             videoTexture={
-              isVisible?.state == true && isVisible?.name == "tvkanan05" ? "video/10VirtualSalesdrMCT.mp4" : null
+              isVisible?.state == true && isVisible?.name == "tvkanan05"
+                ? "video/10VirtualSalesdrMCT.mp4"
+                : null
             }
-
             texture={
-              isVisible?.state == false ? "img/10VirtualSalesdrMCT.png" : "img/10VirtualSalesdrMCT.png"
+              isVisible?.state == false
+                ? "img/10VirtualSalesdrMCT.png"
+                : "img/10VirtualSalesdrMCT.png"
             }
-
             lightMapIntensity={1.5}
-
             lightMap={
-              isVisible?.state == false ? "img/10VirtualSalesdrMCT.png" : "img/10VirtualSalesdrMCT.png"
+              isVisible?.state == false
+                ? "img/10VirtualSalesdrMCT.png"
+                : "img/10VirtualSalesdrMCT.png"
             }
-
             onClick={(e) => {
               movePlayer(e, "tvkanan05");
             }}
           />
-
 
           <Plane
             name="tvkanan06"
@@ -605,25 +628,26 @@ const Game = () => {
             z={-2111.39}
             scaleX={5.73}
             scaleY={3.72}
-            rotationY={-20.00}
+            rotationY={-20.0}
             fog={false}
-
             // color="#cbffaf"
 
             videoTexture={
-              isVisible?.state == true && isVisible?.name == "tvkanan06" ? "video/12EdenVirtualWorld.mp4" : null
+              isVisible?.state == true && isVisible?.name == "tvkanan06"
+                ? "video/12EdenVirtualWorld.mp4"
+                : null
             }
-
             texture={
-              isVisible?.state == false ? "img/12EdenVirtualWorld.png" : "img/12EdenVirtualWorld.png"
+              isVisible?.state == false
+                ? "img/12EdenVirtualWorld.png"
+                : "img/12EdenVirtualWorld.png"
             }
-
-            lightMapIntensity={300.00}
-
+            lightMapIntensity={300.0}
             lightMap={
-              isVisible?.state == false ? "img/12EdenVirtualWorld.png" : "img/12EdenVirtualWorld.png"
+              isVisible?.state == false
+                ? "img/12EdenVirtualWorld.png"
+                : "img/12EdenVirtualWorld.png"
             }
-
             onClick={(e) => {
               movePlayer(e, "tvkanan06");
             }}
@@ -636,22 +660,23 @@ const Game = () => {
             z={-3639.65}
             scaleX={5.73}
             scaleY={3.72}
-            rotationY={-20.00}
-
+            rotationY={-20.0}
             videoTexture={
-              isVisible?.state == true && isVisible?.name == "tvkanan07" ? "video/14VirtualAngelica.mp4" : null
+              isVisible?.state == true && isVisible?.name == "tvkanan07"
+                ? "video/14VirtualAngelica.mp4"
+                : null
             }
-
             texture={
-              isVisible?.state == false ? "img/14VirtualAngelica.png" : "img/14VirtualAngelica.png"
+              isVisible?.state == false
+                ? "img/14VirtualAngelica.png"
+                : "img/14VirtualAngelica.png"
             }
-
             lightMapIntensity={2}
-
             lightMap={
-              isVisible?.state == false ? "img/14VirtualAngelica.png" : "img/14VirtualAngelica.png"
+              isVisible?.state == false
+                ? "img/14VirtualAngelica.png"
+                : "img/14VirtualAngelica.png"
             }
-
             onClick={(e) => {
               movePlayer(e, "tvkanan07");
             }}
@@ -661,35 +686,32 @@ const Game = () => {
             name="tvkanan08"
             x={735.63}
             y={189.62}
-            z={-5162.10}
+            z={-5162.1}
             scaleX={5.73}
             scaleY={3.72}
-            rotationY={-20.00}
-
+            rotationY={-20.0}
             videoTexture={
-              isVisible?.state == true && isVisible?.name == "tvkanan08" ? "video/16VirtualBazaar.mp4" : null
+              isVisible?.state == true && isVisible?.name == "tvkanan08"
+                ? "video/16VirtualBazaar.mp4"
+                : null
             }
-
             texture={
-              isVisible?.state == false ? "img/16VirtualBazaar.png" : "img/16VirtualBazaar.png"
+              isVisible?.state == false
+                ? "img/16VirtualBazaar.png"
+                : "img/16VirtualBazaar.png"
             }
-
             lightMapIntensity={1}
-
             lightMap={
-              isVisible?.state == false ? "img/16VirtualBazaar.png" : "img/16VirtualBazaar.png"
+              isVisible?.state == false
+                ? "img/16VirtualBazaar.png"
+                : "img/16VirtualBazaar.png"
             }
-
             onClick={(e) => {
               movePlayer(e, "tvkanan08");
             }}
           />
-
         </Group>
-
       </World>
-
-
     </>
   );
 };

@@ -73,6 +73,20 @@
     -moz-box-shadow: " 1px 0px 5px 14px rgba(255,192,0,0.94)";
 }
 
+.button-glow2 {
+    animation: glowing 2000ms infinite;
+    position: "relative";
+    z-index: "1000";
+    float: right;
+    right: 2%;
+    margin: 12px;
+    border-radius: "6px";
+    background-color: "#00000075";
+    box-shadow: "1px 0px 5px 14px RGB(181, 216, 28)";
+    -webkit-box-shadow: "1px 0px 5px 5px rgb(255 192 0 / 94%)";
+    -moz-box-shadow: " 1px 0px 5px 14px RGB(181, 216, 28)";
+}
+
 
 @keyframes glowing {
     0% {

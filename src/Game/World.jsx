@@ -21,6 +21,7 @@ import CircularStatic from "../component/CircularProgressWithLabel";
 import ResponsiveDrawer from "../component/Drawer";
 import Form from "../component/Form";
 import Game from "./Game";
+import { Html } from "@mui/icons-material";
 
 const BootstrapDialogTitle = (props) => {
   const { children, onClose, ...other } = props;
@@ -173,6 +174,25 @@ const World = () => {
         </Button>
       </Slide> 
 
+      <Button
+          className="button-glow2"
+          variant="contained"
+          sx={{
+            position: "fixed",
+            bottom: "5vh",
+            right:" 4vh",
+            border: "2px solid #00ee28 !important",
+            backgroundColor: "rgb(0 0 0 / 80%)",
+            zIndex: "1000",
+          }}
+          onClick={() => {
+            
+            window.open('https://api.whatsapp.com/send?phone=6593722626&text=ismartwebsite', '_blank');
+          }}
+        >
+          WHATSAPP
+        </Button>
+
       <Dialog
         maxWidth={"md"}
         open={open}
@@ -197,7 +217,7 @@ const World = () => {
         </DialogContent>
       </Dialog>
 
-      <ResponsiveDrawer />
+      {/* <ResponsiveDrawer /> */}
       
       <Game />
     </>
