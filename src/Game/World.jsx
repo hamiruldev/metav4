@@ -217,7 +217,7 @@ const World = () => {
         </DialogContent>
       </Dialog>
 
-      {/* <ResponsiveDrawer /> */}
+      <ResponsiveDrawer />
       
       <Game />
     </>
