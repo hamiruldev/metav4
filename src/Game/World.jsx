@@ -14,6 +14,7 @@ import {
   useMediaQuery,
   styled,
   Slide,
+  CardMedia
 } from "@mui/material";
 import CloseIcon from "@mui/icons-material/Close";
 
@@ -22,6 +23,7 @@ import ResponsiveDrawer from "../component/Drawer";
 import Form from "../component/Form";
 import Game from "./Game";
 import { Html } from "@mui/icons-material";
+// import { waitForDebugger } from "inspector";
 
 const BootstrapDialogTitle = (props) => {
   const { children, onClose, ...other } = props;
@@ -111,7 +113,7 @@ const World = () => {
             alt="metasg"
             width={"100%"}
             height={"100%"}
-            src={`preloader/preloader.gif`}
+            src={`preloader/preloader_hd.gif`}
           />
           <CircularStatic value={progress} />
         </Stack>
@@ -225,3 +227,5 @@ const World = () => {
 };
 
 export default World;
+
+ 
