@@ -1,7 +1,7 @@
 import * as React from "react";
 import PropTypes from "prop-types";
 
-import { useNavigate } from "react-router-dom";
+import { redirect, useNavigate } from "react-router-dom";
 import {
   Box,
   Collapse,
@@ -17,6 +17,7 @@ import {
   CssBaseline,
   Drawer,
   useMediaQuery,
+  Link,
 } from "@mui/material";
 import { ExpandMore, ExpandLess, Menu as MenuIcon } from "@mui/icons-material";
 import AudioBcg from "./AudioBcg";
@@ -29,7 +30,6 @@ const drawerWidth = 248;
 const submenu = ["SOUND ON / OFF", `SINGAPORE SGT ${date1}`];
 
 const SubDrawer = () => {
-
   //Home & Index
   const [openHome, setOpenHome] = React.useState(true);
   const handleClickHome = () => {
@@ -50,7 +50,8 @@ const SubDrawer = () => {
         <Box>
           <img
             onClick={() => {
-              navigate(`../`);
+              // navigate(`../`);
+              window.location.assign("https://i-smart.com.sg/");
             }}
             src={`https://360xp.co/metagallery/wp-content/uploads/2022/10/ISMART-Logo-White-01.png`}
             style={{ width: 110, cursor: "pointer" }}
@@ -78,10 +79,10 @@ const SubDrawer = () => {
         aria-labelledby="nested-list-subheader"
       >
         <ListItemButton
-
           onClick={() => {
-            navigate(`../`);
-            handleClickHome;
+            // navigate(`../`);
+            // handleClickHome;
+            window.location.assign("https://i-smart.com.sg/");
           }}
         >
           <ListItemText primary="1 HOME" />
@@ -215,8 +216,6 @@ const SubDrawer = () => {
           </ListItemText>
         </ListItemButton>
       </List>
-
-
     </>
   );
 };
@@ -233,38 +232,49 @@ function ResponsiveDrawer(props) {
     setMobileOpen(!mobileOpen);
   };
 
-  const container = window !== undefined ? () => window().document.body : undefined;
+  const container =
+    window !== undefined ? () => window().document.body : undefined;
+
 
   return (
     <Box sx={{ display: "flex" }}>
       <CssBaseline />
 
-      {matches && <AppBar
-        position="fixed"
-        sx={{
-          width: { sm: `calc(100 % - ${drawerWidth}px)` },
-          ml: { sm: `${drawerWidth}px` },
-          bgcolor: "text.primary",
-          display: { xs: "block", md: "none", lg: "none" }, // Hidden on desktop
-        }}
-      >
-        <Toolbar>
-          <Typography onClick={() => {
-            navigate(`../`);
-          }} variant="h6" noWrap sx={{ flexGrow: 1 }} component="div">
-            iSmart Support
-          </Typography>
-          <IconButton
-            color="inherit"
-            aria-label="open drawer"
-            edge="end"
-            onClick={handleDrawerToggle}
-            sx={{ mr: 2, display: { sm: "none" } }}
-          >
-            <MenuIcon />
-          </IconButton>
-        </Toolbar>
-      </AppBar>}
+      {matches && (
+        <AppBar
+          position="fixed"
+          sx={{
+            width: { sm: `calc(100 % - ${drawerWidth}px)` },
+            ml: { sm: `${drawerWidth}px` },
+            bgcolor: "text.primary",
+            display: { xs: "block", md: "none", lg: "none" }, // Hidden on desktop
+          }}
+        >
+          <Toolbar>
+            <Link 
+            href="https://i-smart.com.sg" 
+            sx={{ color: "inherit", flexGrow: 1 }}>
+              <Typography
+                variant="h6"
+                noWrap
+                sx={{ flexGrow: 1 }}
+                component="div"
+              >
+                iSmart Support
+              </Typography>
+            </Link>
+            <IconButton
+              color="inherit"
+              aria-label="open drawer"
+              edge="end"
+              onClick={handleDrawerToggle}
+              sx={{ mr: 2, display: { sm: "none" } }}
+            >
+              <MenuIcon />
+            </IconButton>
+          </Toolbar>
+        </AppBar>
+      )}
 
       <Box
         component="nav"
@@ -272,7 +282,7 @@ function ResponsiveDrawer(props) {
         aria-label="mailbox folders"
       >
         {/* The implementation can be swapped with js to avoid SEO duplication of links. */}
-        {matches ?
+        {matches ? (
           <Drawer
             container={container}
             variant="temporary"
@@ -293,7 +303,7 @@ function ResponsiveDrawer(props) {
           >
             <SubDrawer />
           </Drawer>
-          :
+        ) : (
           <Drawer
             variant="permanent"
             sx={{
@@ -307,7 +317,7 @@ function ResponsiveDrawer(props) {
           >
             <SubDrawer />
           </Drawer>
-        }
+        )}
       </Box>
     </Box>
   );

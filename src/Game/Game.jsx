@@ -19,6 +19,7 @@ import {
   Plane,
   Cube,
   useSpring,
+  PointLight
 } from "lingo3d-react";
 
 import LightArea from "../component/World/LightArea";
@@ -108,6 +109,33 @@ const Game = () => {
           src="maps/tunnel1.glb"
           onClick={handleClick}
         ></Model>
+
+        {/* <Model
+          x={296.22}
+          y={-1600.06}
+          z={-6855.78}
+          physics="map"
+          width={245.36}
+          depth={245.36}
+          scaleX={10}
+          scaleY={10}
+          scaleZ={10}
+          src="maps/portal_frame.glb"
+          onClick={handleClick}
+        ></Model> */}
+        {/* <Model
+          x={296.22}
+          y={-1600.06}
+          z={-6855.78}
+          physics="map"
+          width={245.36}
+          depth={245.36}
+          scaleX={10}
+          scaleY={10}
+          scaleZ={10}
+          src="maps/ancient_portal_frame.glb"
+          onClick={handleClick}
+        ></Model> */}
 
         <ThirdPersonCamera
           mouseControl={"drag"}
@@ -599,7 +627,6 @@ const Game = () => {
             scaleX={5.73}
             scaleY={3.72}
             rotationY={-20.0}
-            s
             videoTexture={
               isVisible?.state == true && isVisible?.name == "tvkanan05"
                 ? "video/10VirtualSalesdrMCT.mp4"
@@ -642,7 +669,7 @@ const Game = () => {
                 ? "img/12EdenVirtualWorld.png"
                 : "img/12EdenVirtualWorld.png"
             }
-            lightMapIntensity={300.0}
+            lightMapIntensity={1.5}
             lightMap={
               isVisible?.state == false
                 ? "img/12EdenVirtualWorld.png"
@@ -711,6 +738,8 @@ const Game = () => {
             }}
           />
         </Group>
+      
+
       </World>
     </>
   );

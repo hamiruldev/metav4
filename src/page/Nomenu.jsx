@@ -19,7 +19,10 @@ const Nomenu = ({ url }) => {
           background: 'rgba(0, 0, 0, 0.87)'
         }}
         onClick={() => {
-          navigate(`../`);
+          // navigate(`../`);
+          window.location.assign("https://i-smart.com.sg/")
+
+          
         }}
       >
         Back

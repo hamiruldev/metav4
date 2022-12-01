@@ -10,6 +10,7 @@ import Iframe from "./page/Iframe";
 import Nomenu from "./page/Nomenu";
 import "./App.css";
 import Game from "./Game/Game";
+import { redirect } from "react-router-dom";
 
 function App() {
   const theme = createTheme(Theme);
