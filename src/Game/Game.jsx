@@ -261,10 +261,10 @@ const Game = () => {
               movePlayer(e, "tvkiri01");
             }}
             // outline={mouseOver}
-            onMouseOver={() => setMouseOver(true)}
-            onMouseOut={() => setMouseOver(false)}
+            // onMouseOver={() => setMouseOver(true)}
+            // onMouseOut={() => setMouseOver(false)}
           >
-            {mouseOver && (
+            {/* {mouseOver && (
               <HTML>
                 <div style={{ color: "white" }}>
                   <AnimText
@@ -275,7 +275,7 @@ const Game = () => {
                   </AnimText>
                 </div>
               </HTML>
-            )}
+            )} */}
           </Plane>
 
           <Plane
