@@ -5,7 +5,7 @@ import react from "@vitejs/plugin-react";
 export default defineConfig({
   plugins: [react()],
   base: "/", // mode: "development",
-  // base: "/basiir/test31/", // mode: "production",
+  // base: "/basiir/test32/", // mode: "production",
 });
 
 

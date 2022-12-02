@@ -10,6 +10,7 @@ import Iframe from "./page/Iframe";
 import Nomenu from "./page/Nomenu";
 import "./App.css";
 import Game from "./Game/Game";
+import Island from "./Game/Island";
 import { redirect } from "react-router-dom";
 
 function App() {
@@ -24,6 +25,7 @@ function App() {
         <BrowserRouter basename={`${viteBaseUrl}`}>
           <Routes>
             <Route path="/" element={<World />} />
+            <Route path="/island" element={<Island />} />
             <Route
               path="portfolio"
               element={<Nomenu url={"https://360xp.co/ismartwebsite/"} />}

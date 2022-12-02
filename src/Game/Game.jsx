@@ -19,7 +19,7 @@ import {
   Plane,
   Cube,
   useSpring,
-  PointLight
+  PointLight,
 } from "lingo3d-react";
 
 import LightArea from "../component/World/LightArea";
@@ -89,7 +89,7 @@ const Game = () => {
         <Setup
           pixelRatio={5}
           exposure={1}
-          defaultLightScale={0.4}
+          defaultLightScale={0.30}
           repulsion={5}
         />
 
@@ -107,8 +107,25 @@ const Game = () => {
           z={0}
           scale={70}
           src="maps/tunnel1.glb"
+          // src="maps/tunnel-v3.glb"
+          
           onClick={handleClick}
         ></Model>
+
+        {/* <Model
+          physics="map"
+          width={245.36}
+          depth={245.36}
+          scaleX={20}
+          scaleY={20}
+          scaleZ={20}
+          x={0}
+          y={0}
+          z={0}
+          scale={10}
+          src="maps/art_gallery.glb"
+          onClick={handleClick}
+        ></Model> */}
 
         {/* <Model
           x={296.22}
@@ -144,6 +161,7 @@ const Game = () => {
           fov={width < 640 ? 110 : 90}
           enableDamping
           // innerY={90}
+
           // Basiir
           innerY={ySpring}
           innerZ={zSpring}
@@ -264,7 +282,8 @@ const Game = () => {
             // onMouseOver={() => setMouseOver(true)}
             // onMouseOut={() => setMouseOver(false)}
           >
-            {/* {mouseOver && (
+            {
+              /* {mouseOver && (
               <HTML>
                 <div style={{ color: "white" }}>
                   <AnimText
@@ -275,7 +294,8 @@ const Game = () => {
                   </AnimText>
                 </div>
               </HTML>
-            )} */}
+            )} */
+            }
           </Plane>
 
           <Plane
@@ -499,11 +519,11 @@ const Game = () => {
                 ? "img/17MemeBistroBar.png"
                 : "img/17MemeBistroBar.png"
             }
-            lightMapIntensity={1.5}
+            lightMapIntensity={2}
             lightMap={
               isVisible?.state == false
-                ? "img/17MemeBistroBar.png"
-                : "img/17MemeBistroBar.png"
+                ? "img/14VirtualAngelica.png"
+                : "img/14VirtualAngelica.png"
             }
             onClick={(e) => {
               movePlayer(e, "tvkiri09");
@@ -672,8 +692,8 @@ const Game = () => {
             lightMapIntensity={1.5}
             lightMap={
               isVisible?.state == false
-                ? "img/12EdenVirtualWorld.png"
-                : "img/12EdenVirtualWorld.png"
+                ? "img/14VirtualAngelica.png"
+                : "img/14VirtualAngelica.png"
             }
             onClick={(e) => {
               movePlayer(e, "tvkanan06");
@@ -727,19 +747,17 @@ const Game = () => {
                 ? "img/16VirtualBazaar.png"
                 : "img/16VirtualBazaar.png"
             }
-            lightMapIntensity={1}
+            lightMapIntensity={2}
             lightMap={
               isVisible?.state == false
-                ? "img/16VirtualBazaar.png"
-                : "img/16VirtualBazaar.png"
+                ? "img/14VirtualAngelica.png"
+                : "img/14VirtualAngelica.png"
             }
             onClick={(e) => {
               movePlayer(e, "tvkanan08");
             }}
           />
         </Group>
-      
-
       </World>
     </>
   );
