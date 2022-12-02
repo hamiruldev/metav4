@@ -51,7 +51,8 @@ const SubDrawer = () => {
           <img
             onClick={() => {
               // navigate(`../`);
-              window.location.assign("https://i-smart.com.sg/");
+              // window.location.assign("https://i-smart.com.sg/");
+              window.location.assign("https://2vr360.com/basiir/test32/");
             }}
             src={`https://360xp.co/metagallery/wp-content/uploads/2022/10/ISMART-Logo-White-01.png`}
             style={{ width: 110, cursor: "pointer" }}
@@ -82,7 +83,9 @@ const SubDrawer = () => {
           onClick={() => {
             // navigate(`../`);
             // handleClickHome;
-            window.location.assign("https://i-smart.com.sg/");
+            // window.location.assign("https://i-smart.com.sg/");
+            window.location.assign("https://2vr360.com/basiir/test32/");
+            
           }}
         >
           <ListItemText primary="1 HOME" />
