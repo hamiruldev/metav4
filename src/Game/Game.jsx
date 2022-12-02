@@ -670,13 +670,13 @@ const Game = () => {
 
           <Plane
             name="tvkanan06"
-            x={735.63}
+            x={730.40}
             y={189.62}
-            z={-2111.39}
-            scaleX={5.73}
+            z={-2119.39}
+            scaleX={5.62}
             scaleY={3.72}
             rotationY={-20.0}
-            fog={false}
+            // fog={false}
             // color="#cbffaf"
 
             videoTexture={
@@ -689,7 +689,7 @@ const Game = () => {
                 ? "img/12EdenVirtualWorld.png"
                 : "img/12EdenVirtualWorld.png"
             }
-            lightMapIntensity={1.5}
+            lightMapIntensity={3}
             lightMap={
               isVisible?.state == false
                 ? "img/14VirtualAngelica.png"

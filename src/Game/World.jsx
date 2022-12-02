@@ -183,7 +183,7 @@ const World = () => {
             position: "fixed",
             bottom: "5vh",
             right:" 4vh",
-            border: "2px solid #00ee28 !important",
+            border: "2px solid #c4a300 !important",
             backgroundColor: "rgb(0 0 0 / 80%)",
             zIndex: "1000",
           }}

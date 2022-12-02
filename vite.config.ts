@@ -7,6 +7,3 @@ export default defineConfig({
   base: "/", // mode: "development",
   // base: "/basiir/test32/", // mode: "production",
 });
-
-
-// student farith ni
