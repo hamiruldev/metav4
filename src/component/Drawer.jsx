@@ -51,8 +51,8 @@ const SubDrawer = () => {
           <img
             onClick={() => {
               // navigate(`../`);
-              // window.location.assign("https://i-smart.com.sg/");
-              window.location.assign("https://2vr360.com/basiir/test32/");
+              window.location.assign("https://i-smart.com.sg/");
+              // window.location.assign("https://2vr360.com/basiir/test32/");
             }}
             src={`https://360xp.co/metagallery/wp-content/uploads/2022/10/ISMART-Logo-White-01.png`}
             style={{ width: 110, cursor: "pointer" }}
@@ -83,8 +83,8 @@ const SubDrawer = () => {
           onClick={() => {
             // navigate(`../`);
             // handleClickHome;
-            // window.location.assign("https://i-smart.com.sg/");
-            window.location.assign("https://2vr360.com/basiir/test32/");
+            window.location.assign("https://i-smart.com.sg/");
+            // window.location.assign("https://2vr360.com/basiir/test32/");
             
           }}
         >
@@ -256,7 +256,7 @@ function ResponsiveDrawer(props) {
           <Toolbar>
             <Link 
             href="https://i-smart.com.sg" 
-            sx={{ color: "inherit", flexGrow: 1 }}>
+            sx={{ color: "inherit", flexGrow: 1 , textDecoration: 'none'}}>
               <Typography
                 variant="h6"
                 noWrap

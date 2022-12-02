@@ -189,9 +189,10 @@ const World = () => {
           }}
           onClick={() => {
             
-            window.open('https://api.whatsapp.com/send?phone=6593722626&text=ismartwebsite', '_blank');
+            window.open('https://wasap.my/6585351972/Hi%20iSmart%20Support,%20I%20am%20coming%20from%20your%20website', '_blank');
           }}
         >
+        
           WHATSAPP
         </Button>
 
