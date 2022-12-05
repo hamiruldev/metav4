@@ -20,6 +20,7 @@ import {
   Cube,
   useSpring,
   PointLight,
+  Reflector,
 } from "lingo3d-react";
 
 import LightArea from "../component/World/LightArea";
@@ -80,7 +81,7 @@ const Game = () => {
   return (
     <>
       <World>
-        {/* <LingoEditor /> */}
+        <LingoEditor />
         {/* <Library /> */}
         {/* <Toolbar /> */}
         {/* <Editor /> */}
@@ -89,7 +90,7 @@ const Game = () => {
         <Setup
           pixelRatio={5}
           exposure={1}
-          defaultLightScale={0.30}
+          defaultLightScale={0.4}
           repulsion={5}
         />
 
@@ -106,11 +107,25 @@ const Game = () => {
           y={0}
           z={0}
           scale={70}
-          src="maps/tunnel1.glb"
-          // src="maps/tunnel-v3.glb"
-          
+          // src="maps/tunnel1.glb"
+          src="maps/tunnel-v3.glb"
           onClick={handleClick}
         ></Model>
+
+        {/* <Model
+          x={296.22}
+          y={-1600.06}
+          z={-6855.78}
+          physics="map"
+          width={245.36}
+          depth={245.36}
+          scaleX={10}
+          scaleY={10}
+          scaleZ={10}
+          // src="maps/portal_frame.glb"
+          src="maps/christmas_tree_2.glb"
+          onClick={handleClick}
+        ></Model> */}
 
         {/* <Model
           physics="map"
@@ -254,11 +269,11 @@ const Game = () => {
         <Group y={-2079.95} name="tvscreengroup">
           <Plane
             name="tvkiri01"
-            x={-410.94}
-            y={191.46}
-            z={6074.82}
+            x={-499.79}
+            y={188.33}
+            z={6074.57}
             scaleX={5.73}
-            scaleY={3.72}
+            scaleY={3.9}
             rotationY={20}
             videoTexture={
               isVisible?.state == true && isVisible?.name == "tvkiri01"
@@ -282,8 +297,7 @@ const Game = () => {
             // onMouseOver={() => setMouseOver(true)}
             // onMouseOut={() => setMouseOver(false)}
           >
-            {
-              /* {mouseOver && (
+            {/* {mouseOver && (
               <HTML>
                 <div style={{ color: "white" }}>
                   <AnimText
@@ -294,17 +308,16 @@ const Game = () => {
                   </AnimText>
                 </div>
               </HTML>
-            )} */
-            }
+            )} */}
           </Plane>
 
           <Plane
             name="tvkiri02"
-            x={-410.94}
+            x={-500.24}
             y={191.46}
-            z={4554.72}
+            z={4549.91}
             scaleX={5.73}
-            scaleY={3.72}
+            scaleY={3.9}
             rotationY={20}
             videoTexture={
               isVisible?.state == true && isVisible?.name == "tvkiri02"
@@ -329,11 +342,11 @@ const Game = () => {
 
           <Plane
             name="tvkiri03"
-            x={-410.94}
+            x={-499.15}
             y={191.46}
-            z={3029.62}
+            z={3028.49}
             scaleX={5.73}
-            scaleY={3.72}
+            scaleY={3.9}
             rotationY={20}
             videoTexture={
               isVisible?.state == true && isVisible?.name == "tvkiri03"
@@ -358,11 +371,11 @@ const Game = () => {
 
           <Plane
             name="tvkiri04"
-            x={-410.94}
-            y={191.46}
-            z={1510.52}
+            x={-500.25}
+            y={191.43}
+            z={1508.39}
             scaleX={5.73}
-            scaleY={3.72}
+            scaleY={3.9}
             rotationY={20}
             videoTexture={
               isVisible?.state == true && isVisible?.name == "tvkiri04"
@@ -387,11 +400,11 @@ const Game = () => {
 
           <Plane
             name="tvkiri05"
-            x={-410.94}
-            y={191.46}
-            z={162.42}
+            x={-501.26}
+            y={190.15}
+            z={161.5}
             scaleX={5.73}
-            scaleY={3.72}
+            scaleY={3.9}
             rotationY={20}
             videoTexture={
               isVisible?.state == true && isVisible?.name == "tvkiri05"
@@ -416,11 +429,11 @@ const Game = () => {
 
           <Plane
             name="tvkiri06"
-            x={-410.94}
+            x={-500.76}
             y={191.46}
             z={-1360.49}
             scaleX={5.73}
-            scaleY={3.72}
+            scaleY={3.9}
             rotationY={20}
             videoTexture={
               isVisible?.state == true && isVisible?.name == "tvkiri06"
@@ -445,11 +458,11 @@ const Game = () => {
 
           <Plane
             name="tvkiri07"
-            x={-410.94}
+            x={-498.91}
             y={191.46}
-            z={-2880.91}
+            z={-2879.23}
             scaleX={5.73}
-            scaleY={3.72}
+            scaleY={3.9}
             rotationY={20}
             videoTexture={
               isVisible?.state == true && isVisible?.name == "tvkiri07"
@@ -474,11 +487,11 @@ const Game = () => {
 
           <Plane
             name="tvkiri08"
-            x={-410.94}
+            x={-502.75}
             y={191.46}
-            z={-4404.53}
+            z={-4399.99}
             scaleX={5.73}
-            scaleY={3.72}
+            scaleY={3.9}
             rotationY={20}
             videoTexture={
               isVisible?.state == true && isVisible?.name == "tvkiri08"
@@ -503,11 +516,11 @@ const Game = () => {
 
           <Plane
             name="tvkiri09"
-            x={-410.94}
+            x={-500.97}
             y={191.46}
             z={-5923.44}
             scaleX={5.73}
-            scaleY={3.72}
+            scaleY={3.9}
             rotationY={20}
             videoTexture={
               isVisible?.state == true && isVisible?.name == "tvkiri09"
@@ -532,11 +545,11 @@ const Game = () => {
 
           <Plane
             name="tvkanan01"
-            x={735.63}
-            y={189.62}
-            z={5315.74}
+            x={645.06}
+            y={191.54}
+            z={5312.1}
             scaleX={5.73}
-            scaleY={3.72}
+            scaleY={3.8}
             rotationY={-19.7}
             videoTexture={
               isVisible?.state == true && isVisible?.name == "tvkanan01"
@@ -561,11 +574,11 @@ const Game = () => {
 
           <Plane
             name="tvkanan02"
-            x={735.63}
-            y={189.62}
-            z={3795.46}
+            x={646.35}
+            y={195.08}
+            z={3789.78}
             scaleX={5.73}
-            scaleY={3.72}
+            scaleY={3.8}
             rotationY={-20.0}
             videoTexture={
               isVisible?.state == true && isVisible?.name == "tvkanan02"
@@ -586,11 +599,11 @@ const Game = () => {
 
           <Plane
             name="tvkanan03"
-            x={735.63}
-            y={189.62}
+            x={646.44}
+            y={196.94}
             z={2270.09}
             scaleX={5.73}
-            scaleY={3.72}
+            scaleY={3.8}
             rotationY={-20.0}
             videoTexture={
               isVisible?.state == true && isVisible?.name == "tvkanan03"
@@ -615,11 +628,11 @@ const Game = () => {
 
           <Plane
             name="tvkanan04"
-            x={735.63}
-            y={189.62}
-            z={751.29}
+            x={645.08}
+            y={190.65}
+            z={745.38}
             scaleX={5.73}
-            scaleY={3.72}
+            scaleY={3.8}
             rotationY={-20.0}
             videoTexture={
               isVisible?.state == true && isVisible?.name == "tvkanan04"
@@ -641,11 +654,11 @@ const Game = () => {
 
           <Plane
             name="tvkanan05"
-            x={735.63}
-            y={189.62}
+            x={647.64}
+            y={191.97}
             z={-598.72}
             scaleX={5.73}
-            scaleY={3.72}
+            scaleY={3.8}
             rotationY={-20.0}
             videoTexture={
               isVisible?.state == true && isVisible?.name == "tvkanan05"
@@ -670,11 +683,11 @@ const Game = () => {
 
           <Plane
             name="tvkanan06"
-            x={730.40}
-            y={189.62}
-            z={-2119.39}
-            scaleX={5.62}
-            scaleY={3.72}
+            x={641.05}
+            y={191.01}
+            z={-2119.97}
+            scaleX={5.8}
+            scaleY={3.8}
             rotationY={-20.0}
             // fog={false}
             // color="#cbffaf"
@@ -702,11 +715,11 @@ const Game = () => {
 
           <Plane
             name="tvkanan07"
-            x={735.63}
-            y={189.62}
+            x={647.02}
+            y={192.37}
             z={-3639.65}
             scaleX={5.73}
-            scaleY={3.72}
+            scaleY={3.8}
             rotationY={-20.0}
             videoTexture={
               isVisible?.state == true && isVisible?.name == "tvkanan07"
@@ -731,11 +744,11 @@ const Game = () => {
 
           <Plane
             name="tvkanan08"
-            x={735.63}
-            y={189.62}
+            x={645.88}
+            y={194.66}
             z={-5162.1}
             scaleX={5.73}
-            scaleY={3.72}
+            scaleY={3.8}
             rotationY={-20.0}
             videoTexture={
               isVisible?.state == true && isVisible?.name == "tvkanan08"
@@ -758,6 +771,15 @@ const Game = () => {
             }}
           />
         </Group>
+        <Reflector
+          x={71.21}
+          y={-2102.46}
+          z={6110.8}
+          scaleX={48.02}
+          scaleY={264.46}
+          rotationZ={0.68}
+          normalScale={{ isVector2: true, x: 1, y: 1 }}
+        />
       </World>
     </>
   );

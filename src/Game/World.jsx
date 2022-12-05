@@ -71,6 +71,7 @@ const World = () => {
       `3dCharacter/new/character.glb`,
       `3dCharacter/new/BreathingIdle.fbx`,
       `3dCharacter/new/Running.fbx`,
+      `maps/tunnel-v3.glb`,
     ],
     "50kb"
   );
