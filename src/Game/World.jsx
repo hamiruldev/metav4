@@ -1,4 +1,4 @@
-import React, { useLayoutEffect, useState, useEffect  } from "react";
+import React, { useLayoutEffect, useState, useEffect } from "react";
 import _uniqueId from "lodash/uniqueId";
 
 import { usePreload, useWindowSize } from "lingo3d-react";
@@ -14,11 +14,12 @@ import {
   useMediaQuery,
   styled,
   Slide,
-  CardMedia
+  CardMedia,
 } from "@mui/material";
 import CloseIcon from "@mui/icons-material/Close";
 
 import CircularStatic from "../component/CircularProgressWithLabel";
+import LoadingProgress from "../component/LoadingProgress";
 import ResponsiveDrawer from "../component/Drawer";
 import Form from "../component/Form";
 import Game from "./Game";
@@ -72,7 +73,7 @@ const World = () => {
       `3dCharacter/new/BreathingIdle.fbx`,
       `3dCharacter/new/Running.fbx`,
     ],
-    "50kb"
+    "5kb"
   );
 
   const handleGame = () => {
@@ -88,13 +89,12 @@ const World = () => {
     const timer = setTimeout(() => {
       // console.log('This will run after 5 second!')
       setAnimate(true);
-
     }, 5000);
     return () => clearTimeout(timer);
   }, []);
 
   if (progress < 100)
-  // if the game is still loading
+    // if the game is still loading
     return (
       <div
         style={{
@@ -109,13 +109,15 @@ const World = () => {
         }}
       >
         <Stack sx={{ justifyContent: "center", alignItems: "center" }}>
-          <img
+          {/* <img
             alt="metasg"
             width={"100%"}
             height={"100%"}
-            src={`preloader/preloader_hd.gif`}
-          />
-          <CircularStatic value={progress} />
+            src={`preloader/preloader.gif`}
+          /> */}
+         
+          {/* <CircularStatic value={progress} /> */}
+          <LoadingProgress value={progress} />
         </Stack>
       </div>
     );
@@ -174,27 +176,28 @@ const World = () => {
         >
           Need help ?
         </Button>
-      </Slide> 
+      </Slide>
 
       <Button
-          className="button-glow2"
-          variant="contained"
-          sx={{
-            position: "fixed",
-            bottom: "5vh",
-            right:" 4vh",
-            border: "2px solid #c4a300 !important",
-            backgroundColor: "rgb(0 0 0 / 80%)",
-            zIndex: "1000",
-          }}
-          onClick={() => {
-            
-            window.open('https://wasap.my/6585351972/Hi%20iSmart%20Support,%20I%20am%20coming%20from%20your%20website', '_blank');
-          }}
-        >
-        
-          WHATSAPP
-        </Button>
+        className="button-glow2"
+        variant="contained"
+        sx={{
+          position: "fixed",
+          bottom: "5vh",
+          right: " 4vh",
+          border: "2px solid #c4a300 !important",
+          backgroundColor: "rgb(0 0 0 / 80%)",
+          zIndex: "1000",
+        }}
+        onClick={() => {
+          window.open(
+            "https://wasap.my/6585351972/Hi%20iSmart%20Support,%20I%20am%20coming%20from%20your%20website",
+            "_blank"
+          );
+        }}
+      >
+        WHATSAPP
+      </Button>
 
       <Dialog
         maxWidth={"md"}
@@ -221,12 +224,10 @@ const World = () => {
       </Dialog>
 
       <ResponsiveDrawer />
-      
+
       <Game />
     </>
   );
 };
 
 export default World;
-
- 
