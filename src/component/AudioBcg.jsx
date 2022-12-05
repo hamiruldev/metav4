@@ -1,4 +1,4 @@
-import React, { useEffect, useState, useRef } from "react";
+import React, { useEffect, useState, useLayoutEffect } from "react";
 import MusicOffIcon from "@mui/icons-material/MusicOff";
 import MusicNoteIcon from "@mui/icons-material/MusicNote";
 import { Button } from "@mui/material";
@@ -6,25 +6,18 @@ import { Button } from "@mui/material";
 const AudioBcg = () => {
     var isChrome = /Chrome/.test(navigator.userAgent) && /Google Inc/.test(navigator.vendor);
 
-    const videoRef = useRef()
+    const audio = document.getElementById("playAudio")
+
     const [isAudio, setAudio] = useState(true);
 
-    useEffect(() => {
-        setTimeout(() => {
-            if (!isAudio) videoRef?.current?.pause();
-            if (isAudio) {
-                videoRef?.current.play()
-            }
-        }, 1000);
-
-
+    useLayoutEffect(() => {
+        if (!isAudio) audio?.pause();
+        if (isAudio) audio?.play();
     }, [isAudio]);
 
     return (
         <>
             <audio
-                autoPlay
-                ref={videoRef}
                 controls
                 loop
                 style={{ position: "relative", zIndex: "100", display: "none" }}

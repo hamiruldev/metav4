@@ -78,6 +78,8 @@ const World = () => {
     const handleGame = () => {
         setGame(true);
         isInital == null && sessionStorage.setItem("inital", true);
+        const audio = document.getElementById("playAudio")
+        audio.play()
     };
 
     const handleClose = () => {
@@ -219,7 +221,7 @@ const World = () => {
                 </DialogContent>
             </Dialog>
 
-            {/* <ResponsiveDrawer /> */}
+            <ResponsiveDrawer />
 
             <Game />
         </>

@@ -34,6 +34,7 @@ const Game = () => {
   const isMobile = width < height;
   const dummyRef = useRef(null);
   const portalRef = useRef(null);
+
   const [running, setRunning] = useState(false);
   const [arrowPosition, setArrowPosition] = useState({ x: 0, y: 0, z: 0 });
   const [isVisible, setVisible] = useState({ state: false, name: "" });
@@ -86,19 +87,21 @@ const Game = () => {
   const openPortal = (url) => {
     window.open(url, "_blank  ")
   }
+
   return (
     <>
+      <Stats />
       <World>
         {/* <LingoEditor /> */}
         {/* <Library /> */}
         {/* <Toolbar /> */}
         {/* <Editor /> */}
         {/* <Environment /> */}
-        <Stats />
+
         <Setup
           pixelRatio={5}
           exposure={1}
-          defaultLightScale={0.30}
+          defaultLightScale={0.2}
           repulsion={5}
         />
 
@@ -148,24 +151,23 @@ const Game = () => {
           })}
         />
 
-        {isMobile &&
-          <AreaLight
-            x={474.83}
-            y={-1698.09}
-            z={-7039.36}
-            rotationX={177.94}
-            scale={3}
-            opacityFactor={10}
-            intensity={50.00}
-            color={"#0368ff"}
-          />
-        }
+        <AreaLight
+          x={474.83}
+          y={-1698.09}
+          z={-7039.36}
+          rotationX={177.94}
+          scale={3}
+          opacityFactor={10}
+          intensity={50.00}
+          color={"#0368ff"}
+        />
+
         <Model
           name="portalModel"
 
           ref={portalRef}
           adjustColor="#00fff2"
-          x={296.22}
+          x={250.22}
           y={-1640.06}
           z={-6855.78}
           physics="map"
