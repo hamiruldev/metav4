@@ -67,13 +67,8 @@ const World = () => {
   const isInital = sessionStorage.getItem("inital");
 
   const progress = usePreload(
-    [
-      `maps/tunnel1.glb`,
-      `3dCharacter/new/character.glb`,
-      `3dCharacter/new/BreathingIdle.fbx`,
-      `3dCharacter/new/Running.fbx`,
-    ],
-    "16MB"
+    ["maps/tunnel1.glb","3dCharacter/new/character.glb","3dCharacter/new/BreathingIdle.fbx","3dCharacter/new/Running.fbx"],
+    "16mb"
   );
 
   const handleGame = () => {
@@ -117,7 +112,7 @@ const World = () => {
           /> */}
          
           {/* <CircularStatic value={progress} /> */}
-          <LoadingProgress value={progress} />
+          <LoadingProgress value={Math.floor(progress)}/>
         </Stack>
       </div>
     );

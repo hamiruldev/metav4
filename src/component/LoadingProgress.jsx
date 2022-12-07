@@ -14,7 +14,7 @@ function LinearProgressWithLabel(props) {
         <Typography
           variant="body2"
           sx={{ color: "rgb(255 255 255 / 80%)" }}
-        >{`${Math.round(props?.value)}%`}</Typography>
+        >{props?.value}%</Typography>
       </Box>
     </Box>
    
