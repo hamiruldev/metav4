@@ -73,7 +73,7 @@ const World = () => {
       `3dCharacter/new/BreathingIdle.fbx`,
       `3dCharacter/new/Running.fbx`,
     ],
-    "5kb"
+    "16MB"
   );
 
   const handleGame = () => {
