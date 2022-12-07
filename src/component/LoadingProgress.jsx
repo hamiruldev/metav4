@@ -29,7 +29,6 @@ export default function LinearDeterminate({ value }) {
       color="#111"
       fontFamily="Baloo Thambi, cursive"
       fontSize={mobileVersion ? "2em" : "7rem"}
-
     >
       <div className="text-container">
         <span>L</span>
