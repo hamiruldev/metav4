@@ -4,7 +4,7 @@ import LinearProgress from "@mui/material/LinearProgress";
 import { Typography, useMediaQuery } from "@mui/material";
 
 function LinearProgressWithLabel(props) {
-  console.log(props?.value)
+  // console.log(props?.value)
   return (
     <Box sx={{ display: "flex", alignItems: "center" }}>
       <Box sx={{ width: "100%", mr: 1 }}>

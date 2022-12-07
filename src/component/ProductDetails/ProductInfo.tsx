@@ -72,7 +72,7 @@ const ProductInfo = ({ product }: { product: any }) => {
     },
     validationSchema,
     onSubmit: (values) => {
-      console.log("values", values);
+      // console.log("values", values);
 
       // console.log("produc---t", product);
     },
@@ -92,7 +92,7 @@ const ProductInfo = ({ product }: { product: any }) => {
 
   const sendDataToParent = (index: any) => {
     // the callback. Use a better name
-    console.log("index--->", index);
+    // console.log("index--->", index);
     setDeliverId(index?.id);
   };
 
@@ -115,7 +115,7 @@ const ProductInfo = ({ product }: { product: any }) => {
 
     const { id, image, name, price, quantity } = values;
 
-    console.log("deliverId", deliverId);
+    // console.log("deliverId", deliverId);
 
     if (deliverId == undefined) {
       setErrors({ delivery_schedule_id: "please select one of the date" });
@@ -136,7 +136,7 @@ const ProductInfo = ({ product }: { product: any }) => {
           a?.click();
 
           setStatus("Add to Cart successfully");
-          console.log("res", res);
+          // console.log("res", res);
         }
       });
     }

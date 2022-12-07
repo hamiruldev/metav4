@@ -18,7 +18,7 @@ const PopInstruction = () => {
     a?.click();
   }, [a]);
 
-  console.log("a", a);
+  // console.log("a", a);
 
   return (
     <>

@@ -124,7 +124,7 @@ const AddToCartTable = ({ data }: { data: any }) => {
     },
     validationSchema,
     onSubmit: (values) => {
-      console.log("values", values);
+      // console.log("values", values);
     },
   });
 
@@ -169,7 +169,7 @@ const AddToCartTable = ({ data }: { data: any }) => {
       delivery_schedule_id: scheduleId?.id,
     };
 
-    console.log("FormDataObj", FormDataObj);
+    // console.log("FormDataObj", FormDataObj);
 
     setAddToCart(FormDataObj).then((res: any) => {
       if (res?.data?.success == "Add to Cart successfully") {
@@ -177,15 +177,15 @@ const AddToCartTable = ({ data }: { data: any }) => {
         a?.click();
 
         setStatus("Date Updated Successfully");
-        console.log("res----?", res);
+        // console.log("res----?", res);
       }
     });
   };
 
   const removeCart = async (id: any) => {
-    console.log("id", id);
+    // console.log("id", id);
     deleteCartByCartId(id).then((res) => {
-      console.log("res delete", res);
+      // console.log("res delete", res);
       const a = window.document.getElementById("buttonAddToCartRefresh");
       a?.click();
       const rowData = window.document.getElementById(`tr${id}`);
@@ -201,7 +201,7 @@ const AddToCartTable = ({ data }: { data: any }) => {
   //   }
   // }, [productById, availableDate]);
 
-  console.log("data", data);
+  // console.log("data", data);
 
   return (
     <>

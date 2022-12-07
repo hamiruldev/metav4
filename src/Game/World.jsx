@@ -67,7 +67,12 @@ const World = () => {
   const isInital = sessionStorage.getItem("inital");
 
   const progress = usePreload(
-    ["maps/tunnel1.glb","3dCharacter/new/character.glb","3dCharacter/new/BreathingIdle.fbx","3dCharacter/new/Running.fbx"],
+    [
+      "maps/tunnel1.glb",
+      "3dCharacter/new/character.glb",
+      "3dCharacter/new/BreathingIdle.fbx",
+      "3dCharacter/new/Running.fbx",
+    ],
     "16mb"
   );
 
@@ -90,6 +95,7 @@ const World = () => {
 
   if (progress < 100)
     // if the game is still loading
+    // console.log("progress", progress)
     return (
       <div
         style={{
@@ -110,9 +116,9 @@ const World = () => {
             height={"100%"}
             src={`preloader/preloader.gif`}
           /> */}
-         
+
           {/* <CircularStatic value={progress} /> */}
-          <LoadingProgress value={Math.floor(progress)}/>
+          <LoadingProgress value={Math.floor(progress)} />
         </Stack>
       </div>
     );
@@ -147,14 +153,7 @@ const World = () => {
         />
       )}
 
-      <Slide
-        direction="down"
-        in={startAnimate}
-        // style={{ transformOrigin: "0 0 0" }}
-        // {...(startAnimate ? { timeout: 1000 } : {})}
-        mountOnEnter
-        unmountOnExit
-      >
+      <Slide direction="down" in={startAnimate} mountOnEnter unmountOnExit>
         <Button
           className="button-glow"
           variant="contained"
