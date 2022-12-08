@@ -73,7 +73,7 @@ const World = () => {
       "3dCharacter/new/BreathingIdle.fbx",
       "3dCharacter/new/Running.fbx",
     ],
-    "16mb"
+    "0.09mb"
   );
 
   const handleGame = () => {
@@ -95,7 +95,7 @@ const World = () => {
 
   if (progress < 100)
     // if the game is still loading
-    // console.log("progress", progress)
+
     return (
       <div
         style={{
@@ -109,6 +109,7 @@ const World = () => {
           width: "100vw",
         }}
       >
+        {console.log("progress", progress)}
         <Stack sx={{ justifyContent: "center", alignItems: "center" }}>
           {/* <img
             alt="metasg"
@@ -134,11 +135,10 @@ const World = () => {
             // setAnimate(true);
           }}
           sx={{
-            background: `url( ${
-              windowSize.width < 700
-                ? "preloader/popMobile.png"
-                : "preloader/popDesktop.png"
-            })`,
+            background: `url( ${windowSize.width < 700
+              ? "preloader/popMobile.png"
+              : "preloader/popDesktop.png"
+              })`,
             width: "100%",
             height: "100vh",
             border: "0px",

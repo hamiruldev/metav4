@@ -20,13 +20,15 @@ import {
   Cube,
   useSpring,
   PointLight,
+  Joystick,
 } from "lingo3d-react";
 
 import LightArea from "../component/World/LightArea";
 import AnimText from "@lincode/react-anim-text";
 
 const Game = () => {
-  const { width } = useWindowSize();
+  const { width, height } = useWindowSize();
+  const isMobile = width < height;
   const dummyRef = useRef(null);
   const [running, setRunning] = useState(false);
   const [arrowPosition, setArrowPosition] = useState({ x: 0, y: 0, z: 0 });
@@ -65,14 +67,14 @@ const Game = () => {
   const movePlayer = (e, id) => {
     setVisible({ state: true, name: id });
     const dummy = dummyRef.current;
-    // if (!dummy) return;
 
     setArrowPosition(e.point);
-    dummy.lookTo(e.point.x, undefined, e.point.z + 200, 0.2);
-    dummy.moveTo(e.point.x, undefined, e.point.z + 200, 12);
-    setRunning(true);
 
-    dummy.onMoveToEnd = () => {
+    !isMobile && dummy.lookTo(e.point.x, undefined, e.point.z + 200, 0.2);
+    !isMobile && dummy.moveTo(e.point.x, undefined, e.point.z + 200, 12);
+    !isMobile && setRunning(true);
+
+    if (!isMobile) dummy.onMoveToEnd = () => {
       setRunning(false);
     };
   };
@@ -96,6 +98,7 @@ const Game = () => {
         <LightArea />
 
         <Model
+          name="worldmap"
           physics="map"
           width={245.36}
           depth={245.36}
@@ -108,8 +111,7 @@ const Game = () => {
           scale={70}
           src="maps/tunnel1.glb"
           // src="maps/tunnel-v3.glb"
-          
-          onClick={handleClick}
+          onClick={!isMobile && handleClick}
         ></Model>
 
         {/* <Model
@@ -157,7 +159,7 @@ const Game = () => {
         <ThirdPersonCamera
           mouseControl={"drag"}
           active={true}
-          lockTargetRotation={false}
+          lockTargetRotation={isMobile ? true : false}
           fov={width < 640 ? 110 : 90}
           enableDamping
           // innerY={90}
@@ -174,6 +176,8 @@ const Game = () => {
             id="player"
             name="player"
             ref={dummyRef}
+            strideMove
+            strideMode="free"
             scale={1.5}
             src="3dCharacter/new/character.glb"
             physics="character"
@@ -278,9 +282,9 @@ const Game = () => {
             onClick={(e) => {
               movePlayer(e, "tvkiri01");
             }}
-            // outline={mouseOver}
-            // onMouseOver={() => setMouseOver(true)}
-            // onMouseOut={() => setMouseOver(false)}
+          // outline={mouseOver}
+          // onMouseOver={() => setMouseOver(true)}
+          // onMouseOut={() => setMouseOver(false)}
           >
             {
               /* {mouseOver && (
@@ -759,6 +763,26 @@ const Game = () => {
           />
         </Group>
       </World>
+
+      {isMobile && (
+        <Joystick
+          onMove={(e) => {
+            const fox = dummyRef.current;
+            if (!fox) return;
+
+            fox.strideForward = -e.y * 7;
+            fox.strideRight = -e.x * 5;
+          }}
+          onMoveEnd={() => {
+            const fox = dummyRef.current;
+            if (!fox) return;
+
+            fox.strideForward = 0;
+            fox.strideRight = 0;
+          }}
+        />
+      )}
+
     </>
   );
 };
