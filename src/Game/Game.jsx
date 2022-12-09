@@ -81,7 +81,7 @@ const Game = () => {
   return (
     <>
       <World>
-        <LingoEditor />
+        {/* <LingoEditor /> */}
         {/* <Library /> */}
         {/* <Toolbar /> */}
         {/* <Editor /> */}
@@ -779,6 +779,10 @@ const Game = () => {
           scaleY={264.46}
           rotationZ={0.68}
           normalScale={{ isVector2: true, x: 1, y: 1 }}
+          color="#5c5757"
+          resolution={556}
+          blur={800}
+          opacity={0.4}
         />
       </World>
     </>
