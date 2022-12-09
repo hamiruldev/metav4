@@ -115,7 +115,7 @@ const World = () => {
             alt="metasg"
             width={"100%"}
             height={"100%"}
-            src={`preloader/new.gif`}
+            src={`preloader/preloader.gif`}
           />
           {/* <CircularStatic value={progress} /> */}
           {/* <Typography>Loading </Typography>   */}
