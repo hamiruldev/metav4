@@ -14,7 +14,8 @@ import {
   useMediaQuery,
   styled,
   Slide,
-  CardMedia
+  CardMedia,
+  Typography,
 } from "@mui/material";
 import CloseIcon from "@mui/icons-material/Close";
 
@@ -114,9 +115,10 @@ const World = () => {
             alt="metasg"
             width={"100%"}
             height={"100%"}
-            src={`preloader/preloader_hd.gif`}
+            src={`preloader/new.gif`}
           />
-          <CircularStatic value={progress} />
+          {/* <CircularStatic value={progress} /> */}
+          {/* <Typography>Loading </Typography>   */}
         </Stack>
       </div>
     );
