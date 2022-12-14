@@ -28,12 +28,12 @@ function App() {
             <Route path="/island" element={<Island />} />
             <Route
               path="portfolio"
-              element={<Nomenu url={"https://360xp.co/ismartwebsite/"} />}
+              element={<Nomenu url={"https://www.i-smart.com.sg/portfolio/"} />}
             />
             <Route
               path="services"
               element={
-                <Iframe url={"https://360xp.co/ismartwebsite/services/"} />
+                <Iframe url={"https://www.i-smart.com.sg/service/"} />
               }
             />
             <Route
