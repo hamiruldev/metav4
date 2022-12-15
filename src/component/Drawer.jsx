@@ -1,7 +1,7 @@
 import * as React from "react";
 import PropTypes from "prop-types";
 
-import { redirect, useNavigate } from "react-router-dom";
+import { Outlet, redirect, useNavigate } from "react-router-dom";
 import {
   Box,
   Collapse,
@@ -19,7 +19,12 @@ import {
   useMediaQuery,
   Link,
 } from "@mui/material";
-import { ExpandMore, ExpandLess, Menu as MenuIcon } from "@mui/icons-material";
+import {
+  ExpandMore,
+  ExpandLess,
+  Menu as MenuIcon,
+  Height,
+} from "@mui/icons-material";
 import AudioBcg from "./AudioBcg";
 
 let dateNew = new Date();
@@ -85,7 +90,6 @@ const SubDrawer = () => {
             // handleClickHome;
             window.location.assign("https://www.i-smart.com.sg/");
             // window.location.assign("https://2vr360.com/basiir/test32/");
-            
           }}
         >
           <ListItemText primary="1 HOME" />
@@ -238,7 +242,6 @@ function ResponsiveDrawer(props) {
   const container =
     window !== undefined ? () => window().document.body : undefined;
 
-
   return (
     <Box sx={{ display: "flex" }}>
       <CssBaseline />
@@ -254,9 +257,10 @@ function ResponsiveDrawer(props) {
           }}
         >
           <Toolbar>
-            <Link 
-            href="https://www.i-smart.com.sg" 
-            sx={{ color: "inherit", flexGrow: 1 , textDecoration: 'none'}}>
+            <Link
+              href="https://www.i-smart.com.sg"
+              sx={{ color: "inherit", flexGrow: 1, textDecoration: "none" }}
+            >
               <Typography
                 variant="h6"
                 noWrap
@@ -300,7 +304,7 @@ function ResponsiveDrawer(props) {
               "& .MuiDrawer-paper": {
                 boxSizing: "border-box",
                 width: drawerWidth,
-                pt: 8,
+                // pt: 8,
               },
             }}
           >
@@ -321,6 +325,21 @@ function ResponsiveDrawer(props) {
             <SubDrawer />
           </Drawer>
         )}
+      </Box>
+      {/* Main  */}
+      <Box
+        component="main"
+        sx={{
+          display: "flex",
+          // flexGrow: 1,
+          // width: "100%",
+          height: "100vh",
+          p: 3,
+          width: { sm: `calc(100% - ${drawerWidth}px)` },
+        }}
+      >
+        <Toolbar />
+        <Outlet />
       </Box>
     </Box>
   );

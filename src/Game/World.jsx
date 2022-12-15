@@ -170,7 +170,7 @@ const World = () => {
             top: `calc(100vh - ${matches ? "90vh" : "95vh"})`,
             border: "2px solid #c4a300 !important",
             backgroundColor: "rgb(0 0 0 / 80%)",
-            position: "relative",
+            position: "absolute",
             zIndex: "1000",
           }}
           onClick={() => {
@@ -225,7 +225,7 @@ const World = () => {
         </DialogContent>
       </Dialog>
 
-      <ResponsiveDrawer />
+      {/* <ResponsiveDrawer /> */}
       
       <Game />
     </>
