@@ -1,4 +1,4 @@
-import { Suspense, useRef, useState } from "react";
+import { Suspense, useEffect, useRef, useState } from "react";
 
 import { Button, Stack } from "@mui/material";
 
@@ -21,15 +21,41 @@ import {
   useSpring,
   PointLight,
   Joystick,
+  Trigger,
+  AreaLight,
+  Sphere,
+  Circle,
+  useScene,
+  useAnimation,
+  useRenderer,
+  Frame,
+  useLoop,
+  useValue,
 } from "lingo3d-react";
 
+import * as THREE from 'three'
+
 import LightArea from "../component/World/LightArea";
-import AnimText from "@lincode/react-anim-text";
+import ScrollDialog from "../component/ScrollDialog";
+
+// import testVertexShader from '../shader/vertex.glsl'
+// import testFragmentShader from '../shader/fragment.glsl'
 
 const Game = () => {
-  const { width, height } = useWindowSize();
-  const isMobile = width < height;
+
+  const viteBaseUrl = import.meta.env.VITE_BASE_URL;
+
   const dummyRef = useRef(null);
+  const dummyBatteryRef = useRef(null);
+  const cameraRef = useRef(null);
+  const pointerRef = useRef(null);
+  const portalRef = useRef(null);
+  const triggerBatteryRef = useRef(null);
+  const cubeRef = useRef(null);
+
+  const scene = useScene()
+  const { width, height } = useWindowSize();
+  const getRenderer = useRenderer()
   const [running, setRunning] = useState(false);
   const [arrowPosition, setArrowPosition] = useState({ x: 0, y: 0, z: 0 });
   const [isVisible, setVisible] = useState({ state: false, name: "" });
@@ -37,6 +63,10 @@ const Game = () => {
   //mouseOver
   const [mouseOver, setMouseOver] = useState(false);
 
+  const [dialogOpen, setDialogOpen] = useState(false);
+  const [htmlFor, setHtmlFor] = useState();
+
+  const isMobile = width < height;
   const camX = mouseOver ? 50 : 0;
   const camY = mouseOver ? 100 : 100;
   const camZ = mouseOver ? 100 : 300;
@@ -47,20 +77,34 @@ const Game = () => {
   const ySpring = useSpring({ to: camY, bounce: 0 });
   const zSpring = useSpring({ to: camZ, bounce: 0 });
 
-  const viteBaseUrl = import.meta.env.VITE_BASE_URL;
 
   //player movement
   const handleClick = (e) => {
+
     const dummy = dummyRef.current;
     if (!dummy) return;
 
+    const pointAnimation = pointerRef.current;
+    if (!pointAnimation) return;
+
     setArrowPosition(e.point);
+
+    pointAnimation.visible = true
+    pointAnimation.bloom = true
+
+    const animation = pointAnimation.animationManagers
+    animation["Scene"].play()
+
     dummy.lookTo(e.point.x, undefined, e.point.z, 0.2);
     dummy.moveTo(e.point.x, undefined, e.point.z, 12);
-    setRunning(true);
+
+    // active portal
+    const animationPortal = dummy.animationManagers
+    animationPortal["running"].play()
 
     dummy.onMoveToEnd = () => {
-      setRunning(false);
+      animationPortal["idle"].play()
+      pointAnimation.visible = false
     };
   };
 
@@ -79,8 +123,197 @@ const Game = () => {
     };
   };
 
+  const openPortal = (url) => {
+    window.open(url, "_blank  ")
+  }
+
+  const handleItem = (name) => {
+
+    handleDialogToggle()
+
+    const allChildren = scene.children
+    const array1 = allChildren.filter(x => x.name == name)
+
+    // active portal
+    const animationPortal = portalRef.current.animationManagers
+    animationPortal["Take 001"].play()
+    portalRef.current.bloom = true
+
+    //pass battery to player
+    dummyBatteryRef.current.visible = true
+    dummyBatteryRef.current.animation = {
+      y: [80, 80 + 0.5, 80, 80 - 0.5, 80],
+      rotationY: [0, 45, 90, 135, 180, 225, 270, 315]
+    }
+
+    //remove battery
+    const MeshInModel = array1[0].children.filter(x => x.type != `Group` && x.name == 'batterySphere' || x.name == 'batteryModel')
+    MeshInModel.map((item) => {
+      item.children.filter(x => x.type == 'Mesh').map((item) => {
+        item.material.dispose()
+        item.geometry.dispose()
+        item.parent.remove(item)
+      })
+    })
+
+    scene.remove(array1[0])
+    triggerBatteryRef.current.dispose();
+
+    // animate()
+  }
+
+  const handleDialogToggle = (name) => {
+    setDialogOpen(!dialogOpen);
+    setHtmlFor(name)
+  };
+
+  const handleClose = () => {
+    setDialogOpen(false);
+  };
+
+  const copyObject = (e) => {
+
+
+    const camera = scene.getObjectByName("camera");
+
+
+    getRenderer.render(scene, camera.userData.manager.camera)
+
+
+
+    // const camera = scene.getObjectByName("camera");
+    // console.log("camera", camera.userData.manager.camera)
+    // console.log("scene", scene)
+
+    // const geometry1 = new THREE.BoxGeometry(5, 5, 5);
+    // const material1 = new THREE.MeshBasicMaterial({ color: 0x00ff00 });
+    // const cube1 = new THREE.Mesh(geometry1, material1);
+
+    // const oriCube = scene.getObjectByName("oriCube");
+
+    // oriCube.parent = null
+    // oriCube.userData = {}
+
+    // console.log("cube1", cube1)
+    // console.log("oriCube", oriCube)
+
+
+    // var copycube = oriCube.clone();
+
+    // console.log("copycube", copycube)
+
+
+    // scene.add(copycube)
+
+
+    // const newObjCube = new THREE.Object3D()
+
+    // newObjCube.add(newObjCube)
+    // newObjCube.name = "cubeCopyRef"
+    // newObjCube.position.set(Math.random(), 5, 5)
+
+
+    // console.log("copycube", copycube)
+    // console.log("newObjCube", newObjCube)
+
+
+    // scene.add(newObjCube)
+
+    // console.log("scene", scene.children)
+    // console.log("getRenderer", getRenderer.info.memory)
+
+  }
+
+  const animate = () => {
+    const camera = scene.getObjectByName("camera");
+    getRenderer.render(scene, camera.userData.manager.camera)
+    window.requestAnimationFrame(animate)
+  }
+
+
+  // const geometry1 = new THREE.BoxGeometry(1, 1, 1);
+  // const material1 = new THREE.MeshBasicMaterial({ color: 0x00ff00 });
+  // const cube = new THREE.Mesh(geometry1, material1);
+
+  // const geometry = new THREE.PlaneGeometry(1, 1, 32, 32)
+
+  // // Material
+  // const material = new THREE.ShaderMaterial({
+  //   vertexShader: document.getElementById('testVertexShader').textContent,
+  //   fragmentShader: document.getElementById('testFragmentShader').textContent,
+  //   // uniforms:
+  //   // {
+  //   //   uFrequency: { value: new THREE.Vector2(10, 5) },
+  //   //   uTime: { value: 0 },
+  //   //   uColor: { value: new THREE.Color('orange') },
+  //   //   uTexture: { value: flagTexture }
+  //   // }
+  // })
+
+  // // Mesh
+  // const mesh = new THREE.Mesh(geometry, material)
+  // // mesh.scale.y = 2 / 3
+
+  // setTimeout(() => {
+  //   scene.add(cube)
+  // }, 10000);
+
+  // console.log("cube", cube)
+  // console.log("mesh", mesh)
+  // console.log("getRenderer", getRenderer.info.memory)
+
+
   return (
     <>
+
+      {/* <Button
+        variant="contained"
+        className="testButton"
+        onClick={copyObject}>
+        copy cube
+      </Button>
+      <Button
+        variant="contained"
+        className="testButton"
+        onClick={(() => {
+          handleDialogToggle("instruction")
+        })}>
+        instruction
+      </Button>
+      <Button
+        variant="contained"
+        className="testButton"
+        onClick={(() => {
+          handleDialogToggle("login")
+        })}>
+        Sign Up/Login
+      </Button>
+      <Button
+        variant="contained"
+        className="testButton"
+        onClick={(() => {
+          handleDialogToggle("menu")
+        })}>
+        menu
+      </Button>
+      <Button
+        variant="contained"
+        className="testButton"
+        onClick={(() => {
+          handleDialogToggle("avatar")
+        })}>
+        avatar
+      </Button> */}
+
+
+      <ScrollDialog
+        htmlFor={htmlFor}
+        boothState={undefined}
+        dataContent={`Hey, you guys want mayo or mustard, or both?  We got a shot at getting these stones, but I gotta tell you my priorities: Bring back what we lost? I hope, yes. Keep what I got?`}
+        handleClose={handleClose}
+        open={dialogOpen}
+        onClose={handleClose}
+      />
       <World>
         {/* <LingoEditor /> */}
         {/* <Library /> */}
@@ -97,6 +330,15 @@ const Game = () => {
 
         <LightArea />
 
+        <Cube name="oriCube"
+          onIntersect={(() => {
+            console.log("onIntersect")
+          })}
+          intersectIds="player"
+          // slippery={true}
+          // physics={true} 
+          ref={cubeRef} x={290.01} y={-2034.24} z={5985.45} color="red" />
+
         <Model
           name="worldmap"
           physics="map"
@@ -111,27 +353,43 @@ const Game = () => {
           scale={70}
           src="maps/tunnel1.glb"
           // src="maps/tunnel-v3.glb"
+
           onClick={!isMobile && handleClick}
-        ></Model>
+        >
 
-        {/* <Model
-          physics="map"
-          width={245.36}
-          depth={245.36}
-          scaleX={20}
-          scaleY={20}
-          scaleZ={20}
-          x={0}
-          y={0}
-          z={0}
-          scale={10}
-          src="maps/art_gallery.glb"
-          onClick={handleClick}
-        ></Model> */}
 
-        {/* <Model
-          x={296.22}
-          y={-1600.06}
+        </Model>
+
+        <Trigger
+          x={313.71}
+          y={-1710.77}
+          z={-6915.49}
+          radius={400}
+          targetIds="player"
+          onEnter={(() => {
+            openPortal(`${viteBaseUrl}forest-island`)
+          })}
+        />
+
+        <AreaLight
+          x={474.83}
+          y={-1698.09}
+          z={-7039.36}
+          rotationX={177.94}
+          scale={3}
+          opacityFactor={10}
+          intensity={50.00}
+          color={"#0368ff"}
+          visible={false}
+        />
+
+        <Model
+          name="portalModel"
+
+          ref={portalRef}
+          adjustColor="#00fff2"
+          x={250.22}
+          y={-1640.06}
           z={-6855.78}
           physics="map"
           width={245.36}
@@ -139,24 +397,67 @@ const Game = () => {
           scaleX={10}
           scaleY={10}
           scaleZ={10}
-          src="maps/portal_frame.glb"
-          onClick={handleClick}
-        ></Model> */}
-        {/* <Model
-          x={296.22}
-          y={-1600.06}
-          z={-6855.78}
-          physics="map"
-          width={245.36}
-          depth={245.36}
-          scaleX={10}
-          scaleY={10}
-          scaleZ={10}
-          src="maps/ancient_portal_frame.glb"
-          onClick={handleClick}
-        ></Model> */}
+          src="maps/stargate.glb"
+          onClick={((e) => {
+            handleClick(e)
+          })}
+        >
+
+          <Find bloom={isMobile ? false : false} adjustColor="#00458f" name="Portal">
+          </Find>
+
+        </Model>
+
+        <AreaLight
+          name="batteryLight"
+          x={-32.52}
+          y={-1929.34}
+          z={5372.94}
+          rotationY={82.72}
+        />
+
+        <Group
+          name="Battery"
+
+          x={-123.60}
+          y={-1926.92}
+          z={5356.52}
+          animation={{ y: [-1932.51, -1932.51 + 10, -1932.51, -1932.51 - 10, -1932.51], rotationY: [0, 45, 90, 135, 180, 225, 270, 315] }}
+
+        >
+          <Trigger
+            ref={triggerBatteryRef}
+            radius={100}
+            name="triggerBattery"
+            targetIds="player"
+            onEnter={(() => {
+              handleItem("Battery")
+            })}
+          />
+
+          <Sphere
+            name="batterySphere"
+            scale={2.5}
+            color="#ffa400"
+            opacity={0.3}
+            bloom
+          />
+
+          <Model
+            name="batteryModel"
+            src="item/coin.glb"
+            bloom
+            opacity={0.5}
+            animationPaused={false}
+            animationRepeat={false}
+
+          />
+
+        </Group>
 
         <ThirdPersonCamera
+          name="camera"
+          ref={cameraRef}
           mouseControl={"drag"}
           active={true}
           lockTargetRotation={isMobile ? true : false}
@@ -172,84 +473,65 @@ const Game = () => {
           y={100}
           zoom={1}
         >
+
           <Dummy
             id="player"
             name="player"
             ref={dummyRef}
+
             strideMove
             strideMode="free"
-            scale={1.5}
-            src="3dCharacter/new/character.glb"
+            src="3dCharacter/new/character1.glb"
             physics="character"
             animation={running ? "running" : "idle"}
             width={50}
             depth={50}
+
+            // preset="rifle"
             rotationY={180.74}
-            x={108.52}
+            x={599.08}
             y={-2004.04}
             z={6631.41}
-          />
+            scale={1.5}
+          >
+            <Model
+              ref={dummyBatteryRef}
+              name="dummyBattery"
+              src="item/coin.glb"
+              opacity={0.5}
+              scale={0.2}
+              y={80}
+              visible={false}
+              bloom
+
+            />
+
+            <AreaLight
+              scale={0.20}
+              rotationY={82.72}
+              x={9.59}
+              y={78.85}
+              z={-9.10}
+              helper={true}
+            />
+
+          </Dummy>
+
         </ThirdPersonCamera>
 
-        {running && (
-          <>
-            <Group>
-              <Torus
-                x={arrowPosition.x}
-                y={arrowPosition.y + 10}
-                z={arrowPosition.z}
-                height={100}
-                depth={100}
-                width={72.99}
-                emissiveColor="#ff0000"
-                color="#ff4e4e"
-                rotationX={90}
-                animation={{
-                  scale: [0, 1, 1, 0],
-                }}
-                scaleX={0.21}
-                scaleY={0.24}
-                scaleZ={0.13}
-                normalScale={{ x: 1, y: 1 }}
-              />
-              <Torus
-                x={arrowPosition.x}
-                y={arrowPosition.y + 10}
-                z={arrowPosition.z}
-                height={100}
-                depth={100}
-                width={72.99}
-                emissiveColor="#ff0000"
-                color="#ff4e4e"
-                rotationX={90}
-                animation={{
-                  scale: [0, 1, 1, 0],
-                }}
-                scaleX={0.5}
-                scaleY={0.5}
-                scaleZ={1.64}
-                normalScale={{ x: 1, y: 1 }}
-              />
-              <Cylinder
-                x={arrowPosition.x}
-                y={arrowPosition.y + 10}
-                z={arrowPosition.z}
-                height={200}
-                width={72.99}
-                depth={100}
-                emissiveColor="#ff0000"
-                color="#ff4e4e"
-                animation={{
-                  scale: [0, 0.09, 0.05, 0],
-                }}
-                scaleX={0.02}
-                scaleY={0.46}
-                scaleZ={0.03}
-                normalScale={{ x: 1, y: 1 }}
-              />
-            </Group>
-          </>
-        )}
+        <Model
+          name="p2p"
+          ref={pointerRef}
+          src="dummy/p2p_a.glb"
+          emissiveColor="#ff0000"
+          color="#ff4e4e"
+          opacity={1}
+          scale={1}
+          visible={false}
+          x={arrowPosition.x}
+          y={arrowPosition.y + 50}
+          z={arrowPosition.z}
+        />
 
         {/*
          ***TV PANEL  difference Z = 1,518.1
@@ -764,24 +1046,26 @@ const Game = () => {
         </Group>
       </World>
 
-      {isMobile && (
-        <Joystick
-          onMove={(e) => {
-            const fox = dummyRef.current;
-            if (!fox) return;
+      {
+        isMobile && (
+          <Joystick
+            onMove={(e) => {
+              const fox = dummyRef.current;
+              if (!fox) return;
 
-            fox.strideForward = -e.y * 7;
-            fox.strideRight = -e.x * 5;
-          }}
-          onMoveEnd={() => {
-            const fox = dummyRef.current;
-            if (!fox) return;
+              fox.strideForward = -e.y * 7;
+              fox.strideRight = -e.x * 5;
+            }}
+            onMoveEnd={() => {
+              const fox = dummyRef.current;
+              if (!fox) return;
 
-            fox.strideForward = 0;
-            fox.strideRight = 0;
-          }}
-        />
-      )}
+              fox.strideForward = 0;
+              fox.strideRight = 0;
+            }}
+          />
+        )
+      }
 
     </>
   );

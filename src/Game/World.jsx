@@ -1,4 +1,4 @@
-import React, { useLayoutEffect, useState, useEffect } from "react";
+import React, { useState, useEffect } from "react";
 import _uniqueId from "lodash/uniqueId";
 
 import { usePreload, useWindowSize } from "lingo3d-react";
@@ -7,24 +7,19 @@ import {
   Button,
   Dialog,
   DialogContent,
-  DialogContentText,
   DialogTitle,
   IconButton,
   Stack,
   useMediaQuery,
-  styled,
   Slide,
-  CardMedia,
 } from "@mui/material";
 import CloseIcon from "@mui/icons-material/Close";
 
-import CircularStatic from "../component/CircularProgressWithLabel";
 import LoadingProgress from "../component/LoadingProgress";
 import ResponsiveDrawer from "../component/Drawer";
 import Form from "../component/Form";
 import Game from "./Game";
-import { Html } from "@mui/icons-material";
-// import { waitForDebugger } from "inspector";
+
 
 const BootstrapDialogTitle = (props) => {
   const { children, onClose, ...other } = props;
@@ -57,6 +52,7 @@ const BootstrapDialogTitle = (props) => {
 };
 
 const World = () => {
+
   const [isGame, setGame] = useState(false);
   const [open, setOpen] = useState(false);
 
@@ -69,11 +65,13 @@ const World = () => {
   const progress = usePreload(
     [
       "maps/tunnel1.glb",
-      "3dCharacter/new/character.glb",
+      "3dCharacter/new/character1.glb",
+      "3dCharacter/new/character2.glb",
+      "3dCharacter/new/character3.glb",
       "3dCharacter/new/BreathingIdle.fbx",
       "3dCharacter/new/Running.fbx",
     ],
-    "0.09mb"
+    "0.10mb"
   );
 
   const handleGame = () => {
@@ -109,16 +107,7 @@ const World = () => {
           width: "100vw",
         }}
       >
-        {console.log("progress", progress)}
         <Stack sx={{ justifyContent: "center", alignItems: "center" }}>
-          {/* <img
-            alt="metasg"
-            width={"100%"}
-            height={"100%"}
-            src={`preloader/preloader.gif`}
-          /> */}
-
-          {/* <CircularStatic value={progress} /> */}
           <LoadingProgress value={Math.floor(progress)} />
         </Stack>
       </div>
@@ -217,9 +206,10 @@ const World = () => {
         </DialogContent>
       </Dialog>
 
-      <ResponsiveDrawer />
+      {/* <ResponsiveDrawer /> */}
 
       <Game />
+
     </>
   );
 };

@@ -85,7 +85,7 @@ const SubDrawer = () => {
             // handleClickHome;
             window.location.assign("https://i-smart.com.sg/");
             // window.location.assign("https://2vr360.com/basiir/test32/");
-            
+
           }}
         >
           <ListItemText primary="1 HOME" />
@@ -254,9 +254,9 @@ function ResponsiveDrawer(props) {
           }}
         >
           <Toolbar>
-            <Link 
-            href="https://i-smart.com.sg" 
-            sx={{ color: "inherit", flexGrow: 1 , textDecoration: 'none'}}>
+            <Link
+              href="https://i-smart.com.sg"
+              sx={{ color: "inherit", flexGrow: 1, textDecoration: 'none' }}>
               <Typography
                 variant="h6"
                 noWrap

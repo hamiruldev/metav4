@@ -10,8 +10,9 @@ import Iframe from "./page/Iframe";
 import Nomenu from "./page/Nomenu";
 import "./App.css";
 import Game from "./Game/Game";
-import Island from "./Game/Island";
+import Island1 from "./Game/Island1";
 import { redirect } from "react-router-dom";
+import Island2 from "./Game/Island2";
 
 function App() {
   const theme = createTheme(Theme);
@@ -24,16 +25,21 @@ function App() {
         <CssBaseline />
         <BrowserRouter basename={`${viteBaseUrl}`}>
           <Routes>
+
+
             <Route path="/" element={<World />} />
-            <Route path="/island" element={<Island />} />
+            <Route path="/forest-island" element={<Island1 />} />
+            <Route path="/japan-island" element={<Island2 />} />
+
+
             <Route
               path="portfolio"
-              element={<Nomenu url={"https://360xp.co/ismartwebsite/"} />}
+              element={<Nomenu url={"https://i-smart.com.sg/portfolio/"} />}
             />
             <Route
-              path="services"
+              path="service"
               element={
-                <Iframe url={"https://360xp.co/ismartwebsite/services/"} />
+                <Iframe url={"https://i-smart.com.sg/service/"} />
               }
             />
             <Route

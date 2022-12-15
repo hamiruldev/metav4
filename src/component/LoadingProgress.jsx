@@ -17,7 +17,7 @@ function LinearProgressWithLabel(props) {
         >{props?.value}%</Typography>
       </Box>
     </Box>
-   
+
   );
 }
 

@@ -3,7 +3,7 @@ import DialogInstruction from "./DialogInstruction";
 import ScrollDialog from "./ScrollDialog";
 
 const PopInstruction = () => {
-  const [modalState, setModalState] = useState<any>(false);
+  const [modalState, setModalState] = useState<any>(true);
   const [isInstruction, setInstruction] = useState<any>();
 
   const a = window.document.getElementById("modalInstruction");
