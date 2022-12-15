@@ -3,16 +3,12 @@ import Button from "@mui/material/Button";
 import Dialog from "@mui/material/Dialog";
 import DialogActions from "@mui/material/DialogActions";
 import DialogContent from "@mui/material/DialogContent";
-import DialogContentText from "@mui/material/DialogContentText";
 import DialogTitle from "@mui/material/DialogTitle";
-import Card from "@mui/material/Card";
-import CardContent from "@mui/material/CardContent";
-import CardMedia from "@mui/material/CardMedia";
 import Typography from "@mui/material/Typography";
-import { Box, CardActionArea, CircularProgress, ClickAwayListener, Stack } from "@mui/material";
 import useMediaQuery from "@mui/material/useMediaQuery";
-import { styled } from "@mui/material/styles";
-import { IconButton, Slide } from "@mui/material";
+
+import { Box, CircularProgress, ClickAwayListener, Stack, useTheme, styled, IconButton, Slide } from "@mui/material";
+
 import { getAllProduct } from "../api/productApi";
 import CloseIcon from "@mui/icons-material/Close";
 import CardFeed from "./CardFeed";
@@ -20,6 +16,9 @@ import Zoom from "@mui/material/Zoom";
 import AddToCartTable from "./User/AddToCartTable";
 import AuthForm from "./UiUx/AuthForm";
 import AvatarCard from "./UiUx/AvatarCard";
+import Form from "./Form";
+import InstructionCtx from "./UiUx/InstructionCtx";
+import ListMenu from "./UiUx/listMenu";
 
 var menuData = [{ id: 1, name: 'Intrest form' }, { id: 2, name: 'share' }, { id: 3, name: 'help' }]
 
@@ -56,7 +55,8 @@ const BootstrapDialog = styled(Dialog)(({ theme }) => ({
     padding: theme.spacing(1),
   },
   "& .MuiPaper-root": {
-    backgroundColor: "transparent !important",
+    backgroundColor: "transparent",
+    overflow: "visible",
     boxShadow: "none",
     display: "flex",
     justifyContent: "center",
@@ -72,38 +72,62 @@ const BootstrapDialog = styled(Dialog)(({ theme }) => ({
 }));
 
 const BootstrapDialogTitle = (props) => {
-  const { children, onClose, ...other } = props;
+  const { children, handleClose, ...other } = props;
   const matches = useMediaQuery("(max-width:425px)");
 
   return (
-    <DialogTitle sx={{ m: 0, p: 2 }} {...other}>
-      {children}
-      {onClose ? (
+    <DialogTitle sx={{ m: 0, p: 2, display: "flex", justifyContent: "flex-end", width: "100%" }} {...other}>
+      {handleClose ? (
         <IconButton
           aria-label="close"
-          onClick={onClose}
+          onClick={handleClose}
           sx={{
             position: "absolute",
             backgroundColor: "red",
             color: "white",
-            top: matches ? "-5%" : "-8%",
-            right: matches ? "-5%" : "-5%",
+            top: " -5%",
+            right: "-5%",
+            // top: matches ? "-2%" : "-8%",
+            // right: matches ? "-2%" : "-5%",
             borderRadius: "50%",
           }}
         >
           <CloseIcon sx={{ fontSize: matches ? "1em" : "1.5em" }} />
         </IconButton>
-      ) : null}
-    </DialogTitle>
+      ) : null
+      }
+    </DialogTitle >
   );
 };
+
+const AnimateBox = styled("div")({
+  "@keyframes pulsate": {
+    "0%": {
+      backgroundPosition: "0% 50%"
+    },
+    "50%": {
+      backgroundPosition: "100% 50%"
+    },
+    "100%": {
+      backgroundPosition: "0% 50%"
+    }
+  },
+  animation: "pulsate 4s ease infinite",
+  background: "linear-gradient(270deg, #833ab4, #fd1d1d, #fcb045)",
+  backgroundSize: "600% 600%",
+  // background: "linear-gradient(300deg,#ffe800,#000000,#ff8800)",
+  // backgroundSize: "120% 120%",
+  padding: "0.8rem",
+  borderRadius: "40px",
+  width: "inherit",
+  maxWidth: "600px",
+});
 
 export default function ScrollDialog({
   htmlFor,
   boothState,
   dataContent,
   open,
-  onClose,
   handleClose,
 }) {
   const [scroll, setScroll] = React.useState("paper");
@@ -137,21 +161,16 @@ export default function ScrollDialog({
         fullWidth={true}
         maxWidth={"lg"}
         open={open}
-        onClose={onClose}
+        onClose={handleClose}
         scroll={scroll}
         aria-labelledby="scroll-dialog-title"
         aria-describedby="scroll-dialog-description"
-        sx={{ backgroundColor: "transparent" }}
+        sx={{
+          backgroundColor: "transparent",
+        }}
       >
         <ClickAwayListener onClickAway={handleClose}>
-          <Box
-            maxWidth={"sm"}
-            sx={{
-              background: "linear-gradient(to right, #ffe800, #ff8800)",
-              padding: " 0.5rem",
-              borderRadius: "30px",
-              width: "inherit",
-            }}
+          <AnimateBox
           >
             <Stack
               sx={{
@@ -169,8 +188,9 @@ export default function ScrollDialog({
               }}
             >
               <BootstrapDialogTitle
+                component="div"
                 id="customized-dialog-title"
-                onClose={onClose}
+                handleClose={handleClose}
               />
 
               <DialogContent
@@ -180,63 +200,113 @@ export default function ScrollDialog({
                   textAlign: "center",
                   flexDirection: "column",
                   pb: 0,
+                  overflow: "visible"
                 }}
                 dividers={scroll === "paper"}
               >
-                <Typography variant="h4">
+
+                <Typography variant={matches ? "h5" : "h4"}>
+                  {htmlFor == "needHelp" && <>How can we <span style={{ color: 'red' }}> HELP  </span> you ?</>}
                   {htmlFor == "instruction" && "INSTRUCTION"}
                   {htmlFor == "login" && "LOGIN"}
                   {htmlFor == "menu" && "MENU"}
                   {htmlFor == "avatar" && "CHOOSE AVATAR"}
-
+                  {htmlFor == "Info Board" && "INFO BOARD"}
                 </Typography>
 
-                <Stack>
-                  {htmlFor == "instruction" &&
-                    "Five years ago, we lost. All of us. We lost friends... We lost family... We lost a part of ourselves. Today, we have a chance to take it all back."}
-                  {htmlFor == "login" && <AuthForm />}
+                <Slide
+                  direction="up"
+                  in={true}
+                  style={{
+                    transformOrigin: "0 0 0",
+                    position: "relative",
+                    zIndex: "1000000",
+                  }}
+                  {...(true ? { timeout: 1000 } : {})}
+                >
 
-                  {htmlFor == "avatar" && <AvatarCard setAvatarButton={setAvatarButton} />}
+                  <Box
+                    sx={{
+                      mt: 2,
+                      width: "100%",
+                      height: htmlFor == "needHelp" && matches && "50vh",
+                      overflow: htmlFor == "needHelp" && matches && "auto",
+                      display: htmlFor == "menu" && "flex",
+                      justifyContent: htmlFor == "menu" && "center",
 
-                  {htmlFor == "product" && "products"}
-                  {htmlFor === "video" && "video"}
-                  {htmlFor === "booth" && "booth"}
-                  {htmlFor === "navBar" && "List of Your Cart"}
+                      '&::-webkit-scrollbar': {
+                        width: '0.3em',
+                      },
+                      '&::-webkit-scrollbar-track': {
+                        background: "#f1f1f1",
+                        borderRadius: "50px",
+                      },
+                      '&::-webkit-scrollbar-thumb': {
+                        backgroundColor: '#888',
+                        borderRadius: "50px",
+                      },
+                      '&::-webkit-scrollbar-thumb:hover': {
+                        background: '#555',
+                        borderRadius: "50px",
+                      }
+                    }}
 
-                  {htmlFor === "navBar" && (
-                    <>
-                      <AddToCartTable data={dataContent} />
-                    </>
-                  )}
+                  >
 
-                  {htmlFor === "booth" && boothState?.id != 0 && (
-                    <Stack
-                      spacing={1}
-                      sx={{
-                        display: " flex",
-                        justifyContent: "space-between",
-                        alignItems: "baseline",
-                        flexDirection: "row",
-                        flexWrap: "wrap",
-                        bgcolor: "#f5f5f5",
-                      }}
-                    >
-                      <CardFeed data={boothState?.id} />
-                    </Stack>
-                  )}
+                    {htmlFor == "Info Board" && `Congrats! You can now play a game in the fantasy island. Go to future teleport at the end of this tunnel to explore the island.`}
+                    {htmlFor == "instruction" && <InstructionCtx />}
+                    {htmlFor == "menu" && <ListMenu />}
+                    {htmlFor == "avatar" && <AvatarCard setAvatarButton={setAvatarButton} />}
+                    {htmlFor == "needHelp" && <Form />}
+                    {htmlFor == "login" && <AuthForm />}
 
-                  {htmlFor === "video" && (
-                    <iframe
-                      width={matches ? "100%" : "560"}
-                      height={matches ? "100%" : "315"}
-                      src="https://www.youtube.com/embed/0YO89ssEmq4"
-                      title="YouTube video player"
-                      frameBorder="0"
-                      allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-                      allowFullScreen
-                    ></iframe>
-                  )}
-                </Stack>
+
+
+                    {htmlFor == "product" && "products"}
+                    {htmlFor === "video" && "video"}
+                    {htmlFor === "booth" && "booth"}
+                    {htmlFor === "navBar" && "List of Your Cart"}
+
+                    {htmlFor === "navBar" && (
+                      <>
+                        <AddToCartTable data={dataContent} />
+                      </>
+                    )}
+
+                    {htmlFor === "booth" && boothState?.id != 0 && (
+                      <Stack
+                        spacing={1}
+                        sx={{
+                          display: " flex",
+                          justifyContent: "space-between",
+                          alignItems: "baseline",
+                          flexDirection: "row",
+                          flexWrap: "wrap",
+                          bgcolor: "#f5f5f5",
+                        }}
+                      >
+                        <CardFeed data={boothState?.id} />
+                      </Stack>
+                    )}
+
+                    {htmlFor === "video" && (
+                      <iframe
+                        width={matches ? "100%" : "560"}
+                        height={matches ? "100%" : "315"}
+                        src="https://www.youtube.com/embed/0YO89ssEmq4"
+                        title="YouTube video player"
+                        frameBorder="0"
+                        allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                        allowFullScreen
+                      ></iframe>
+                    )}
+
+
+
+
+                  </Box>
+                </Slide>
+
               </DialogContent>
 
               <DialogActions
@@ -245,126 +315,56 @@ export default function ScrollDialog({
                   zIndex: "1000000",
                   p: 0,
                   flexDirection: "column",
-                  width: htmlFor == "menu" ? matches ? "80%" : "50%" : null
+                  // width: matches ? "300px" : "300px"
                 }}
               >
 
-                {htmlFor == "menu" ?
-                  <> <Slide
-                    direction={"up"}
-                    in={true}
-                    style={{
-                      transformOrigin: "0 0 0",
+                <Slide
+                  direction="up"
+                  in={true}
+                  style={{
+                    transformOrigin: "0 0 0",
+                    position: "relative",
+                    zIndex: "1000000",
+                  }}
+                  {...(true ? { timeout: 1500 } : {})}
+                >
+
+                  <Button
+                    fullWidth
+                    disabled={htmlFor == "avatar" && !isAvatar}
+                    sx={{
+                      my: 2,
+                      fontWeight: 900,
+                      textAlign: "center",
+                      borderRadius: "5px",
                       position: "relative",
-                      zIndex: "1000000",
+                      border: "2px solid white",
+                      boxShadow: "0px 1px 0px 0px #fff6af",
+                      display: htmlFor == "needHelp" || htmlFor == "Info Board" || htmlFor == "menu" ? "none" : "flex",
+                      background: htmlFor == "avatar" && isSuccess ? "linear-gradient(180deg,#89ff68 0%,#336d16 100%);" : "linear-gradient(to bottom, #ffec64 5%, #ffab23 100%)",
+                      color: htmlFor == "avatar" && isSuccess ? "#333333" : "#333333",
                     }}
-                    {...(true ? { timeout: 1500 } : {})}
+                    onClick={(() => {
+                      htmlFor == "login" && loginButton()
+                      htmlFor == "avatar" && handleAvatar()
+                      htmlFor == "instruction" && handleClose()
+                    })}
+                    endIcon={htmlFor == "avatar" && isLoading && <CircularProgress sx={{ color: "black" }} size={24} />}
                   >
 
-                    <Box>
+                    {htmlFor == "login" && "Submit"}
+                    {htmlFor == "instruction" && "Start"}
+                    {htmlFor == "avatar" && isSuccess && "Success"}
+                    {htmlFor == "avatar" && !isSuccess && "Start"}
+                  </Button>
 
-                      <Button
-                        fullWidth
-                        sx={{
-                          border: "2px solid white",
-                          borderRadius: "5px",
-                          my: 1,
-                          boxShadow: "0px 1px 0px 0px #fff6af",
-                          background: "linear-gradient(to bottom, #ffec64 5%, #ffab23 100%)",
-                          backgroundColor: "#ffec64",
-                          color: "#333333",
-                          position: "relative",
-                          zIndex: "10000000",
-                          fontWeight: 900,
-                        }}
-                      >
-                        I N T E R E S T F O R M
-                      </Button>
-                      <Button
-                        fullWidth
-                        sx={{
-                          border: "2px solid white",
-                          borderRadius: "5px",
-                          my: 1,
-                          boxShadow: "0px 1px 0px 0px #fff6af",
-                          background: "linear-gradient(to bottom, #ffec64 5%, #ffab23 100%)",
-                          backgroundColor: "#ffec64",
-                          color: "#333333",
-                          position: "relative",
-                          zIndex: "10000000",
-                          fontWeight: 900,
-                        }}
-                      >
-                        S H A R E
-                      </Button>
-                      <Button
-                        fullWidth
-                        sx={{
-                          border: "2px solid white",
-                          borderRadius: "5px",
-                          my: 1,
-                          boxShadow: "0px 1px 0px 0px #fff6af",
-                          background: "linear-gradient(to bottom, #ffec64 5%, #ffab23 100%)",
-                          backgroundColor: "#ffec64",
-                          color: "#333333",
-                          position: "relative",
-                          zIndex: "10000000",
-                          fontWeight: 900,
-                        }}
-                      >
-                        H E L P
-                      </Button>
-
-                    </Box>
-                  </Slide>
-
-                  </>
-                  :
-                  <>
-                    <Slide
-                      direction="up"
-                      in={true}
-                      style={{
-                        transformOrigin: "0 0 0",
-                        position: "relative",
-                        zIndex: "1000000",
-                      }}
-                      {...(true ? { timeout: 1500 } : {})}
-                    >
-                      <Button
-                        disabled={htmlFor == "avatar" && !isAvatar}
-                        sx={{
-                          my: 2,
-                          fontWeight: 900,
-                          zIndex: "10000000",
-                          borderRadius: "5px",
-                          position: "relative",
-                          border: "2px solid white",
-                          boxShadow: "0px 1px 0px 0px #fff6af",
-                          background: htmlFor == "avatar" && isSuccess ? "linear-gradient(180deg,#89ff68 0%,#336d16 100%);" : "linear-gradient(to bottom, #ffec64 5%, #ffab23 100%)",
-                          color: htmlFor == "avatar" && isSuccess ? "#333333" : "#333333",
-                        }}
-                        fullWidth
-                        onClick={(() => {
-                          htmlFor == "login" && loginButton()
-                          htmlFor == "avatar" && handleAvatar()
-                        })}
-                        endIcon={htmlFor == "avatar" && isLoading && <CircularProgress sx={{ color: "black" }} size={24} />}
-                      >
-
-                        {htmlFor == "login" && "Submit"}
-                        {htmlFor == "instruction" && "Start"}
-                        {htmlFor == "avatar" && isSuccess && "Success"}
-                        {htmlFor == "avatar" && !isSuccess && "Start"}
-                      </Button>
-
-                    </Slide>
-                  </>
-                }
+                </Slide>
 
               </DialogActions>
+
             </Stack>
-          </Box>
+          </AnimateBox>
         </ClickAwayListener>
       </BootstrapDialog>
     </>

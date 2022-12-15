@@ -62,31 +62,36 @@
 }
 
 .button-glow {
-    animation: glowing 2000ms infinite;
-    position: "relative";
-    z-index: "1000";
     float: right;
     right: 2%;
+    height: 30px;
     margin: 12px;
-    border-radius: "6px";
-    background-color: "#00000075";
-    box-shadow: "1px 0px 5px 14px rgba(255,192,0,0.94)";
-    -webkit-box-shadow: "1px 0px 5px 5px rgb(255 192 0 / 94%)";
-    -moz-box-shadow: " 1px 0px 5px 14px rgba(255,192,0,0.94)";
+    z-index: 1000 !important;
+    position: absolute !important;
+    border-radius: 6px !important;
+    border: 2px solid #c4a300 !important;
+    background-color: #00000075 !important;
+    animation: glowing 2000ms infinite;
+    box-shadow: 1px 0px 5px 14px rgba(255, 192, 0, 0.94);
+    -webkit-box-shadow: 1px 0px 5px 5px rgb(255 192 0 / 94%);
+    -moz-box-shadow: 1px 0px 5px 14px rgba(255, 192, 0, 0.94);
 }
 
 .button-glow2 {
     animation: glowing 2000ms infinite;
-    position: "relative";
-    z-index: "1000";
     float: right;
+    z-Index: 1000;
+    position: absolute !important;
     right: 2%;
+    bottom: 5vh;
+    height: 30px;
     margin: 12px;
-    border-radius: "6px";
-    background-color: "#00000075";
-    box-shadow: "1px 0px 5px 14px RGB(181, 216, 28)";
-    -webkit-box-shadow: "1px 0px 5px 5px rgb(255 192 0 / 94%)";
-    -moz-box-shadow: " 1px 0px 5px 14px RGB(181, 216, 28)";
+    border-radius: 6px;
+    border: 2px solid #c4a300 !important;
+    background-color: #00000075 !important;
+    box-shadow: 1px 0px 5px 14px RGB(181, 216, 28);
+    -webkit-box-shadow: 1px 0px 5px 5px rgb(255 192 0 / 94%);
+    -moz-box-shadow: 1px 0px 5px 14px RGB(181, 216, 28);
 }
 
 
@@ -202,15 +207,19 @@ body {
 
 .swiper-slide img {
     display: block;
-
     width: 240px;
     height: 300px;
-
     object-fit: contain;
     border: 2px solid white;
     background-color: grey;
     border-radius: 11px;
+}
 
+@media only screen and (max-width: 600px) {
+    .swiper-slide img {
+        width: 150px;
+        height: 200px;
+    }
 }
 
 .swiper-slide img:hover {
@@ -258,6 +267,7 @@ body {
     position: relative;
     z-index: 10;
     background-color: black;
+    height: 40px;
 }
 
 .activeCard {

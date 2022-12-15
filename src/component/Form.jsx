@@ -11,6 +11,7 @@ import {
     Box,
     Typography,
     useMediaQuery,
+    Slide,
 } from "@mui/material";
 
 import CheckCircleIcon from '@mui/icons-material/CheckCircle';
@@ -47,7 +48,7 @@ const category = [
 ];
 const ReactPhoneInput = import.meta.env.PROD ? (PI).default : PI;
 
-const Form = () => {
+const Form = ({ setHelpButton }) => {
     const [isLoading, setLoading] = useState(false);
     const [message, setMessage] = useState();
     const matches = useMediaQuery("(max-width:425px)");
@@ -57,9 +58,6 @@ const Form = () => {
 
             {message != 'Message is sent.' ?
                 <>
-                    <Typography component={'h5'} variant="h5" sx={{ color: 'white', textAlign: "center", pt: 4 }}>
-                        How can we <span style={{ color: 'red' }}> HELP  </span> you?
-                    </Typography>
                     <Formik
                         initialValues={{
                             name: '',
@@ -72,7 +70,7 @@ const Form = () => {
                         onSubmit={async (values) => {
                             setMessage("")
                             setLoading(true);
-
+                            setHelpButton(true)
                             // const formData = {
                             //     'first_name': values.name,
                             //     'last_name': values.name,
@@ -107,7 +105,7 @@ const Form = () => {
                         {(props) => (
                             <>
                                 <form style={{ width: "inherit" }} onSubmit={props.handleSubmit} onChange={props.handleChange} >
-                                    <Stack direction={"column"} spacing={2} sx={{ pt: 3, color: "white" }}>
+                                    <Stack direction={"column"} spacing={2} sx={{ pt: matches ? 0.5 : 1, pr: matches && "1%", color: "white" }}>
                                         <FormControl hiddenLabel fullWidth>
                                             <OutlinedInput
                                                 required
@@ -234,17 +232,28 @@ const Form = () => {
                                                 sx={{ color: "white" }}
                                             />
                                         </FormControl>
+                                        <Slide
+                                            direction="up"
+                                            in={true}
+                                            style={{
+                                                transformOrigin: "0 0 0",
+                                                position: "relative",
+                                                zIndex: "1000000",
+                                            }}
+                                            {...(true ? { timeout: 2000 } : {})}
+                                        >
 
-                                        <Box sx={{ alignItems: "center", pb: 3, display: "flex", justifyContent: 'center' }}>
-                                            <Button sx={{
-                                                width: "50%", color: "black", backgroundColor: "#FFC000", boxShadow: "5px 7px 7px -5px #000000 !important",
-                                                "&:hover": {
-                                                    backgroundColor: "#ff9d00",
-                                                },
-                                            }} size="large" type="submit">
-                                                {isLoading ? <CircularProgress sx={{ color: "black" }} size={20} /> : "Submit"}
-                                            </Button>
-                                        </Box>
+                                            <Box sx={{ alignItems: "center", py: 1, display: "flex", justifyContent: 'center' }}>
+                                                <Button sx={{
+                                                    width: "50%", color: "black", backgroundColor: "#FFC000", boxShadow: "5px 7px 7px -5px #000000 !important",
+                                                    "&:hover": {
+                                                        backgroundColor: "#ff9d00",
+                                                    },
+                                                }} size="large" type="submit">
+                                                    {isLoading ? <CircularProgress sx={{ color: "black" }} size={20} /> : "Submit"}
+                                                </Button>
+                                            </Box>
+                                        </Slide>
 
                                     </Stack>
 

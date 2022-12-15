@@ -27,7 +27,7 @@ export default function LinearDeterminate({ value }) {
 
   return (
     <Box
-      backgroundColor="#000"
+      backgroundColor="transparent"
       color="#111"
       fontFamily="Baloo Thambi, cursive"
       fontSize={mobileVersion ? "2em" : "7rem"}

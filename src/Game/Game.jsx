@@ -1,6 +1,6 @@
 import { Suspense, useEffect, useRef, useState } from "react";
 
-import { Button, Stack } from "@mui/material";
+import { Box, Button, Stack } from "@mui/material";
 
 import {
   Dummy,
@@ -129,7 +129,7 @@ const Game = () => {
 
   const handleItem = (name) => {
 
-    handleDialogToggle()
+    name == "Battery" && handleDialogToggle("Info Board")
 
     const allChildren = scene.children
     const array1 = allChildren.filter(x => x.name == name)
@@ -266,11 +266,19 @@ const Game = () => {
   return (
     <>
 
-      {/* <Button
+      <Button
         variant="contained"
         className="testButton"
         onClick={copyObject}>
         copy cube
+      </Button>
+      <Button
+        variant="contained"
+        className="testButton"
+        onClick={(() => {
+          handleDialogToggle("avatar")
+        })}>
+        avatar
       </Button>
       <Button
         variant="contained"
@@ -296,20 +304,14 @@ const Game = () => {
         })}>
         menu
       </Button>
-      <Button
-        variant="contained"
-        className="testButton"
-        onClick={(() => {
-          handleDialogToggle("avatar")
-        })}>
-        avatar
-      </Button> */}
-
 
       <ScrollDialog
         htmlFor={htmlFor}
         boothState={undefined}
-        dataContent={`Hey, you guys want mayo or mustard, or both?  We got a shot at getting these stones, but I gotta tell you my priorities: Bring back what we lost? I hope, yes. Keep what I got?`}
+        dataContent={`Congrats! You can now play a game
+        in the fantasy island. Go to future
+        teleport at the end of this tunnel to
+        explore the island.`}
         handleClose={handleClose}
         open={dialogOpen}
         onClose={handleClose}

@@ -9,7 +9,7 @@ import DoneIcon from '@mui/icons-material/Done';
 // Import Swiper styles
 import "swiper/css";
 import "swiper/css/pagination";
-import { Box, Stack, Zoom } from '@mui/material';
+import { Box, Slide, Stack, Zoom } from '@mui/material';
 import { useState } from 'react';
 import { useRenderer, useScene } from 'lingo3d-react';
 
@@ -46,79 +46,71 @@ export default function AvatarCard({ setAvatarButton }) {
     const [avatar, setAvatar] = useState({ name: "", image: "", model: "", state: false })
 
     const handleAvatar = (id, image, model, state) => {
-        setAvatarButton(true)
+
+        setAvatar({ name: id, image: image, model: model, state: state })
         currentAvatar.userData.manager.srcState.set(model)
         const animation = currentAvatar.userData.manager.animationManagers
         animation["idle"].play()
-        setAvatar({ name: id, image: image, model: model, state: state })
+        setAvatarButton(true)
         getRenderer.render(scene, camera.userData.manager.camera)
     }
 
 
     return (
-        <>
-            <Swiper
-                effect={"cards"}
-                grabCursor={true}
-                modules={[EffectCards, Pagination]}
-                pagination={true}
-                className="mySwiper"
-            >
-                {MyArray.map((item, key) => (
-                    <SwiperSlide key={key}>
-                        <Stack direction={"column"}
+        <Swiper
+            effect={"cards"}
+            grabCursor={true}
+            modules={[EffectCards, Pagination]}
+            pagination={true}
+            className="mySwiper"
+        >
+            {MyArray.map((item, key) => (
+                <SwiperSlide key={key}>
+                    <Stack direction={"column"}
+                    >
+                        <Box
+                            sx={{
+                                height: "30px",
+                                width: "100%",
+                                display: "flex",
+                                justifyContent: "flex-end",
+                                position: "relative",
+                                top: "30px",
+                            }}
                         >
 
-                            <Box
-                                sx={{
-                                    height: "30px",
-                                    width: "100%",
-                                    display: "flex",
-                                    justifyContent: "flex-end",
-                                    position: "relative",
-                                    top: "30px",
-                                }}
-                            >
-
-                                {avatar?.state && avatar.name == item.name &&
-                                    <Zoom in={true}>
-                                        <DoneIcon
-                                            color="action"
-                                            sx={{
-                                                backgroundColor: "orange",
-                                                borderRadius: "50px",
-                                                position: "relative",
-                                                top: "5px",
-                                                right: "5px",
-                                            }}
-                                        />
-                                    </Zoom>
-                                }
-
-                            </Box>
+                            {avatar?.state && avatar.name == item.name &&
+                                <Zoom in={true}>
+                                    <DoneIcon
+                                        color="action"
+                                        sx={{
+                                            backgroundColor: "orange",
+                                            borderRadius: "50px",
+                                            position: "relative",
+                                            top: "5px",
+                                            right: "5px",
+                                        }}
+                                    />
+                                </Zoom>
+                            }
+                        </Box>
 
 
-                            <CardMedia
-                                onClick={
-                                    (() => {
-                                        handleAvatar(item.name, item.image, item.model, true)
-                                    })}
-                                key={key}
-                                id="cardmedia"
-                                component="img"
-                                alt="green iguana"
-                                height="100"
-                                src={item.image}
-                            />
-                        </Stack>
-
-
-                    </SwiperSlide>
-
-
-                ))}
-            </Swiper>
-
-        </>
+                        <CardMedia
+                            onClick={
+                                (() => {
+                                    handleAvatar(item.name, item.image, item.model, true)
+                                })}
+                            key={key}
+                            id="cardmedia"
+                            component="img"
+                            alt="green iguana"
+                            height="100"
+                            src={item.image}
+                        />
+                    </Stack>
+                </SwiperSlide>
+            ))}
+        </Swiper>
     );
 }

@@ -45,13 +45,8 @@ const theme = createTheme({
     MuiModal: {
       styleOverrides: {
         root: {
-          // position: "relative",
           zIndex: "1500 !important",
         },
-
-        // backdrop: {
-        //   backgroundColor: "transparent",
-        // },
       },
     },
 

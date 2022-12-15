@@ -112,6 +112,14 @@ const Theme = {
         },
       },
     },
+
+    MuiDialog: {
+      styleOverrides: {
+        root: {
+          overflow: "visible",
+        },
+      },
+    },
   },
 };
 
