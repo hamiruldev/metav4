@@ -243,7 +243,7 @@ function ResponsiveDrawer(props) {
     window !== undefined ? () => window().document.body : undefined;
 
   return (
-    <Box sx={{ display: "flex" }}>
+    <Box className="flex-none" sx={{ display: "flex" }}>
       <CssBaseline />
 
       {matches && (

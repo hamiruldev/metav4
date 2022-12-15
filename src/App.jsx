@@ -23,6 +23,11 @@ import {
 import { redirect } from "react-router-dom";
 import Layout from "./layout/Layout";
 import ResponsiveDrawer from "./component/Drawer";
+import { Home } from "@mui/icons-material";
+import Homepage from "./page/Homepage";
+import CardImage from "./page/CardImage";
+import Gallery from "./page/Gallery";
+import ReactVideoGallery from "./page/ReactVideoGallery";
 
 function App() {
   const theme = createTheme(Theme);
@@ -142,7 +147,8 @@ function App() {
           </Routes> */}
           <Routes>
             <Route path="/" element={<ResponsiveDrawer />}>
-              <Route index element={<Home />} />
+              {/* <Route index element={<Homepage/>} /> */}
+              <Route index element={<CardImage />} />
               <Route path="game" element={<World />} />
               <Route
                 path="portfolio"
@@ -150,6 +156,8 @@ function App() {
                   <Nomenu url={"https://www.i-smart.com.sg/portfolio/"} />
                 }
               />
+              <Route path="gallery" element={<Gallery />} />
+              <Route path="reactvideogallery" element={<ReactVideoGallery />} />
               <Route
                 path="services"
                 element={<Iframe url={"https://www.i-smart.com.sg/service/"} />}
@@ -249,42 +257,10 @@ function App() {
   );
 }
 
-// function CustomLink({ children, to, ...props }) {
-//   let resolved = useResolvedPath(to);
-//   let match = useMatch({ path: resolved.pathname, end: true });
-
-//   return (
-//     <div>
-//       <Link
-//         style={{ textDecoration: match ? "underline" : "none" }}
-//         to={to}
-//         {...props}
-//       >
-//         {children}
-//       </Link>
-//       {match && " (active)"}
-//     </div>
-//   );
-// }
-
-function Home() {
-  return (
-    <div
-      style={{
-        backgroundColor: "black",
-      }}
-    >
-      <h1>Home</h1>
-      <button>Metaverse</button>
-      <button>Website</button>
-    </div>
-  );
-}
-
 function NoMatch() {
   return (
     <div>
-      <h1>Nothing to see here!</h1>
+      <h1>Error 404</h1>
       <p>
         <Link to="/">Go to the home page</Link>
       </p>
