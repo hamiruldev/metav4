@@ -41,116 +41,13 @@ function App() {
         <BrowserRouter basename={`${viteBaseUrl}`}>
           <Routes>
             <Route
-              path="/"
+              index path ="/"
               element={<Iframe url={"https://360xp.co/ismartwebsite/services"} />}
             />
-            {/* <Route
-              path="services"
-              element={
-                <Iframe url={"https://www.i-smart.com.sg/services/"} />
-              }
-            />
-            <Route
-              path="services/softwaredev"
-              element={
-                <Iframe
-                  url={
-                    "https://www.i-smart.com.sg/services/#softwaredev_section"
-                  }
-                />
-              }
-            />
-            <Route
-              path="services/ecommerce"
-              element={
-                <Iframe
-                  url={
-                    "https://www.i-smart.com.sg/services/#ecommerce_section"
-                  }
-                />
-              }
-            />
-            <Route
-              path="services/websitedesign"
-              element={
-                <Iframe
-                  url={
-                    "https://www.i-smart.com.sg/services/#websitedesign_section"
-                  }
-                />
-              }
-            />
-            <Route
-              path="services/webminigame"
-              element={
-                <Iframe
-                  url={
-                    "https://www.i-smart.com.sg/services/#webminigame_section"
-                  }
-                />
-              }
-            />
-            <Route
-              path="services/virtualevent"
-              element={
-                <Iframe
-                  url={
-                    "https://www.i-smart.com.sg/services/#virtualevent_section"
-                  }
-                />
-              }
-            />
-            <Route
-              path="services/onlineshowroom"
-              element={
-                <Iframe
-                  url={
-                    "https://www.i-smart.com.sg/services/#onlineshowroom_section"
-                  }
-                />
-              }
-            />
-            <Route
-              path="services/3dvisualization"
-              element={
-                <Iframe
-                  url={
-                    "https://www.i-smart.com.sg/services/#3dvisualization_section"
-                  }
-                />
-              }
-            />
-            <Route
-              path="services/metaverse"
-              element={
-                <Iframe
-                  url={
-                    "https://www.i-smart.com.sg/services/#metaverse_section"
-                  }
-                />
-              }
-            />
-            <Route
-              path="contact-us"
-              element={
-                <Iframe url={"https://www.i-smart.com.sg/contact-us/"} />
-              }
-            /> */}
           </Routes>
         </BrowserRouter>
       </ThemeProvider>
     </>
-  );
-}
-
-function NoMatch() {
-  return (
-    <div>
-      <h1>Error 404</h1>
-      <p>
-        <Link to="/">Go to the home page</Link>
-      </p>
-    </div>
   );
 }
 

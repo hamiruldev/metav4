@@ -5,6 +5,7 @@ import ArrowCircleLeftSharpIcon from "@mui/icons-material/ArrowCircleLeftSharp";
 import { useNavigate } from "react-router-dom";
 
 const Iframe = ({ url }) => {
+    console.log(url)
     const navigate = useNavigate();
     const matches = useMediaQuery("(max-width:425px)");
     return (
