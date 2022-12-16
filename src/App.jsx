@@ -42,7 +42,9 @@ function App() {
           <Routes>
             <Route
               index path ="/"
-              element={<Iframe url={"https://360xp.co/ismartwebsite/services"} />}
+              // element={<Iframe url={"https://360xp.co/ismartwebsite/services"} />}
+              element={<Iframe url={"https://360xp.co/ismartwebsite/contact-us"} />}
+              // element={<Nomenu url={"https://360xp.co/ismartwebsite/contact-us"} />}
             />
           </Routes>
         </BrowserRouter>
