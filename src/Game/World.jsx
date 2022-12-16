@@ -20,6 +20,7 @@ import {
 import CloseIcon from "@mui/icons-material/Close";
 
 import CircularStatic from "../component/CircularProgressWithLabel";
+import LoadingProgress from "../component/LoadingProgress";
 import ResponsiveDrawer from "../component/Drawer";
 import Form from "../component/Form";
 import Game from "./Game";
@@ -111,14 +112,15 @@ const World = () => {
         }}
       >
         <Stack sx={{ justifyContent: "center", alignItems: "center" }}>
-          <img
+          {/*<img
             alt="metasg"
             width={"100%"}
             height={"100%"}
             src={`preloader/preloader.gif`}
           />
-          {/* <CircularStatic value={progress} /> */}
+           <CircularStatic value={progress} /> */}
           {/* <Typography>Loading </Typography>   */}
+          <LoadingProgress value={Math.floor(progress)} />
         </Stack>
       </div>
     );
@@ -168,7 +170,7 @@ const World = () => {
             top: `calc(100vh - ${matches ? "90vh" : "95vh"})`,
             border: "2px solid #c4a300 !important",
             backgroundColor: "rgb(0 0 0 / 80%)",
-            position: "relative",
+            position: "absolute",
             zIndex: "1000",
           }}
           onClick={() => {
@@ -223,7 +225,7 @@ const World = () => {
         </DialogContent>
       </Dialog>
 
-      <ResponsiveDrawer />
+      {/* <ResponsiveDrawer /> */}
       
       <Game />
     </>

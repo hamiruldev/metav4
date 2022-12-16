@@ -109,3 +109,65 @@
 .SelectOptionsDropDown::placeholder {
     color: red;
 }
+
+
+body {
+    background-color: rgb(255, 255, 255);
+    color: #111;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-family: 'Baloo Thambi', cursive;
+    font-size: 7rem;
+    height: 100vh;
+}
+
+.text-container>span {
+    text-transform: uppercase;
+    animation: glow 2s ease-in-out infinite;
+}
+
+@keyframes glow {
+
+    0%,
+    100% {
+        color: #FFF;
+        /* text-shadow: 0 0 10px #0652DD, 0 0 50px #0652DD, 0 0 100px #0652DD; */
+        text-shadow: 0 0 10px #c4a300, 0 0 50px #c4a300, 0 0 100px #c4a300;
+    }
+
+    10%,
+    90% {
+        /* color: #111; */
+        color: rgb(84, 81, 81);
+        text-shadow: none;
+    }
+}
+
+.text-container>span:nth-child(2) {
+    animation-delay: 0.25s;
+}
+
+.text-container>span:nth-child(3) {
+    animation-delay: 0.5s;
+}
+
+.text-container>span:nth-child(4) {
+    animation-delay: 0.75s;
+}
+
+.text-container>span:nth-child(5) {
+    animation-delay: 1s;
+}
+
+.text-container>span:nth-child(6) {
+    animation-delay: 1.25s;
+}
+
+.text-container>span:nth-child(7) {
+    animation-delay: 1.5s;
+}
+
+.loaderColor {
+    background-color: #c4a300;
+}

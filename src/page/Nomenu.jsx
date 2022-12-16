@@ -16,14 +16,12 @@ const Nomenu = ({ url }) => {
           top: "5%",
           zIndex: "1000",
           left: "3%",
-          background: 'rgba(0, 0, 0, 0.87)'
+          background: "rgba(0, 0, 0, 0.87)",
         }}
         onClick={() => {
           // navigate(`../`);
-          window.location.assign("https://www.i-smart.com.sg/")
+          window.location.assign("https://www.i-smart.com.sg/");
           // window.location.assign("https://2vr360.com/basiir/test32/")
-
-          
         }}
       >
         Back
