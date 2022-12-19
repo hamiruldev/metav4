@@ -31,6 +31,7 @@ import {
   Frame,
   useLoop,
   useValue,
+  SvgMesh,
 } from "lingo3d-react";
 
 import * as THREE from 'three'
@@ -362,16 +363,7 @@ const Game = () => {
 
         </Model>
 
-        <Trigger
-          x={313.71}
-          y={-1710.77}
-          z={-6915.49}
-          radius={400}
-          targetIds="player"
-          onEnter={(() => {
-            openPortal(`${viteBaseUrl}forest-island`)
-          })}
-        />
+
 
         <AreaLight
           x={474.83}
@@ -383,6 +375,37 @@ const Game = () => {
           intensity={50.00}
           color={"#0368ff"}
           visible={false}
+        />
+
+        <Trigger
+          x={313.71}
+          y={-1710.77}
+          z={-6915.49}
+          radius={400}
+          targetIds="player"
+          onEnter={(() => {
+            openPortal(`${viteBaseUrl}forest-island`)
+          })}
+        />
+
+        <SvgMesh
+          name="arrowSvg"
+          src="arrow.svg"
+          bloom
+          outline
+          metalnessFactor={1}
+          roughnessFactor={0.4}
+          roughness={0.4}
+          scaleZ={0.1}
+          scaleX={1.50}
+          scaleY={1.50}
+          color="#ff0000"
+          emissiveColor="#223056"
+          x={280.38}
+          z={-6561.98}
+          y={-1657.27}
+          animation={{ y: [-1657.27, -1657.27 + 20, -1657.27, -1657.27 - 20, -1657.27] }}
+
         />
 
         <Model
@@ -521,19 +544,8 @@ const Game = () => {
 
         </ThirdPersonCamera>
 
-        <Model
-          name="p2p"
-          ref={pointerRef}
-          src="dummy/p2p_a.glb"
-          emissiveColor="#ff0000"
-          color="#ff4e4e"
-          opacity={1}
-          scale={1}
-          visible={false}
-          x={arrowPosition.x}
-          y={arrowPosition.y + 50}
-          z={arrowPosition.z}
-        />
+
+
 
         {/*
          ***TV PANEL  difference Z = 1,518.1
@@ -1046,6 +1058,22 @@ const Game = () => {
             }}
           />
         </Group>
+
+        <Model
+          name="p2p"
+          ref={pointerRef}
+          src="dummy/p2p_a.glb"
+          emissiveColor="#ff0000"
+          color="#ffffff"
+          opacityFactor={4}
+          scale={1}
+          animation={{ rotationY: [0, 45, 90, 180, 270, 360] }}
+          visible={false}
+          x={arrowPosition.x}
+          y={arrowPosition.y + 50}
+          z={arrowPosition.z}
+        />
+
       </World>
 
       {

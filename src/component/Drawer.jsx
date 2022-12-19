@@ -1,7 +1,7 @@
 import * as React from "react";
 import PropTypes from "prop-types";
 
-import { Outlet, redirect, useNavigate } from "react-router-dom";
+import { Outlet, redirect, useLocation, useNavigate } from "react-router-dom";
 import {
   Box,
   Collapse,
@@ -235,6 +235,8 @@ function ResponsiveDrawer(props) {
   const [mobileOpen, setMobileOpen] = React.useState(false);
   const matches = useMediaQuery("(max-width:599px)");
   const navigate = useNavigate();
+  const location = useLocation();
+
   const handleDrawerToggle = () => {
     setMobileOpen(!mobileOpen);
   };
@@ -243,102 +245,113 @@ function ResponsiveDrawer(props) {
     window !== undefined ? () => window().document.body : undefined;
 
   return (
-    <Box sx={{ display: "flex" }}>
-      <CssBaseline />
+    <>
+      <Box sx={{ display: "flex" }}>
+        <CssBaseline />
 
-      {matches && (
-        <AppBar
-          position="fixed"
+
+
+        {location.pathname == '/' || location.pathname == '/service' &&
+          <>
+            {matches && (
+              <AppBar
+                position="fixed"
+                sx={{
+                  width: { sm: `calc(100 % - ${drawerWidth}px)` },
+                  ml: { sm: `${drawerWidth}px` },
+                  bgcolor: "text.primary",
+                  display: { xs: "block", md: "none", lg: "none" }, // Hidden on desktop
+                }}
+              >
+                <Toolbar>
+                  <Link
+                    href="https://www.i-smart.com.sg"
+                    sx={{ color: "inherit", flexGrow: 1, textDecoration: "none" }}
+                  >
+                    <Typography
+                      variant="h6"
+                      noWrap
+                      sx={{ flexGrow: 1 }}
+                      component="div"
+                    >
+                      iSmart Support
+                    </Typography>
+                  </Link>
+                  <IconButton
+                    color="inherit"
+                    aria-label="open drawer"
+                    edge="end"
+                    onClick={handleDrawerToggle}
+                    sx={{ mr: 2, display: { sm: "none" } }}
+                  >
+                    <MenuIcon />
+                  </IconButton>
+                </Toolbar>
+              </AppBar>
+            )}
+
+            <Box
+              component="nav"
+              sx={{ width: { sm: drawerWidth }, flexShrink: { sm: 0 } }}
+              aria-label="mailbox folders"
+            >
+              {/* The implementation can be swapped with js to avoid SEO duplication of links. */}
+              {matches ? (
+                <Drawer
+                  container={container}
+                  variant="temporary"
+                  // variant="persistent"
+                  open={mobileOpen}
+                  onClose={handleDrawerToggle}
+                  ModalProps={{
+                    keepMounted: true, // Better open performance on mobile.
+                  }}
+                  sx={{
+                    display: { xs: "block", sm: "none" },
+                    "& .MuiDrawer-paper": {
+                      boxSizing: "border-box",
+                      width: drawerWidth,
+                      // pt: 8,
+                    },
+                  }}
+                >
+                  <SubDrawer />
+                </Drawer>
+              ) : (
+                <Drawer
+                  variant="permanent"
+                  sx={{
+                    display: { xs: "none", sm: "block" },
+                    "& .MuiDrawer-paper": {
+                      boxSizing: "border-box",
+                      width: drawerWidth,
+                    },
+                  }}
+                  open
+                >
+                  <SubDrawer />
+                </Drawer>
+              )}
+            </Box>
+          </>
+        }
+
+
+        <Box
+          component="main"
           sx={{
-            width: { sm: `calc(100 % - ${drawerWidth}px)` },
-            ml: { sm: `${drawerWidth}px` },
-            bgcolor: "text.primary",
-            display: { xs: "block", md: "none", lg: "none" }, // Hidden on desktop
+            display: "flex",
+            height: "100vh",
+            p: 3,
+            width: { sm: `calc(100% - ${drawerWidth}px)` },
           }}
         >
-          <Toolbar>
-            <Link
-              href="https://www.i-smart.com.sg"
-              sx={{ color: "inherit", flexGrow: 1, textDecoration: "none" }}
-            >
-              <Typography
-                variant="h6"
-                noWrap
-                sx={{ flexGrow: 1 }}
-                component="div"
-              >
-                iSmart Support
-              </Typography>
-            </Link>
-            <IconButton
-              color="inherit"
-              aria-label="open drawer"
-              edge="end"
-              onClick={handleDrawerToggle}
-              sx={{ mr: 2, display: { sm: "none" } }}
-            >
-              <MenuIcon />
-            </IconButton>
-          </Toolbar>
-        </AppBar>
-      )}
+          <Toolbar />
+          <Outlet />
+        </Box>
 
-      <Box
-        component="nav"
-        sx={{ width: { sm: drawerWidth }, flexShrink: { sm: 0 } }}
-        aria-label="mailbox folders"
-      >
-        {/* The implementation can be swapped with js to avoid SEO duplication of links. */}
-        {matches ? (
-          <Drawer
-            container={container}
-            variant="temporary"
-            // variant="persistent"
-            open={mobileOpen}
-            onClose={handleDrawerToggle}
-            ModalProps={{
-              keepMounted: true, // Better open performance on mobile.
-            }}
-            sx={{
-              display: { xs: "block", sm: "none" },
-              "& .MuiDrawer-paper": {
-                boxSizing: "border-box",
-                width: drawerWidth,
-                // pt: 8,
-              },
-            }}
-          >
-            <SubDrawer />
-          </Drawer>
-        ) : (
-          <Drawer
-            variant="permanent"
-            sx={{
-              display: { xs: "none", sm: "block" },
-              "& .MuiDrawer-paper": {
-                boxSizing: "border-box",
-                width: drawerWidth,
-              },
-            }}
-            open
-          >
-            <SubDrawer />
-          </Drawer>
-        )}
       </Box>
-      <Box
-        component="main"
-        sx={{
-          display: "flex",
-          height: "100vh",
-          p: 3,
-          width: { sm: `calc(100% - ${drawerWidth}px)` },
-        }}
-      >
-        <Toolbar />
-        <Outlet />
-      </Box>
-    </Box>
+    </>
   );
 }
 

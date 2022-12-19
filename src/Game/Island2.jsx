@@ -31,6 +31,7 @@ import {
   usePreload,
   FindAll,
   Water,
+  Skybox,
 } from "lingo3d-react";
 
 import * as THREE from 'three'
@@ -240,7 +241,7 @@ const Island2 = () => {
       )}
 
       <World>
-        <LingoEditor />
+        {/* <LingoEditor /> */}
         {/* <Library /> */}
         {/* <Toolbar /> */}
         {/* <Editor /> */}
@@ -252,9 +253,9 @@ const Island2 = () => {
           defaultLightScale={0.30}
           repulsion={5}
         />
-
+        <Skybox texture="img/sky/autumn.jpg" />
         <Suspense fallback={null}>
-          <LightArea2 />
+          {/* <LightArea2 /> */}
         </Suspense>
 
         <Model
@@ -271,9 +272,9 @@ const Island2 = () => {
           z={-761.98}
           scale={70}
           flipY={true}
-          src="maps/new/chinese_island4.gltf"
+          src="maps/new/chinese_island5.glb"
 
-          receiveShadow={false}
+          receiveShadow={true}
 
           onClick={!isMobile && handleClick}
         >
@@ -295,7 +296,17 @@ const Island2 = () => {
           <Find
             name="AM113_021_Populus_Defintion1.006"
             opacity={1}
+            texture="maps/new/alphamap.png"
           />
+
+
+          <Find
+            name="tree"
+            opacity={1}
+            texture="maps/new/alphamap.png"
+          />
+
+          <FindAll name="tree" />
 
 
         </Model>

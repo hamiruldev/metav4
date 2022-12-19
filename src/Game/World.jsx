@@ -78,7 +78,6 @@ const World = () => {
   return (
     <>
 
-
       <ScrollDialog
         htmlFor="instruction"
         dataContent=""
@@ -96,32 +95,6 @@ const World = () => {
           handleClose={handleClose}
         />
       }
-
-      {/* <Button
-        onClick={() => {
-          handleGame();
-          setOpen(true);
-        }}
-        sx={{
-          background: `url( ${windowSize.width < 700
-            ? "preloader/popMobile.png"
-            : "preloader/popDesktop.png"
-            })`,
-          width: "100%",
-          height: "100vh",
-          border: "0px",
-          backgroundRepeat: "no-repeat",
-          backgroundSize: "contain",
-          backgroundPosition: "center",
-          backgroundColor: "transparent",
-          zIndex: 10000,
-          display: isGame ? "none" : "block",
-          ':hover': {
-            backgroundColor: "transparent",
-          }
-        }}
-      /> */}
-
 
       <Slide direction="down" in={startAnimate} mountOnEnter unmountOnExit>
         <Button

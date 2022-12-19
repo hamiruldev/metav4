@@ -273,3 +273,10 @@ body {
 .activeCard {
     border: 2px solid red;
 }
+
+
+.imgBcg {
+    background-position: center;
+    background-repeat: no-repeat;
+    background-size: auto;
+}

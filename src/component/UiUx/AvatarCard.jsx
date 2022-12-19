@@ -47,12 +47,24 @@ export default function AvatarCard({ setAvatarButton }) {
 
     const handleAvatar = (id, image, model, state) => {
 
+        getRenderer.render(scene, camera.userData.manager.camera)
+        currentAvatar.userData.manager.srcState.set("3dCharacter/new/character1.glb")
+        getRenderer.render(scene, camera.userData.manager.camera)
+
         setAvatar({ name: id, image: image, model: model, state: state })
-        currentAvatar.userData.manager.srcState.set(model)
+
+        setTimeout(() => {
+            currentAvatar.userData.manager.srcState.set(model)
+            getRenderer.render(scene, camera.userData.manager.camera)
+
+        }, 500);
+
+
         const animation = currentAvatar.userData.manager.animationManagers
         animation["idle"].play()
+
         setAvatarButton(true)
-        getRenderer.render(scene, camera.userData.manager.camera)
+
     }
 
 

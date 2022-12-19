@@ -19,6 +19,7 @@ import AvatarCard from "./UiUx/AvatarCard";
 import Form from "./Form";
 import InstructionCtx from "./UiUx/InstructionCtx";
 import ListMenu from "./UiUx/listMenu";
+import WelcomeButton from "./UiUx/WelcomeButton";
 
 var menuData = [{ id: 1, name: 'Intrest form' }, { id: 2, name: 'share' }, { id: 3, name: 'help' }]
 
@@ -27,6 +28,14 @@ const loginButton = () => {
   loginEl.click()
   loginEl.style.display = "block"
 }
+
+const registerButton = () => {
+  const loginEl = document.getElementById("formButton")
+  loginEl.click()
+  loginEl.style.display = "block"
+}
+
+
 
 const Transition = React.forwardRef(function Transition(props, ref) {
   return <Slide
@@ -134,6 +143,8 @@ export default function ScrollDialog({
   const [isAvatar, setAvatarButton] = React.useState(false);
   const [isLoading, setLoading] = React.useState(false);
   const [isSuccess, setSuccess] = React.useState(false);
+  const [isReady, setReady] = React.useState(false)
+
   const matches = useMediaQuery("(max-width:425px)");
 
   const handleAvatar = () => {
@@ -142,16 +153,22 @@ export default function ScrollDialog({
     setTimeout(() => {
       setLoading(false)
       setSuccess(true)
+
+
       setTimeout(() => {
-        handleClose()
-        setTimeout(() => {
-          setSuccess(false)
-          setAvatarButton(false)
-        }, 500)
-      }, 1500)
+        setSuccess(false)
+        setAvatarButton(false)
+        handleClose("avatarClose")
+
+      }, 500)
+
+
     }, 1000);
   }
 
+  const handleReady = () => {
+    setReady(true)
+  }
 
   return (
     <>
@@ -165,13 +182,15 @@ export default function ScrollDialog({
         scroll={scroll}
         aria-labelledby="scroll-dialog-title"
         aria-describedby="scroll-dialog-description"
+        className={(htmlFor == "welcome" || htmlFor == "avatar" || htmlFor == "login" || htmlFor == "register") && "imgBcg"}
         sx={{
           backgroundColor: "transparent",
+          backgroundSize: "cover",
+          backgroundImage: (htmlFor == "welcome" || htmlFor == "avatar" || htmlFor == "login" || htmlFor == "register") && `url(img/sky/cover3.JPG)`,
         }}
       >
         <ClickAwayListener onClickAway={handleClose}>
-          <AnimateBox
-          >
+          <AnimateBox>
             <Stack
               sx={{
                 p: 1,
@@ -205,10 +224,12 @@ export default function ScrollDialog({
                 dividers={scroll === "paper"}
               >
 
-                <Typography variant={matches ? "h5" : "h4"}>
+                <Typography variant={matches ? "h5" : "h4"} id="titleDialog">
                   {htmlFor == "needHelp" && <>How can we <span style={{ color: 'red' }}> HELP  </span> you ?</>}
+                  {htmlFor == "welcome" && "WELCOME"}
                   {htmlFor == "instruction" && "INSTRUCTION"}
                   {htmlFor == "login" && "LOGIN"}
+                  {htmlFor == "register" && "REGISTER"}
                   {htmlFor == "menu" && "MENU"}
                   {htmlFor == "avatar" && "CHOOSE AVATAR"}
                   {htmlFor == "Info Board" && "INFO BOARD"}
@@ -253,14 +274,14 @@ export default function ScrollDialog({
 
                   >
 
+                    {htmlFor == "welcome" && `You are now in Fantasy Island.Choose your favourite avatar before start your exploration.`}
                     {htmlFor == "Info Board" && `Congrats! You can now play a game in the fantasy island. Go to future teleport at the end of this tunnel to explore the island.`}
                     {htmlFor == "instruction" && <InstructionCtx />}
                     {htmlFor == "menu" && <ListMenu />}
                     {htmlFor == "avatar" && <AvatarCard setAvatarButton={setAvatarButton} />}
                     {htmlFor == "needHelp" && <Form />}
-                    {htmlFor == "login" && <AuthForm />}
-
-
+                    {htmlFor == "register" && <AuthForm htmlFor={htmlFor} />}
+                    {htmlFor == "login" && <AuthForm htmlFor={htmlFor} />}
 
                     {htmlFor == "product" && "products"}
                     {htmlFor === "video" && "video"}
@@ -302,8 +323,6 @@ export default function ScrollDialog({
                     )}
 
 
-
-
                   </Box>
                 </Slide>
 
@@ -332,7 +351,7 @@ export default function ScrollDialog({
 
                   <Button
                     fullWidth
-                    disabled={htmlFor == "avatar" && !isAvatar}
+                    disabled={htmlFor == "avatar" && !isAvatar || htmlFor == "welcome" && !isReady}
                     sx={{
                       my: 2,
                       fontWeight: 900,
@@ -347,13 +366,18 @@ export default function ScrollDialog({
                     }}
                     onClick={(() => {
                       htmlFor == "login" && loginButton()
+                      htmlFor == "register" && registerButton()
                       htmlFor == "avatar" && handleAvatar()
                       htmlFor == "instruction" && handleClose()
+                      htmlFor == "welcome" && handleAvatar()
+
                     })}
                     endIcon={htmlFor == "avatar" && isLoading && <CircularProgress sx={{ color: "black" }} size={24} />}
                   >
 
+                    {htmlFor == "register" && "Start"}
                     {htmlFor == "login" && "Submit"}
+                    {htmlFor == "welcome" && <WelcomeButton handleReady={handleReady} isReady={isReady} />}
                     {htmlFor == "instruction" && "Start"}
                     {htmlFor == "avatar" && isSuccess && "Success"}
                     {htmlFor == "avatar" && !isSuccess && "Start"}

@@ -20,12 +20,9 @@ const LightArea1 = () => {
     // console.log("originalLight", originalLight)
     // reflight !== null && light2?.copy()
 
-    console.log("rerender")
 
     return (
         <>
-
-
             <AreaLight
                 name="light1"
                 x={1971.36}
