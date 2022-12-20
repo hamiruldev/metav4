@@ -27,7 +27,7 @@ const World = () => {
 
   const progress = usePreload(
     [
-      "maps/tunnel1.glb",
+      "maps/tunnel/tunnel1.glb",
       "3dCharacter/new/character1.glb",
       "3dCharacter/new/character2.glb",
       "3dCharacter/new/character3.glb",

@@ -42,9 +42,9 @@ import ScrollDialog from "../component/ScrollDialog";
 // import testVertexShader from '../shader/vertex.glsl'
 // import testFragmentShader from '../shader/fragment.glsl'
 
-const Game = () => {
+const viteBaseUrl = import.meta.env.VITE_BASE_URL;
 
-  const viteBaseUrl = import.meta.env.VITE_BASE_URL;
+const Game = () => {
 
   const dummyRef = useRef(null);
   const dummyBatteryRef = useRef(null);
@@ -52,7 +52,9 @@ const Game = () => {
   const pointerRef = useRef(null);
   const portalRef = useRef(null);
   const triggerBatteryRef = useRef(null);
-  const cubeRef = useRef(null);
+  const worldRef = useRef(null);
+
+
 
   const scene = useScene()
   const { width, height } = useWindowSize();
@@ -61,23 +63,10 @@ const Game = () => {
   const [arrowPosition, setArrowPosition] = useState({ x: 0, y: 0, z: 0 });
   const [isVisible, setVisible] = useState({ state: false, name: "" });
 
-  //mouseOver
-  const [mouseOver, setMouseOver] = useState(false);
-
   const [dialogOpen, setDialogOpen] = useState(false);
   const [htmlFor, setHtmlFor] = useState();
 
   const isMobile = width < height;
-  const camX = mouseOver ? 50 : 0;
-  const camY = mouseOver ? 100 : 100;
-  const camZ = mouseOver ? 100 : 300;
-
-  // Camera spring animation
-  // 相机的弹簧动画
-  const xSpring = useSpring({ to: camX, bounce: 0 });
-  const ySpring = useSpring({ to: camY, bounce: 0 });
-  const zSpring = useSpring({ to: camZ, bounce: 0 });
-
 
   //player movement
   const handleClick = (e) => {
@@ -130,6 +119,8 @@ const Game = () => {
 
   const handleItem = (name) => {
 
+    console.log("masuk")
+
     name == "Battery" && handleDialogToggle("Info Board")
 
     const allChildren = scene.children
@@ -172,140 +163,17 @@ const Game = () => {
     setDialogOpen(false);
   };
 
-  const copyObject = (e) => {
-
-
-    const camera = scene.getObjectByName("camera");
-
-
-    getRenderer.render(scene, camera.userData.manager.camera)
-
-
-
-    // const camera = scene.getObjectByName("camera");
-    // console.log("camera", camera.userData.manager.camera)
-    // console.log("scene", scene)
-
-    // const geometry1 = new THREE.BoxGeometry(5, 5, 5);
-    // const material1 = new THREE.MeshBasicMaterial({ color: 0x00ff00 });
-    // const cube1 = new THREE.Mesh(geometry1, material1);
-
-    // const oriCube = scene.getObjectByName("oriCube");
-
-    // oriCube.parent = null
-    // oriCube.userData = {}
-
-    // console.log("cube1", cube1)
-    // console.log("oriCube", oriCube)
-
-
-    // var copycube = oriCube.clone();
-
-    // console.log("copycube", copycube)
-
-
-    // scene.add(copycube)
-
-
-    // const newObjCube = new THREE.Object3D()
-
-    // newObjCube.add(newObjCube)
-    // newObjCube.name = "cubeCopyRef"
-    // newObjCube.position.set(Math.random(), 5, 5)
-
-
-    // console.log("copycube", copycube)
-    // console.log("newObjCube", newObjCube)
-
-
-    // scene.add(newObjCube)
-
-    // console.log("scene", scene.children)
-    // console.log("getRenderer", getRenderer.info.memory)
-
-  }
-
   const animate = () => {
     const camera = scene.getObjectByName("camera");
     getRenderer.render(scene, camera.userData.manager.camera)
     window.requestAnimationFrame(animate)
   }
 
-
-  // const geometry1 = new THREE.BoxGeometry(1, 1, 1);
-  // const material1 = new THREE.MeshBasicMaterial({ color: 0x00ff00 });
-  // const cube = new THREE.Mesh(geometry1, material1);
-
-  // const geometry = new THREE.PlaneGeometry(1, 1, 32, 32)
-
-  // // Material
-  // const material = new THREE.ShaderMaterial({
-  //   vertexShader: document.getElementById('testVertexShader').textContent,
-  //   fragmentShader: document.getElementById('testFragmentShader').textContent,
-  //   // uniforms:
-  //   // {
-  //   //   uFrequency: { value: new THREE.Vector2(10, 5) },
-  //   //   uTime: { value: 0 },
-  //   //   uColor: { value: new THREE.Color('orange') },
-  //   //   uTexture: { value: flagTexture }
-  //   // }
-  // })
-
-  // // Mesh
-  // const mesh = new THREE.Mesh(geometry, material)
-  // // mesh.scale.y = 2 / 3
-
-  // setTimeout(() => {
-  //   scene.add(cube)
-  // }, 10000);
-
-  // console.log("cube", cube)
-  // console.log("mesh", mesh)
-  // console.log("getRenderer", getRenderer.info.memory)
-
+  // console.log("worldRef", worldRef?.current?.model?.object3d?.material)
+  console.log("worldRef", worldRef?.current)
 
   return (
     <>
-
-      <Button
-        variant="contained"
-        className="testButton"
-        onClick={copyObject}>
-        copy cube
-      </Button>
-      <Button
-        variant="contained"
-        className="testButton"
-        onClick={(() => {
-          handleDialogToggle("avatar")
-        })}>
-        avatar
-      </Button>
-      <Button
-        variant="contained"
-        className="testButton"
-        onClick={(() => {
-          handleDialogToggle("instruction")
-        })}>
-        instruction
-      </Button>
-      <Button
-        variant="contained"
-        className="testButton"
-        onClick={(() => {
-          handleDialogToggle("login")
-        })}>
-        Sign Up/Login
-      </Button>
-      <Button
-        variant="contained"
-        className="testButton"
-        onClick={(() => {
-          handleDialogToggle("menu")
-        })}>
-        menu
-      </Button>
-
       <ScrollDialog
         htmlFor={htmlFor}
         boothState={undefined}
@@ -318,7 +186,7 @@ const Game = () => {
         onClose={handleClose}
       />
       <World>
-        {/* <LingoEditor /> */}
+        <LingoEditor />
         {/* <Library /> */}
         {/* <Toolbar /> */}
         {/* <Editor /> */}
@@ -333,16 +201,10 @@ const Game = () => {
 
         <LightArea />
 
-        <Cube name="oriCube"
-          onIntersect={(() => {
-            console.log("onIntersect")
-          })}
-          intersectIds="player"
-          // slippery={true}
-          // physics={true} 
-          ref={cubeRef} x={290.01} y={-2034.24} z={5985.45} color="red" />
+        <Model y={-2151.96} x={-3374.39} name="ground" src="maps/item/ground.glb" />
 
         <Model
+
           name="worldmap"
           physics="map"
           width={245.36}
@@ -354,16 +216,25 @@ const Game = () => {
           y={0}
           z={0}
           scale={70}
-          src="maps/tunnel1.glb"
-          // src="maps/tunnel-v3.glb"
-
+          src="maps/tunnel/tunnel1.glb"
           onClick={!isMobile && handleClick}
+
+          // textureFlipY={false}
+          // alphaMap="maps/tunnel/Tunnel_diffuse.jpg"
+          // texture="maps/tunnel/Tunnel_diffuse.jpg"
+
+          ref={worldRef}
         >
 
+          {/* <Find name="wall.001"
+            alphaMap="maps/tunnel/Tunnel_diffuse.jpg"
+            // texture="maps/tunnel/Tunnel_diffuse.jpg"
+            normalMap="maps/tunnel/Tunnel_normal.jpg"
+            roughnessMap="maps/tunnel/Tunnel_roughness.jpg"
+            textureFlipY={false}
+          /> */}
 
         </Model>
-
-
 
         <AreaLight
           x={474.83}
@@ -384,7 +255,7 @@ const Game = () => {
           radius={400}
           targetIds="player"
           onEnter={(() => {
-            openPortal(`${viteBaseUrl}forest-island`)
+            openPortal(`${viteBaseUrl}main-island`)
           })}
         />
 
@@ -422,7 +293,7 @@ const Game = () => {
           scaleX={10}
           scaleY={10}
           scaleZ={10}
-          src="maps/stargate.glb"
+          src="maps/item/stargate.glb"
           onClick={((e) => {
             handleClick(e)
           })}
@@ -450,7 +321,7 @@ const Game = () => {
           animation={{ y: [-1932.51, -1932.51 + 10, -1932.51, -1932.51 - 10, -1932.51], rotationY: [0, 45, 90, 135, 180, 225, 270, 315] }}
 
         >
-          <Trigger
+          {/* <Trigger
             ref={triggerBatteryRef}
             radius={100}
             name="triggerBattery"
@@ -458,9 +329,14 @@ const Game = () => {
             onEnter={(() => {
               handleItem("Battery")
             })}
-          />
+          /> */}
 
           <Sphere
+            ref={triggerBatteryRef}
+            targetIds={['player']}
+            onIntersect={(() => {
+              handleItem("Battery")
+            })}
             name="batterySphere"
             scale={2.5}
             color="#ffa400"
@@ -488,13 +364,7 @@ const Game = () => {
           lockTargetRotation={isMobile ? true : false}
           fov={width < 640 ? 110 : 90}
           enableDamping
-          // innerY={90}
 
-          // Basiir
-          innerY={ySpring}
-          innerZ={zSpring}
-          innerX={xSpring}
-          // --Basiir
           y={100}
           zoom={1}
         >
@@ -512,7 +382,6 @@ const Game = () => {
             width={50}
             depth={50}
 
-            // preset="rifle"
             rotationY={180.74}
             x={599.08}
             y={-2004.04}
@@ -543,8 +412,6 @@ const Game = () => {
           </Dummy>
 
         </ThirdPersonCamera>
-
-
 
 
         {/*

@@ -36,7 +36,6 @@ const registerButton = () => {
 }
 
 
-
 const Transition = React.forwardRef(function Transition(props, ref) {
   return <Slide
     ref={ref}
@@ -81,12 +80,12 @@ const BootstrapDialog = styled(Dialog)(({ theme }) => ({
 }));
 
 const BootstrapDialogTitle = (props) => {
-  const { children, handleClose, ...other } = props;
+  const { children, handleClose, htmlFor, ...other } = props;
   const matches = useMediaQuery("(max-width:425px)");
 
   return (
     <DialogTitle sx={{ m: 0, p: 2, display: "flex", justifyContent: "flex-end", width: "100%" }} {...other}>
-      {handleClose ? (
+      {htmlFor != "welcome" && handleClose ? (
         <IconButton
           aria-label="close"
           onClick={handleClose}
@@ -148,18 +147,14 @@ export default function ScrollDialog({
   const matches = useMediaQuery("(max-width:425px)");
 
   const handleAvatar = () => {
-
     setLoading(true)
     setTimeout(() => {
       setLoading(false)
       setSuccess(true)
-
-
       setTimeout(() => {
         setSuccess(false)
         setAvatarButton(false)
         handleClose("avatarClose")
-
       }, 500)
 
 
@@ -169,6 +164,10 @@ export default function ScrollDialog({
   const handleReady = () => {
     setReady(true)
   }
+
+
+  console.log("htmlFor", htmlFor)
+
 
   return (
     <>
@@ -189,7 +188,7 @@ export default function ScrollDialog({
           backgroundImage: (htmlFor == "welcome" || htmlFor == "avatar" || htmlFor == "login" || htmlFor == "register") && `url(img/sky/cover3.JPG)`,
         }}
       >
-        <ClickAwayListener onClickAway={handleClose}>
+        <ClickAwayListener disableReactTree onClickAway={htmlFor != "welcome" ? handleClose : false}>
           <AnimateBox>
             <Stack
               sx={{
@@ -206,10 +205,12 @@ export default function ScrollDialog({
                 borderRadius: "30px",
               }}
             >
+
               <BootstrapDialogTitle
                 component="div"
                 id="customized-dialog-title"
                 handleClose={handleClose}
+                htmlFor={htmlFor}
               />
 
               <DialogContent
@@ -274,7 +275,7 @@ export default function ScrollDialog({
 
                   >
 
-                    {htmlFor == "welcome" && `You are now in Fantasy Island.Choose your favourite avatar before start your exploration.`}
+                    {htmlFor == "welcome" && `You are now in Fantasy Island. Choose your favourite avatar before start your exploration.`}
                     {htmlFor == "Info Board" && `Congrats! You can now play a game in the fantasy island. Go to future teleport at the end of this tunnel to explore the island.`}
                     {htmlFor == "instruction" && <InstructionCtx />}
                     {htmlFor == "menu" && <ListMenu />}

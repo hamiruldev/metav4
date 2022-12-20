@@ -9,11 +9,15 @@ import Theme from "./Theme";
 import Iframe from "./page/Iframe";
 import Nomenu from "./page/Nomenu";
 import "./App.css";
-import Game from "./Game/Game";
-import Island1 from "./Game/Island1";
 import { redirect } from "react-router-dom";
-import Island2 from "./Game/Island2";
 import ResponsiveDrawer from "./component/Drawer";
+
+import Game from "./Game/Game";
+import MainIsland from "./Game/MainIsland";
+import ForestIsland from "./Game/ForestIsland";
+import JapanIsland from "./Game/JapanIsland";
+import ChineseIsland from "./Game/ChineseIsland";
+import GreekIsland from "./Game/GreekIsland";
 
 
 function Home() {
@@ -44,9 +48,13 @@ function App() {
             <Route path="/" element={<ResponsiveDrawer />}>
 
               <Route index element={<Home />} />
-              <Route path="/game" element={<World />} />
-              <Route path="/forest-island" element={<Island1 />} />
-              <Route path="/japan-island" element={<Island2 />} />
+
+              <Route path="/tunnel" element={<World />} />
+              <Route path="/main-island" element={<MainIsland />} />
+              <Route path="/forest-island" element={<ForestIsland />} />
+              <Route path="/japan-island" element={<JapanIsland />} />
+              <Route path="/chinese-island" element={<ChineseIsland />} />
+              <Route path="/greek-island" element={<GreekIsland />} />
 
               <Route
                 path="portfolio"

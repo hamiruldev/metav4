@@ -41,7 +41,7 @@ export default function AvatarCard({ setAvatarButton }) {
     const scene = useScene()
     const getRenderer = useRenderer()
     const currentAvatar = scene.getObjectByName("player")
-    const camera = scene.getObjectByName("camera");
+    const camera = scene.getObjectByName("tpc");
 
     const [avatar, setAvatar] = useState({ name: "", image: "", model: "", state: false })
 
@@ -66,7 +66,6 @@ export default function AvatarCard({ setAvatarButton }) {
         setAvatarButton(true)
 
     }
-
 
     return (
         <Swiper
