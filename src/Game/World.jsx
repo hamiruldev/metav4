@@ -44,6 +44,8 @@ const World = () => {
 
   const handleInstructionClose = () => {
     setGame(false);
+    const buttonCamera = document.getElementById("cameraButton")
+    buttonCamera.click()
   };
 
 

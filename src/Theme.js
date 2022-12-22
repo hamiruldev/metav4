@@ -89,7 +89,7 @@ const Theme = {
         root: {
           color: "black",
           border: "1px solid white",
-          backgroundColor: "#FFC000",
+          backgroundColor: "white",
         },
       },
     },

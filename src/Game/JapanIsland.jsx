@@ -25,9 +25,7 @@ import {
   usePreload,
   Cube,
   Plane,
-  SpawnPoint,
   Skybox,
-  HTMLMesh,
   OrbitCamera,
   Camera,
 
@@ -70,28 +68,18 @@ const JapanIsland = () => {
   isLogin == null && sessionStorage.setItem("login", false);
 
   //mouseOver
-  const [mouseOver, setMouseOver] = useState(false);
   const [dialogOpen, setDialogOpen] = useState(false);
   const [htmlFor, setHtmlFor] = useState();
 
   const isMobile = width < height;
-  const camX = mouseOver ? 50 : 0;
-  const camY = mouseOver ? 100 : 100;
-  const camZ = mouseOver ? 100 : 300;
 
-  // Camera spring animation
-  // 相机的弹簧动画
-  const xSpring = useSpring({ to: camX, bounce: 0 });
-  const ySpring = useSpring({ to: camY, bounce: 0 });
-  const zSpring = useSpring({ to: camZ, bounce: 0 });
 
   const handleInstructionClose = () => {
     setGame(false);
     setTimeout(() => {
-      handleDialogToggle("avatar")
+      isLogin == "true" ? handleCamera() : handleDialogToggle("avatar")
     }, 1000);
   };
-
   const handleClick = (e) => {
 
     const dummy = dummyRef.current;
@@ -122,7 +110,7 @@ const JapanIsland = () => {
   };
 
   const openPortal = (url) => {
-    window.open(url, "_blank  ")
+    window.open(` ${viteBaseUrl + url}`, "_self")
   }
 
   const handleItem = (name) => {
@@ -176,7 +164,7 @@ const JapanIsland = () => {
       else {
         setDialogOpen(false);
         setHtmlFor()
-        hanldeCamera()
+        handleCamera()
       };
 
     }, 500);
@@ -225,7 +213,7 @@ const JapanIsland = () => {
     dummy.z = 194.50
   }
 
-  const hanldeCamera = () => {
+  const handleCamera = () => {
     setTimeout(() => {
       tpcRef.current.active = true
     }, 1000)
@@ -260,7 +248,7 @@ const JapanIsland = () => {
       }
 
       <World>
-        {/* <LingoEditor /> */}
+        <LingoEditor />
         {/* <Library /> */}
         {/* <Toolbar /> */}
         {/* <Editor /> */}
@@ -272,7 +260,7 @@ const JapanIsland = () => {
           exposure={1}
           defaultLightScale={1}
           repulsion={5}
-          gridHelper={true}
+          gridHelper={false}
           antiAlias={true}
         />
 
@@ -304,10 +292,10 @@ const JapanIsland = () => {
           scaleY={20}
           scaleZ={20}
           x={1722.20}
-          y={-1646.54}
+          y={-1246.54}
           z={-761.98}
           scale={70}
-          src="maps/island_n-v1.glb"
+          src="maps/japan/japan_island.glb"
           onClick={!isMobile && handleClick}
         />
 
@@ -325,13 +313,13 @@ const JapanIsland = () => {
 
         <Group
           name="groupPortal"
-          x={2168.09}
-          y={206.86}
-          z={-1404.01}
-          rotationY={-31.42}
-          rotationX={-164.79}
-          rotationZ={-174.30}
-          scale={0.30}
+          x={2353.67}
+          y={165.02}
+          z={-1732.58}
+          rotationX={-162.74}
+          rotationY={-35.36}
+          rotationZ={-160.28}
+          scale={0.50}
         >
 
           <AreaLight
@@ -344,13 +332,13 @@ const JapanIsland = () => {
 
           />
 
-          {/* <Trigger
-            radius={600}
+          <Trigger
+            radius={300.00}
             targetIds="player"
             onEnter={(() => {
-              openPortal(`${viteBaseUrl}japan-island`)
+              openPortal(`main-island`)
             })}
-          /> */}
+          />
 
           <Model
             name="portalModel"
@@ -371,7 +359,7 @@ const JapanIsland = () => {
             </Find>
           </Model>
 
-          <HTMLMesh
+          {/* <HTML
             ref={htmlRef}
             visible={true}
             x={-31.44}
@@ -382,6 +370,7 @@ const JapanIsland = () => {
               sx={{
                 mt: 2,
                 padding: "30px",
+                width: "300px",
                 height: "max-content",
                 color: "white",
                 borderRadius: "20px",
@@ -406,7 +395,7 @@ const JapanIsland = () => {
                 Travel to Japanese Island
               </Typography>
             </Box>
-          </HTMLMesh>
+          </HTML> */}
 
 
         </Group>
@@ -425,7 +414,6 @@ const JapanIsland = () => {
           x={-657.85}
           y={58.76}
           z={0}
-          animation={{ y: [58.76, 58.76 + 10, 58.76, 58.76 - 10, 58.76], rotationY: [0, 45, 90, 135, 180, 225, 270, 315] }}
 
         >
           <Trigger
@@ -443,7 +431,6 @@ const JapanIsland = () => {
             scale={2.5}
             color="#ffa400"
             opacity={0.3}
-            bloom
           />
 
           <Model
@@ -453,27 +440,10 @@ const JapanIsland = () => {
             opacity={0.5}
             animationPaused={false}
             animationRepeat={false}
-
+            animation={{ rotationY: [0, 45, 90, 135, 180, 225, 270, 315] }}
           />
 
         </Group>
-
-        {/* <OrbitCamera
-          name="orbitRef"
-          fov={90}
-          ref={orbitRef}
-          active={true}
-          transition={0.02}
-          innerZ={5091.64}
-          // x={-401.57}
-          // y={803.95}
-          // z={3891.64}
-          enableZoom
-          enableDamping
-          targetId="player"
-          autoRotate
-          minPolarAngle={100}
-        /> */}
 
         <Camera
           name="cameraRef"
@@ -502,12 +472,8 @@ const JapanIsland = () => {
 
           enableZoom
           minPolarAngle={100}
-          // azimuthAngle={90}
-          // minAzimuthAngle={180}
 
-          innerY={ySpring}
-          // innerZ={zSpring}
-          innerX={xSpring}
+
           y={100}
           zoom={1}
         >
@@ -541,7 +507,7 @@ const JapanIsland = () => {
             <Model
               ref={dummyBatteryRef}
               name="dummyBattery"
-              src="item/battery.glb"
+              src="item/coin.glb"
               opacity={0.5}
               scale={0.2}
               y={80}
@@ -566,7 +532,7 @@ const JapanIsland = () => {
           z={arrowPosition.z}
         />
 
-        <Group
+        {/* <Group
           x={-952.22}
           y={0.20}
           z={-440.27}
@@ -587,7 +553,7 @@ const JapanIsland = () => {
               handleOutPlayerFly()
             })}
           />
-        </Group>
+        </Group> */}
 
       </World>
 

@@ -60,7 +60,7 @@ const AuthForm = ({ htmlFor }) => {
                   setMessage("");
                   setLoading(true);
 
-                  sessionStorage.setItem("login", true);
+                  sessionStorage.setItem("login", "true");
 
                   setLoading(false);
 
@@ -215,7 +215,7 @@ const AuthForm = ({ htmlFor }) => {
                 onSubmit={async (values) => {
                   setMessage("");
 
-                  setLoading(true); 
+                  setLoading(true);
 
                   sessionStorage.setItem("login", true);
 

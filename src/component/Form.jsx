@@ -168,7 +168,7 @@ const Form = ({ setHelpButton }) => {
                                                         inputStyle={{
                                                             height: "45px",
                                                             width: "100%",
-                                                            backgroundColor: "#FFC000",
+                                                            backgroundColor: "white",
                                                             color: "black",
                                                             filter: "blur(0px)",
                                                         }}
@@ -245,7 +245,7 @@ const Form = ({ setHelpButton }) => {
 
                                             <Box sx={{ alignItems: "center", py: 1, display: "flex", justifyContent: 'center' }}>
                                                 <Button sx={{
-                                                    width: "50%", color: "black", backgroundColor: "#FFC000", boxShadow: "5px 7px 7px -5px #000000 !important",
+                                                    width: "50%", color: "black", backgroundColor: "white", boxShadow: "5px 7px 7px -5px #000000 !important",
                                                     "&:hover": {
                                                         backgroundColor: "#ff9d00",
                                                     },

@@ -6,6 +6,7 @@ import axiosRetry from "axios-retry";
 axiosRetry(axios, { retries: 3 });
 
 const myVar = import.meta.env.VITE_BACKEND_URL;
+
 const getAllProduct = async (booth_id: number) => {
   try {
     const response = await axios.get(

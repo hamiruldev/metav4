@@ -25,15 +25,14 @@ import {
   usePreload,
   Cube,
   Plane,
-  SpawnPoint,
   Skybox,
-  HTMLMesh,
   OrbitCamera,
   Camera,
 
 } from "lingo3d-react";
 
 import * as THREE from 'three'
+import { ImprovedNoise } from 'https://unpkg.com/three/examples/jsm/math/ImprovedNoise.js';
 
 import ScrollDialog from "../component/ScrollDialog";
 import LightArea1 from "../component/World/LightArea1";
@@ -41,9 +40,11 @@ import LightArea1 from "../component/World/LightArea1";
 // import testVertexShader from '../shader/vertex.glsl'
 // import testFragmentShader from '../shader/fragment.glsl'
 
+const viteBaseUrl = import.meta.env.VITE_BASE_URL;
+
+
 const ChineseIsland = () => {
 
-  const viteBaseUrl = import.meta.env.VITE_BASE_URL;
 
   const dummyRef = useRef(null);
   const dummyBatteryRef = useRef(null);
@@ -88,7 +89,7 @@ const ChineseIsland = () => {
   const handleInstructionClose = () => {
     setGame(false);
     setTimeout(() => {
-      handleDialogToggle("avatar")
+      isLogin == "true" ? handleCamera() : handleDialogToggle("avatar")
     }, 1000);
   };
 
@@ -122,8 +123,8 @@ const ChineseIsland = () => {
   };
 
   const openPortal = (url) => {
-    window.open(url, "_blank  ")
-  }
+    window.open(` ${viteBaseUrl + url}`, "_self")
+  };
 
   const handleItem = (name) => {
 
@@ -158,7 +159,7 @@ const ChineseIsland = () => {
     triggerBatteryRef.current.dispose();
 
     // animate()
-  }
+  };
 
   const handleDialogToggle = (name) => {
     setDialogOpen(!dialogOpen);
@@ -176,7 +177,7 @@ const ChineseIsland = () => {
       else {
         setDialogOpen(false);
         setHtmlFor()
-        hanldeCamera()
+        handleCamera()
       };
 
     }, 500);
@@ -207,11 +208,11 @@ const ChineseIsland = () => {
       }
     }
 
-  }
+  };
 
   const handleOutPlayerFly = () => {
     // const playerRefObj = dummyRef.current
-  }
+  };
 
   const handlePlayerFall = () => {
 
@@ -223,22 +224,140 @@ const ChineseIsland = () => {
     dummy.y = 238.87
     dummy.x = -404.36
     dummy.z = 194.50
-  }
+  };
 
-  const hanldeCamera = () => {
+  const handleCamera = () => {
     setTimeout(() => {
       tpcRef.current.active = true
     }, 1000)
-  }
+  };
 
   const animate = () => {
     const camera = scene.getObjectByName("camera");
     getRenderer.render(scene, camera.userData.manager.camera)
     window.requestAnimationFrame(animate)
-  }
+  };
+
+  const handleShader = () => {
+
+
+    const vertexShader = /* glsl */`
+    attribute float size;
+
+    varying vec3 vColor;
+
+    void main() {
+
+      vColor = color;
+
+      vec4 mvPosition = modelViewMatrix * vec4( position, 1.0 );
+
+      gl_PointSize = size * ( 300.0 / -mvPosition.z );
+
+      gl_Position = projectionMatrix * mvPosition;
+
+    }
+  `;
+
+    const fragmentShader = /* glsl */`
+    uniform sampler2D pointTexture;
+
+    varying vec3 vColor;
+
+    void main() {
+
+      gl_FragColor = vec4( vColor, 1.0 );
+
+      gl_FragColor = gl_FragColor * texture2D( pointTexture, gl_PointCoord );
+
+    }
+				`;
+
+
+    // Texture
+
+    const size = 128;
+    const data = new Uint8Array(size * size * size);
+
+    let i = 0;
+    const scale = 0.05;
+    const perlin = new ImprovedNoise();
+    const vector = new THREE.Vector3();
+
+    for (let z = 0; z < size; z++) {
+
+      for (let y = 0; y < size; y++) {
+
+        for (let x = 0; x < size; x++) {
+
+          const d = 1.0 - vector.set(x, y, z).subScalar(size / 2).divideScalar(size).length();
+          data[i] = (128 + 128 * perlin.noise(x * scale / 1.5, y * scale, z * scale / 1.5)) * d * d;
+          i++;
+
+        }
+
+      }
+
+    }
+
+    const texture = new THREE.Data3DTexture(data, size, size, size);
+    texture.format = THREE.RedFormat;
+    texture.minFilter = THREE.LinearFilter;
+    texture.magFilter = THREE.LinearFilter;
+    texture.unpackAlignment = 1;
+    texture.needsUpdate = true;
+
+    let uniforms
+
+
+    const geometry = new THREE.BoxGeometry(1, 1, 1);
+    const material = new THREE.MeshBasicMaterial({ color: 0x00ff00 });
+    const geometry1 = new THREE.BoxGeometry(1, 1, 1);
+
+    uniforms = {
+      pointTexture: { value: new THREE.TextureLoader().load('https://raw.githubusercontent.com/mrdoob/three.js/309b00afb6dcbc5e6c58e72f10eaa8d2e8888c83/examples/textures/sprites/spark1.png') }
+
+    };
+
+    const shaderMaterial = new THREE.ShaderMaterial({
+
+      uniforms: uniforms,
+      uniformsGroups: [],
+      vertexShader: vertexShader,
+      fragmentShader: fragmentShader,
+
+      blending: THREE.AdditiveBlending,
+      depthTest: false,
+      transparent: true,
+      vertexColors: true
+
+    });
+
+    shaderMaterial.uniformsGroups = []
+
+    const mesh = new THREE.Mesh(geometry1, shaderMaterial);
+    const cube = new THREE.Mesh(geometry, shaderMaterial);
+
+
+    // mesh.parent = cube.parent
+
+    console.log("cube", cube)
+    console.log("mesh", mesh)
+
+    // scene.children.push(mesh)
+    scene.add(cube)
+
+
+  };
 
   return (
     <>
+      {/* <Button
+        className="testButton"
+        onClick={handleShader}
+      >
+        shader
+      </Button> */}
       <ScrollDialog
         htmlFor={"welcome"}
         boothState={undefined}
@@ -272,28 +391,10 @@ const ChineseIsland = () => {
           exposure={1}
           defaultLightScale={1}
           repulsion={5}
-          gridHelper={true}
           antiAlias={true}
         />
 
         <Skybox texture="img/sky/sky1.jpg" />
-
-        <Plane
-          id="plane"
-          name="plane"
-          visible={false}
-          x={1412.35}
-          y={-2633.30}
-          z={-973.84}
-          scale={80.00}
-          rotationX={-90.00}
-          intersectIds={["player"]}
-          onIntersect={(() => {
-            handlePlayerFall()
-          })}
-        />
-
-        {/* <LightArea1 /> */}
 
         <Model
           name="worldmap"
@@ -303,13 +404,20 @@ const ChineseIsland = () => {
           scaleX={20}
           scaleY={20}
           scaleZ={20}
-          x={1722.20}
-          y={-1646.54}
+          x={2022.20}
+          y={-1246.54}
           z={-761.98}
           scale={70}
-          src="maps/island_n-v1.glb"
+          src="maps/chinese/chinese_island.glb"
           onClick={!isMobile && handleClick}
-        />
+        >
+
+          <Find name="tree"
+            textureFlipY={true}
+            texture={"maps/chinese/chinese_island5_img4.png"}
+          />
+
+        </Model>
 
         <AreaLight
           x={474.83}
@@ -325,13 +433,13 @@ const ChineseIsland = () => {
 
         <Group
           name="groupPortal"
-          x={2168.09}
-          y={206.86}
-          z={-1404.01}
+          x={2600.92}
+          y={147.73}
+          z={-1815.55}
           rotationY={-31.42}
           rotationX={-164.79}
           rotationZ={-174.30}
-          scale={0.30}
+          scale={0.50}
         >
 
           <AreaLight
@@ -344,13 +452,13 @@ const ChineseIsland = () => {
 
           />
 
-          {/* <Trigger
-            radius={600}
+          <Trigger
+            radius={300.00}
             targetIds="player"
             onEnter={(() => {
-              openPortal(`${viteBaseUrl}japan-island`)
+              openPortal(`main-island`)
             })}
-          /> */}
+          />
 
           <Model
             name="portalModel"
@@ -362,7 +470,7 @@ const ChineseIsland = () => {
             scaleX={10}
             scaleY={10}
             scaleZ={10}
-            src="maps/stargate.glb"
+            src="maps/item/stargate.glb"
             onClick={((e) => {
               handleClick(e)
             })}
@@ -371,7 +479,7 @@ const ChineseIsland = () => {
             </Find>
           </Model>
 
-          <HTMLMesh
+          {/* <HTML
             ref={htmlRef}
             visible={true}
             x={-31.44}
@@ -406,7 +514,7 @@ const ChineseIsland = () => {
                 Travel to Japanese Island
               </Typography>
             </Box>
-          </HTMLMesh>
+          </HTML> */}
 
 
         </Group>
@@ -425,7 +533,6 @@ const ChineseIsland = () => {
           x={-657.85}
           y={58.76}
           z={0}
-          animation={{ y: [58.76, 58.76 + 10, 58.76, 58.76 - 10, 58.76], rotationY: [0, 45, 90, 135, 180, 225, 270, 315] }}
 
         >
           <Trigger
@@ -443,13 +550,15 @@ const ChineseIsland = () => {
             scale={2.5}
             color="#ffa400"
             opacity={0.3}
-            bloom
+
           />
 
           <Model
             name="batteryModel"
             src="item/coin.glb"
             bloom
+            animation={{ rotationY: [0, 45, 90, 135, 180, 225, 270, 315] }}
+
             opacity={0.5}
             animationPaused={false}
             animationRepeat={false}
@@ -541,7 +650,7 @@ const ChineseIsland = () => {
             <Model
               ref={dummyBatteryRef}
               name="dummyBattery"
-              src="item/battery.glb"
+              src="item/coin.glb"
               opacity={0.5}
               scale={0.2}
               y={80}
@@ -588,6 +697,21 @@ const ChineseIsland = () => {
             })}
           />
         </Group>
+
+        <Plane
+          id="plane"
+          name="plane"
+          visible={false}
+          x={1412.35}
+          y={-2633.30}
+          z={-973.84}
+          scale={80.00}
+          rotationX={-90.00}
+          intersectIds={["player"]}
+          onIntersect={(() => {
+            handlePlayerFall()
+          })}
+        />
 
       </World>
 

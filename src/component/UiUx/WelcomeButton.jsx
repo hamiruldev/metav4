@@ -8,7 +8,7 @@ const WelcomeButton = ({ handleReady, isReady }) => {
     const scene = useScene()
     const progress = usePreload(
         [
-            "maps/main/main_1.gltf",
+            "maps/main/main_island.glb",
             "3dCharacter/new/character1.glb",
             "3dCharacter/new/character2.glb",
             "3dCharacter/new/character3.glb",

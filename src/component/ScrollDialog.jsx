@@ -9,10 +9,8 @@ import useMediaQuery from "@mui/material/useMediaQuery";
 
 import { Box, CircularProgress, ClickAwayListener, Stack, useTheme, styled, IconButton, Slide } from "@mui/material";
 
-import { getAllProduct } from "../api/productApi";
 import CloseIcon from "@mui/icons-material/Close";
 import CardFeed from "./CardFeed";
-import Zoom from "@mui/material/Zoom";
 import AddToCartTable from "./User/AddToCartTable";
 import AuthForm from "./UiUx/AuthForm";
 import AvatarCard from "./UiUx/AvatarCard";
@@ -83,9 +81,10 @@ const BootstrapDialogTitle = (props) => {
   const { children, handleClose, htmlFor, ...other } = props;
   const matches = useMediaQuery("(max-width:425px)");
 
+
   return (
     <DialogTitle sx={{ m: 0, p: 2, display: "flex", justifyContent: "flex-end", width: "100%" }} {...other}>
-      {htmlFor != "welcome" && handleClose ? (
+      {htmlFor != "welcome" && htmlFor != "instruction" && handleClose ? (
         <IconButton
           aria-label="close"
           onClick={handleClose}
@@ -146,28 +145,35 @@ export default function ScrollDialog({
 
   const matches = useMediaQuery("(max-width:425px)");
 
+  const isLogin = sessionStorage.getItem("login");
+
   const handleAvatar = () => {
+
+
     setLoading(true)
+
     setTimeout(() => {
+
       setLoading(false)
       setSuccess(true)
       setTimeout(() => {
         setSuccess(false)
         setAvatarButton(false)
-        handleClose("avatarClose")
+        isLogin == false ? handleClose("avatarClose") : handleClose()
+
       }, 500)
 
 
     }, 1000);
   }
 
+  const handleInst = () => {
+    handleClose("instructionClose")
+  }
+
   const handleReady = () => {
     setReady(true)
   }
-
-
-  console.log("htmlFor", htmlFor)
-
 
   return (
     <>
@@ -188,7 +194,7 @@ export default function ScrollDialog({
           backgroundImage: (htmlFor == "welcome" || htmlFor == "avatar" || htmlFor == "login" || htmlFor == "register") && `url(img/sky/cover3.JPG)`,
         }}
       >
-        <ClickAwayListener disableReactTree onClickAway={htmlFor != "welcome" ? handleClose : false}>
+        <ClickAwayListener disableReactTree onClickAway={htmlFor != "welcome" && htmlFor != "instruction" ? handleClose : false}>
           <AnimateBox>
             <Stack
               sx={{
@@ -369,8 +375,8 @@ export default function ScrollDialog({
                       htmlFor == "login" && loginButton()
                       htmlFor == "register" && registerButton()
                       htmlFor == "avatar" && handleAvatar()
-                      htmlFor == "instruction" && handleClose()
-                      htmlFor == "welcome" && handleAvatar()
+                      htmlFor == "instruction" && handleInst()
+                      htmlFor == "welcome" && handleClose()
 
                     })}
                     endIcon={htmlFor == "avatar" && isLoading && <CircularProgress sx={{ color: "black" }} size={24} />}

@@ -25,9 +25,7 @@ import {
   usePreload,
   Cube,
   Plane,
-  SpawnPoint,
   Skybox,
-  HTMLMesh,
   OrbitCamera,
   Camera,
 
@@ -41,9 +39,10 @@ import LightArea1 from "../component/World/LightArea1";
 // import testVertexShader from '../shader/vertex.glsl'
 // import testFragmentShader from '../shader/fragment.glsl'
 
-const ForestIsland = () => {
+const viteBaseUrl = import.meta.env.VITE_BASE_URL;
 
-  const viteBaseUrl = import.meta.env.VITE_BASE_URL;
+
+const ForestIsland = () => {
 
   const dummyRef = useRef(null);
   const dummyBatteryRef = useRef(null);
@@ -88,7 +87,7 @@ const ForestIsland = () => {
   const handleInstructionClose = () => {
     setGame(false);
     setTimeout(() => {
-      handleDialogToggle("avatar")
+      isLogin == "true" ? handleCamera() : handleDialogToggle("avatar")
     }, 1000);
   };
 
@@ -122,7 +121,7 @@ const ForestIsland = () => {
   };
 
   const openPortal = (url) => {
-    window.open(url, "_blank  ")
+    window.open(` ${viteBaseUrl + url}`, "_self")
   }
 
   const handleItem = (name) => {
@@ -176,7 +175,7 @@ const ForestIsland = () => {
       else {
         setDialogOpen(false);
         setHtmlFor()
-        hanldeCamera()
+        handleCamera()
       };
 
     }, 500);
@@ -225,7 +224,7 @@ const ForestIsland = () => {
     dummy.z = 194.50
   }
 
-  const hanldeCamera = () => {
+  const handleCamera = () => {
     setTimeout(() => {
       tpcRef.current.active = true
     }, 1000)
@@ -304,10 +303,10 @@ const ForestIsland = () => {
           scaleY={20}
           scaleZ={20}
           x={1722.20}
-          y={-1646.54}
-          z={-761.98}
+          y={-1083.90}
+          z={-486.53}
           scale={70}
-          src="maps/forest/forest_1.gltf"
+          src="maps/forest/forest_island.glb"
           onClick={!isMobile && handleClick}
         />
 
@@ -344,13 +343,13 @@ const ForestIsland = () => {
 
           />
 
-          {/* <Trigger
+          <Trigger
             radius={600}
             targetIds="player"
             onEnter={(() => {
-              openPortal(`${viteBaseUrl}japan-island`)
+              openPortal(`main-island`)
             })}
-          /> */}
+          />
 
           <Model
             name="portalModel"
@@ -371,7 +370,8 @@ const ForestIsland = () => {
             </Find>
           </Model>
 
-          <HTMLMesh
+          {/* 
+          <HTML
             ref={htmlRef}
             visible={true}
             x={-31.44}
@@ -406,7 +406,7 @@ const ForestIsland = () => {
                 Travel to Japanese Island
               </Typography>
             </Box>
-          </HTMLMesh>
+          </HTML> */}
 
 
         </Group>
@@ -421,16 +421,15 @@ const ForestIsland = () => {
 
         <Group
           name="Battery"
-
           x={-657.85}
-          y={58.76}
+          y={247.94}
           z={0}
-          animation={{ y: [58.76, 58.76 + 10, 58.76, 58.76 - 10, 58.76], rotationY: [0, 45, 90, 135, 180, 225, 270, 315] }}
+          animation={{ y: [58.76, 58.76 + 10, 58.76, 58.76 - 10, 58.76] }}
 
         >
           <Trigger
             ref={triggerBatteryRef}
-            radius={100}
+            radius={150}
             name="triggerBattery"
             targetIds="player"
             onEnter={(() => {
@@ -443,13 +442,13 @@ const ForestIsland = () => {
             scale={2.5}
             color="#ffa400"
             opacity={0.3}
-            bloom
           />
 
           <Model
             name="batteryModel"
             src="item/coin.glb"
             bloom
+            animation={{ rotationY: [0, 45, 90, 135, 180, 225, 270, 315] }}
             opacity={0.5}
             animationPaused={false}
             animationRepeat={false}
@@ -457,23 +456,6 @@ const ForestIsland = () => {
           />
 
         </Group>
-
-        {/* <OrbitCamera
-          name="orbitRef"
-          fov={90}
-          ref={orbitRef}
-          active={true}
-          transition={0.02}
-          innerZ={5091.64}
-          // x={-401.57}
-          // y={803.95}
-          // z={3891.64}
-          enableZoom
-          enableDamping
-          targetId="player"
-          autoRotate
-          minPolarAngle={100}
-        /> */}
 
         <Camera
           name="cameraRef"
@@ -502,12 +484,8 @@ const ForestIsland = () => {
 
           enableZoom
           minPolarAngle={100}
-          // azimuthAngle={90}
-          // minAzimuthAngle={180}
 
-          innerY={ySpring}
-          // innerZ={zSpring}
-          innerX={xSpring}
+
           y={100}
           zoom={1}
         >
@@ -541,7 +519,7 @@ const ForestIsland = () => {
             <Model
               ref={dummyBatteryRef}
               name="dummyBattery"
-              src="item/battery.glb"
+              src="item/coin.glb"
               opacity={0.5}
               scale={0.2}
               y={80}

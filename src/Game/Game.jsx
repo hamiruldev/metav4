@@ -28,10 +28,11 @@ import {
   useScene,
   useAnimation,
   useRenderer,
-  Frame,
   useLoop,
   useValue,
   SvgMesh,
+  Reflector,
+  Camera,
 } from "lingo3d-react";
 
 import * as THREE from 'three'
@@ -49,12 +50,11 @@ const Game = () => {
   const dummyRef = useRef(null);
   const dummyBatteryRef = useRef(null);
   const cameraRef = useRef(null);
+  const tpcRef = useRef(null);
   const pointerRef = useRef(null);
   const portalRef = useRef(null);
   const triggerBatteryRef = useRef(null);
   const worldRef = useRef(null);
-
-
 
   const scene = useScene()
   const { width, height } = useWindowSize();
@@ -65,6 +65,8 @@ const Game = () => {
 
   const [dialogOpen, setDialogOpen] = useState(false);
   const [htmlFor, setHtmlFor] = useState();
+  const [isGame, setGame] = useState(true);
+
 
   const isMobile = width < height;
 
@@ -113,13 +115,28 @@ const Game = () => {
     };
   };
 
+  const openDialogToggle = (name) => {
+
+    setDialogOpen(false);
+    setTimeout(() => {
+      if (isLogin == "false") {
+        setDialogOpen(true);
+        setHtmlFor(name)
+      }
+      else {
+        setDialogOpen(false);
+        setHtmlFor()
+        hanldeCamera()
+      };
+
+    }, 500);
+  };
+
   const openPortal = (url) => {
-    window.open(url, "_blank  ")
+    window.open(` ${viteBaseUrl + url}`, "_self")
   }
 
   const handleItem = (name) => {
-
-    console.log("masuk")
 
     name == "Battery" && handleDialogToggle("Info Board")
 
@@ -140,7 +157,7 @@ const Game = () => {
 
     //remove battery
     const MeshInModel = array1[0].children.filter(x => x.type != `Group` && x.name == 'batterySphere' || x.name == 'batteryModel')
-    MeshInModel.map((item) => {
+    MeshInModel?.map((item) => {
       item.children.filter(x => x.type == 'Mesh').map((item) => {
         item.material.dispose()
         item.geometry.dispose()
@@ -151,7 +168,6 @@ const Game = () => {
     scene.remove(array1[0])
     triggerBatteryRef.current.dispose();
 
-    // animate()
   }
 
   const handleDialogToggle = (name) => {
@@ -159,21 +175,40 @@ const Game = () => {
     setHtmlFor(name)
   };
 
-  const handleClose = () => {
+  const handleClose = (id) => {
     setDialogOpen(false);
   };
 
   const animate = () => {
-    const camera = scene.getObjectByName("camera");
+    const camera = scene.getObjectByName("cameraRef");
     getRenderer.render(scene, camera.userData.manager.camera)
     window.requestAnimationFrame(animate)
   }
 
-  // console.log("worldRef", worldRef?.current?.model?.object3d?.material)
-  console.log("worldRef", worldRef?.current)
+  const handlePlayerFall = () => {
+
+    const dummy = dummyRef.current;
+    dummy.animationManagers["idle"].play()
+
+    dummy.moveTo(-404.36, undefined, 194.50, 12);
+
+    dummy.y = 238.87
+    dummy.x = -404.36
+    dummy.z = 194.50
+  }
+
+  const handleCamera = () => {
+    setTimeout(() => {
+      tpcRef.current.active = true
+    }, 500)
+  }
 
   return (
     <>
+      <Button onClick={handleCamera} id="cameraButton" sx={{ display: "none" }}>
+        handleCamera
+      </Button>
+
       <ScrollDialog
         htmlFor={htmlFor}
         boothState={undefined}
@@ -186,7 +221,7 @@ const Game = () => {
         onClose={handleClose}
       />
       <World>
-        <LingoEditor />
+        {/* <LingoEditor /> */}
         {/* <Library /> */}
         {/* <Toolbar /> */}
         {/* <Editor /> */}
@@ -195,7 +230,7 @@ const Game = () => {
         <Setup
           pixelRatio={5}
           exposure={1}
-          defaultLightScale={0.30}
+          defaultLightScale={0.4}
           repulsion={5}
         />
 
@@ -203,8 +238,22 @@ const Game = () => {
 
         <Model y={-2151.96} x={-3374.39} name="ground" src="maps/item/ground.glb" />
 
-        <Model
+        <Plane
+          id="plane"
+          name="plane"
+          visible={false}
+          x={1412.35}
+          y={-2633.30}
+          z={-973.84}
+          scale={80.00}
+          rotationX={-90.00}
+          intersectIds={["player"]}
+          onIntersect={(() => {
+            handlePlayerFall()
+          })}
+        />
 
+        <Model
           name="worldmap"
           physics="map"
           width={245.36}
@@ -216,24 +265,10 @@ const Game = () => {
           y={0}
           z={0}
           scale={70}
+          // src="maps/tunnel1.glb"
           src="maps/tunnel/tunnel1.glb"
           onClick={!isMobile && handleClick}
-
-          // textureFlipY={false}
-          // alphaMap="maps/tunnel/Tunnel_diffuse.jpg"
-          // texture="maps/tunnel/Tunnel_diffuse.jpg"
-
-          ref={worldRef}
         >
-
-          {/* <Find name="wall.001"
-            alphaMap="maps/tunnel/Tunnel_diffuse.jpg"
-            // texture="maps/tunnel/Tunnel_diffuse.jpg"
-            normalMap="maps/tunnel/Tunnel_normal.jpg"
-            roughnessMap="maps/tunnel/Tunnel_roughness.jpg"
-            textureFlipY={false}
-          /> */}
-
         </Model>
 
         <AreaLight
@@ -255,7 +290,7 @@ const Game = () => {
           radius={400}
           targetIds="player"
           onEnter={(() => {
-            openPortal(`${viteBaseUrl}main-island`)
+            openPortal(`main-island`)
           })}
         />
 
@@ -263,7 +298,6 @@ const Game = () => {
           name="arrowSvg"
           src="arrow.svg"
           bloom
-          outline
           metalnessFactor={1}
           roughnessFactor={0.4}
           roughness={0.4}
@@ -316,24 +350,15 @@ const Game = () => {
           name="Battery"
 
           x={-123.60}
-          y={-1926.92}
+          y={-1900}
           z={5356.52}
-          animation={{ y: [-1932.51, -1932.51 + 10, -1932.51, -1932.51 - 10, -1932.51], rotationY: [0, 45, 90, 135, 180, 225, 270, 315] }}
+          animation={{ y: [-1932.51, -1932.51 + 10, -1932.51, -1932.51 - 10, -1932.51] }}
 
         >
-          {/* <Trigger
-            ref={triggerBatteryRef}
-            radius={100}
-            name="triggerBattery"
-            targetIds="player"
-            onEnter={(() => {
-              handleItem("Battery")
-            })}
-          /> */}
 
           <Sphere
             ref={triggerBatteryRef}
-            targetIds={['player']}
+            intersectIds={['player']}
             onIntersect={(() => {
               handleItem("Battery")
             })}
@@ -351,20 +376,36 @@ const Game = () => {
             opacity={0.5}
             animationPaused={false}
             animationRepeat={false}
+            animation={{ rotationY: [0, 45, 90, 135, 180, 225, 270, 315] }}
 
           />
 
         </Group>
 
-        <ThirdPersonCamera
-          name="camera"
-          ref={cameraRef}
-          mouseControl={"drag"}
+        <Camera
+          name="cameraRef"
           active={true}
+          ref={cameraRef}
+          transition={0.02}
+          innerZ={223.68}
+          x={331.29}
+          y={-841.35}
+          z={-4588.04}
+          rotationY={1.48}
+          rotationX={-5.30}
+          rotationZ={-0.99}
+
+        />
+
+        <ThirdPersonCamera
+          name="tpc"
+          ref={tpcRef}
+          mouseControl={"drag"}
+          active={false}
           lockTargetRotation={isMobile ? true : false}
           fov={width < 640 ? 110 : 90}
           enableDamping
-
+          transition={0.009}
           y={100}
           zoom={1}
         >
@@ -413,7 +454,6 @@ const Game = () => {
 
         </ThirdPersonCamera>
 
-
         {/*
          ***TV PANEL  difference Z = 1,518.1
          */}
@@ -421,11 +461,11 @@ const Game = () => {
         <Group y={-2079.95} name="tvscreengroup">
           <Plane
             name="tvkiri01"
-            x={-410.94}
-            y={191.46}
-            z={6074.82}
+            x={-499.79}
+            y={188.33}
+            z={6074.57}
             scaleX={5.73}
-            scaleY={3.72}
+            scaleY={3.9}
             rotationY={20}
             videoTexture={
               isVisible?.state == true && isVisible?.name == "tvkiri01"
@@ -449,8 +489,7 @@ const Game = () => {
           // onMouseOver={() => setMouseOver(true)}
           // onMouseOut={() => setMouseOver(false)}
           >
-            {
-              /* {mouseOver && (
+            {/* {mouseOver && (
               <HTML>
                 <div style={{ color: "white" }}>
                   <AnimText
@@ -461,17 +500,16 @@ const Game = () => {
                   </AnimText>
                 </div>
               </HTML>
-            )} */
-            }
+            )} */}
           </Plane>
 
           <Plane
             name="tvkiri02"
-            x={-410.94}
+            x={-500.24}
             y={191.46}
-            z={4554.72}
+            z={4549.91}
             scaleX={5.73}
-            scaleY={3.72}
+            scaleY={3.9}
             rotationY={20}
             videoTexture={
               isVisible?.state == true && isVisible?.name == "tvkiri02"
@@ -496,11 +534,11 @@ const Game = () => {
 
           <Plane
             name="tvkiri03"
-            x={-410.94}
+            x={-499.15}
             y={191.46}
-            z={3029.62}
+            z={3028.49}
             scaleX={5.73}
-            scaleY={3.72}
+            scaleY={3.9}
             rotationY={20}
             videoTexture={
               isVisible?.state == true && isVisible?.name == "tvkiri03"
@@ -525,11 +563,11 @@ const Game = () => {
 
           <Plane
             name="tvkiri04"
-            x={-410.94}
-            y={191.46}
-            z={1510.52}
+            x={-500.25}
+            y={191.43}
+            z={1508.39}
             scaleX={5.73}
-            scaleY={3.72}
+            scaleY={3.9}
             rotationY={20}
             videoTexture={
               isVisible?.state == true && isVisible?.name == "tvkiri04"
@@ -554,11 +592,11 @@ const Game = () => {
 
           <Plane
             name="tvkiri05"
-            x={-410.94}
-            y={191.46}
-            z={162.42}
+            x={-501.26}
+            y={190.15}
+            z={161.5}
             scaleX={5.73}
-            scaleY={3.72}
+            scaleY={3.9}
             rotationY={20}
             videoTexture={
               isVisible?.state == true && isVisible?.name == "tvkiri05"
@@ -583,11 +621,11 @@ const Game = () => {
 
           <Plane
             name="tvkiri06"
-            x={-410.94}
+            x={-500.76}
             y={191.46}
             z={-1360.49}
             scaleX={5.73}
-            scaleY={3.72}
+            scaleY={3.9}
             rotationY={20}
             videoTexture={
               isVisible?.state == true && isVisible?.name == "tvkiri06"
@@ -612,11 +650,11 @@ const Game = () => {
 
           <Plane
             name="tvkiri07"
-            x={-410.94}
+            x={-498.91}
             y={191.46}
-            z={-2880.91}
+            z={-2879.23}
             scaleX={5.73}
-            scaleY={3.72}
+            scaleY={3.9}
             rotationY={20}
             videoTexture={
               isVisible?.state == true && isVisible?.name == "tvkiri07"
@@ -641,11 +679,11 @@ const Game = () => {
 
           <Plane
             name="tvkiri08"
-            x={-410.94}
+            x={-502.75}
             y={191.46}
-            z={-4404.53}
+            z={-4399.99}
             scaleX={5.73}
-            scaleY={3.72}
+            scaleY={3.9}
             rotationY={20}
             videoTexture={
               isVisible?.state == true && isVisible?.name == "tvkiri08"
@@ -670,11 +708,11 @@ const Game = () => {
 
           <Plane
             name="tvkiri09"
-            x={-410.94}
+            x={-500.97}
             y={191.46}
             z={-5923.44}
             scaleX={5.73}
-            scaleY={3.72}
+            scaleY={3.9}
             rotationY={20}
             videoTexture={
               isVisible?.state == true && isVisible?.name == "tvkiri09"
@@ -699,11 +737,11 @@ const Game = () => {
 
           <Plane
             name="tvkanan01"
-            x={735.63}
-            y={189.62}
-            z={5315.74}
+            x={645.06}
+            y={191.54}
+            z={5312.1}
             scaleX={5.73}
-            scaleY={3.72}
+            scaleY={3.8}
             rotationY={-19.7}
             videoTexture={
               isVisible?.state == true && isVisible?.name == "tvkanan01"
@@ -728,11 +766,11 @@ const Game = () => {
 
           <Plane
             name="tvkanan02"
-            x={735.63}
-            y={189.62}
-            z={3795.46}
+            x={646.35}
+            y={195.08}
+            z={3789.78}
             scaleX={5.73}
-            scaleY={3.72}
+            scaleY={3.8}
             rotationY={-20.0}
             videoTexture={
               isVisible?.state == true && isVisible?.name == "tvkanan02"
@@ -753,11 +791,11 @@ const Game = () => {
 
           <Plane
             name="tvkanan03"
-            x={735.63}
-            y={189.62}
+            x={646.44}
+            y={196.94}
             z={2270.09}
             scaleX={5.73}
-            scaleY={3.72}
+            scaleY={3.8}
             rotationY={-20.0}
             videoTexture={
               isVisible?.state == true && isVisible?.name == "tvkanan03"
@@ -782,11 +820,11 @@ const Game = () => {
 
           <Plane
             name="tvkanan04"
-            x={735.63}
-            y={189.62}
-            z={751.29}
+            x={645.08}
+            y={190.65}
+            z={745.38}
             scaleX={5.73}
-            scaleY={3.72}
+            scaleY={3.8}
             rotationY={-20.0}
             videoTexture={
               isVisible?.state == true && isVisible?.name == "tvkanan04"
@@ -808,11 +846,11 @@ const Game = () => {
 
           <Plane
             name="tvkanan05"
-            x={735.63}
-            y={189.62}
+            x={647.64}
+            y={191.97}
             z={-598.72}
             scaleX={5.73}
-            scaleY={3.72}
+            scaleY={3.8}
             rotationY={-20.0}
             videoTexture={
               isVisible?.state == true && isVisible?.name == "tvkanan05"
@@ -837,11 +875,11 @@ const Game = () => {
 
           <Plane
             name="tvkanan06"
-            x={730.40}
-            y={189.62}
-            z={-2119.39}
-            scaleX={5.62}
-            scaleY={3.72}
+            x={641.05}
+            y={191.01}
+            z={-2119.97}
+            scaleX={5.8}
+            scaleY={3.8}
             rotationY={-20.0}
             // fog={false}
             // color="#cbffaf"
@@ -869,11 +907,11 @@ const Game = () => {
 
           <Plane
             name="tvkanan07"
-            x={735.63}
-            y={189.62}
+            x={647.02}
+            y={192.37}
             z={-3639.65}
             scaleX={5.73}
-            scaleY={3.72}
+            scaleY={3.8}
             rotationY={-20.0}
             videoTexture={
               isVisible?.state == true && isVisible?.name == "tvkanan07"
@@ -898,11 +936,11 @@ const Game = () => {
 
           <Plane
             name="tvkanan08"
-            x={735.63}
-            y={189.62}
+            x={645.88}
+            y={194.66}
             z={-5162.1}
             scaleX={5.73}
-            scaleY={3.72}
+            scaleY={3.8}
             rotationY={-20.0}
             videoTexture={
               isVisible?.state == true && isVisible?.name == "tvkanan08"
@@ -939,6 +977,20 @@ const Game = () => {
           x={arrowPosition.x}
           y={arrowPosition.y + 50}
           z={arrowPosition.z}
+        />
+
+        <Reflector
+          x={71.21}
+          y={-2102.46}
+          z={6110.8}
+          scaleX={48.02}
+          scaleY={264.46}
+          rotationZ={0.68}
+          normalScale={{ isVector2: true, x: 1, y: 1 }}
+          color="#5c5757"
+          resolution={556}
+          blur={800}
+          opacity={0.4}
         />
 
       </World>

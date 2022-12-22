@@ -1,4 +1,4 @@
-import { Suspense, useEffect, useRef, useState } from "react";
+import { createRef, forwardRef, useRef, useState } from "react";
 
 import { Box, Button, Stack, Tooltip, Typography } from "@mui/material";
 
@@ -14,45 +14,35 @@ import {
   LingoEditor,
   useWindowSize,
   World,
-  useSpring,
   Joystick,
   Trigger,
   AreaLight,
   Sphere,
   useScene,
   useRenderer,
-  Circle,
-  usePreload,
   Cube,
   Plane,
-  SpawnPoint,
   Skybox,
-  HTMLMesh,
   OrbitCamera,
   Camera,
-
 } from "lingo3d-react";
 
 import * as THREE from 'three'
 
 import ScrollDialog from "../component/ScrollDialog";
 import LightArea1 from "../component/World/LightArea1";
+import Portal from "../component/World/Portal";
 
-// import testVertexShader from '../shader/vertex.glsl'
-// import testFragmentShader from '../shader/fragment.glsl'
+const viteBaseUrl = import.meta.env.VITE_BASE_URL;
 
 const MainIsland = () => {
-
-  const viteBaseUrl = import.meta.env.VITE_BASE_URL;
 
   const dummyRef = useRef(null);
   const dummyBatteryRef = useRef(null);
   const cameraRef = useRef(null);
   const tpcRef = useRef(null);
-  const orbitRef = useRef(null);
-
   const pointerRef = useRef(null);
-  const portalRef = useRef(null);
+  const portalRef = createRef(null);
   const triggerBatteryRef = useRef(null);
   const worldRef = useRef(null);
   const htmlRef = useRef(null);
@@ -69,26 +59,19 @@ const MainIsland = () => {
   isInital == null && sessionStorage.setItem("inital", false);
   isLogin == null && sessionStorage.setItem("login", false);
 
-  //mouseOver
-  const [mouseOver, setMouseOver] = useState(false);
   const [dialogOpen, setDialogOpen] = useState(false);
   const [htmlFor, setHtmlFor] = useState();
 
   const isMobile = width < height;
-  const camX = mouseOver ? 50 : 0;
-  const camY = mouseOver ? 100 : 100;
-  const camZ = mouseOver ? 100 : 300;
 
-  // Camera spring animation
-  // 相机的弹簧动画
-  const xSpring = useSpring({ to: camX, bounce: 0 });
-  const ySpring = useSpring({ to: camY, bounce: 0 });
-  const zSpring = useSpring({ to: camZ, bounce: 0 });
+  const openPortal = (url) => {
+    window.open(` ${viteBaseUrl + url}`, "_self")
+  };
 
   const handleInstructionClose = () => {
     setGame(false);
     setTimeout(() => {
-      handleDialogToggle("avatar")
+      isLogin == "true" ? handleCamera() : handleDialogToggle("avatar")
     }, 1000);
   };
 
@@ -121,10 +104,6 @@ const MainIsland = () => {
     };
   };
 
-  const openPortal = (url) => {
-    window.open(url, "_blank  ")
-  }
-
   const handleItem = (name) => {
 
     name == "Battery" && handleDialogToggle("Info Board")
@@ -133,9 +112,9 @@ const MainIsland = () => {
     const array1 = allChildren.filter(x => x.name == name)
 
     // active portal
-    const animationPortal = portalRef.current.animationManagers
-    animationPortal["Take 001"].play()
-    portalRef.current.bloom = true
+    // const animationPortal = portalRef.current.animationManagers
+    // animationPortal["Take 001"].play()
+    // portalRef.current.bloom = true
 
     //pass battery to player
     dummyBatteryRef.current.visible = true
@@ -158,7 +137,7 @@ const MainIsland = () => {
     triggerBatteryRef.current.dispose();
 
     // animate()
-  }
+  };
 
   const handleDialogToggle = (name) => {
     setDialogOpen(!dialogOpen);
@@ -176,7 +155,7 @@ const MainIsland = () => {
       else {
         setDialogOpen(false);
         setHtmlFor()
-        hanldeCamera()
+        handleCamera()
       };
 
     }, 500);
@@ -186,8 +165,7 @@ const MainIsland = () => {
     id = "avatarClose" ? openDialogToggle("register") : setDialogOpen(false);
   };
 
-  const handleOnPlayerFly = () => {
-
+  const handleOnPlayerFly = (url) => {
 
     const playerRefObj = dummyRef.current
 
@@ -196,6 +174,11 @@ const MainIsland = () => {
     setTimeout(() => {
       playerRefObj.animationManagers["float"].play()
       playerRefObj.velocity.y = 1
+
+
+      setTimeout(() => {
+        openPortal(url)
+      }, 1000);
 
     }, 1000);
 
@@ -207,38 +190,79 @@ const MainIsland = () => {
       }
     }
 
-  }
+  };
 
   const handleOutPlayerFly = () => {
+    console.log("keluar")
     // const playerRefObj = dummyRef.current
-  }
+  };
 
   const handlePlayerFall = () => {
 
-    // const dummy = dummyRef.current;
-    // dummy.animationManagers["idle"].play()
+    const dummy = dummyRef.current;
+    dummy.animationManagers["idle"].play()
 
-    // dummy.moveTo(-404.36, undefined, 194.50, 12);
+    dummy.moveTo(-169.30, undefined, -96.23, 12);
 
-    // dummy.y = 238.87
-    // dummy.x = -404.36
-    // dummy.z = 194.50
-  }
+    dummy.y = -356.15
+    dummy.x = -169.30
+    dummy.z = -96.23
+  };
 
-  const hanldeCamera = () => {
+  const handleCamera = () => {
     setTimeout(() => {
       tpcRef.current.active = true
     }, 1000)
-  }
+  };
 
   const animate = () => {
-    const camera = scene.getObjectByName("camera");
-    getRenderer.render(scene, camera.userData.manager.camera)
+    const camera = scene.getObjectByName("tpc");
+    getRenderer.render(scene, camera.userData?.manager?.camera)
     window.requestAnimationFrame(animate)
-  }
+  };
+
+  const tree = () => {
+
+    const geometry = new THREE.BoxGeometry(1, 1, 1);
+    const material = new THREE.MeshBasicMaterial({ color: 0x00ff00 });
+    const cube = new THREE.Mesh(geometry, material);
+
+    const groupPortal1 = scene.getObjectByName("groupPortal")
+    const Battery = scene.getObjectByName("Battery")
+    const cubeLingo = scene.getObjectByName("cube")
+
+
+
+    const cubeLingo1 = Object.getOwnPropertyDescriptors(cubeLingo);
+
+
+    // cubeLingo1.userData = {}
+    // cubeLingo1.parent = null
+    // cubeLingo1.children = []
+
+    // const copyCube = cubeLingo1.clone(true)
+
+    // copyCube.name = "copyCube"
+    // copyCube.position.set(-169.30, -680.33, -509.88)
+
+
+    // scene.add(copyCube);
+
+
+    // console.log("cube", cube)
+    // console.log("copyCube", copyCube)
+    console.log("cubeLingo1", cubeLingo1)
+
+  };
 
   return (
     <>
+
+      {/* <Button onClick={tree} className="testButton">
+        camera
+      </Button> */}
+
+
       <ScrollDialog
         htmlFor={"welcome"}
         boothState={undefined}
@@ -260,40 +284,33 @@ const MainIsland = () => {
       }
 
       <World>
-        <LingoEditor />
+        {/* <LingoEditor /> */}
         {/* <Library /> */}
         {/* <Toolbar /> */}
         {/* <Editor /> */}
-        {/* <Environment /> */}
         {/* <Stats /> */}
+
+        {/* <Cube
+          x={-169.30}
+          y={-680.33}
+          z={-509.88}
+          name="cube"
+          color="red" /> */}
+
+
         <Setup
           ref={worldRef}
           pixelRatio={5}
           exposure={1}
-          defaultLightScale={1}
+          defaultLightScale={0.7}
           repulsion={5}
-          gridHelper={true}
+          gridHelper={false}
           antiAlias={true}
         />
 
         <Skybox texture="img/sky/sky1.jpg" />
 
-        <Plane
-          id="plane"
-          name="plane"
-          visible={false}
-          x={1412.35}
-          y={-2633.30}
-          z={-973.84}
-          scale={80.00}
-          rotationX={-90.00}
-          intersectIds={["player"]}
-          onIntersect={(() => {
-            handlePlayerFall()
-          })}
-        />
 
-        <LightArea1 />
 
         <Model
           name="worldmap"
@@ -304,28 +321,17 @@ const MainIsland = () => {
           scaleY={20}
           scaleZ={20}
           x={1722.20}
-          // y={-1646.54}
           z={-761.98}
-          // scale={1}
-          src="maps/main/new/main_2.glb"
+          src="maps/main/main_island.glb"
           onClick={!isMobile && handleClick}
-        // texture={"maps/forest/111_low_1jpg.jpg"}
-        />
+        >
+        </Model>
 
-        <AreaLight
-          x={474.83}
-          y={-1698.09}
-          z={-7039.36}
-          rotationX={177.94}
-          scale={3}
-          opacityFactor={10}
-          intensity={50.00}
-          color={"#0368ff"}
-          visible={false}
-        />
+
 
         <Group
-          name="groupPortal"
+          ref={portalRef}
+          nameId="groupPortal"
           x={2168.09}
           y={206.86}
           z={-1404.01}
@@ -333,6 +339,7 @@ const MainIsland = () => {
           rotationX={-164.79}
           rotationZ={-174.30}
           scale={0.30}
+
         >
 
           <AreaLight
@@ -342,38 +349,229 @@ const MainIsland = () => {
             intensity={50.00}
             color={"#0368ff"}
             visible={false}
-
           />
 
-          {/* <Trigger
-            radius={600}
-            targetIds="player"
-            onEnter={(() => {
-              openPortal(`${viteBaseUrl}japan-island`)
-            })}
-          /> */}
-
           <Model
-            name="portalModel"
-            ref={portalRef}
+            name="portalJapan"
             adjustColor="#00fff2"
             physics="map"
             width={245.36}
             depth={245.36}
-            scaleX={10}
-            scaleY={10}
-            scaleZ={10}
-            src="maps/stargate.glb"
+
+            scale={34.99}
+
+            x={13475.40}
+            y={-3747.40}
+            z={4060.09}
+
+            rotationX={-77.31}
+            rotationY={-2.72}
+            rotationZ={-124.30}
+
+            src="maps/item/stargate.glb"
             onClick={((e) => {
               handleClick(e)
             })}
           >
-            <Find bloom={isMobile ? false : false} adjustColor="#00458f" name="Portal">
-            </Find>
+
           </Model>
 
-          <HTMLMesh
-            ref={htmlRef}
+          <Trigger
+            name="triggerJapan"
+            targetIds="player"
+            radius={800}
+
+            x={13475.40}
+            y={-3747.40}
+            z={4060.09}
+
+            interval={1}
+
+            onEnter={(() => {
+              handleOnPlayerFly("japan-island")
+            })}
+            onExit={(() => {
+              handleOutPlayerFly()
+            })}
+          />
+
+          <Model
+
+            name="portalChina"
+            adjustColor="#00fff2"
+            physics="map"
+            width={245.36}
+            depth={245.36}
+
+            scale={34.99}
+
+            x={-1703.08}
+            y={-5032.29}
+            z={6898.37}
+
+            rotationX={-79.42}
+            rotationY={-0.43}
+            rotationZ={144.73}
+
+            src="maps/item/stargate.glb"
+            onClick={((e) => {
+              handleClick(e)
+            })}
+          >
+
+          </Model>
+
+          <Trigger
+            name="triggerChina"
+            targetIds="player"
+            radius={800}
+
+            x={-1707.08}
+            y={-5089.14}
+            z={6920.60}
+
+
+            interval={1}
+
+            onEnter={(() => {
+              handleOnPlayerFly("chinese-island")
+            })}
+            onExit={(() => {
+              handleOutPlayerFly()
+            })}
+          />
+
+          <Model
+            name="portalGreek"
+
+            adjustColor="#00fff2"
+            physics="map"
+            width={245.36}
+            depth={245.36}
+
+            scale={34.99}
+
+
+            x={-5328.97}
+            y={-1881.58}
+            z={-7548.52}
+
+            rotationX={-75.44}
+            rotationY={-1.45}
+            rotationZ={56.76}
+
+            src="maps/item/stargate.glb"
+            onClick={((e) => {
+              handleClick(e)
+            })}
+          >
+
+            {/* <HTML
+              ref={htmlRef}
+              visible={true}
+              x={-31.44}
+              y={-106.08}
+              z={927.94}
+            >
+              <Box
+                sx={{
+                  mt: 2,
+                  padding: "30px",
+                  height: "max-content",
+                  color: "white",
+                  borderRadius: "20px",
+                  backdropFilter: "blur(4px)",
+                  webkitBackdropFilter: "blur(4px)",
+                  background: "rgba(0,0,0,0.7)",
+                  border: "1px solid rgba(255,255,255,0.18)",
+                  boxShadow: "0 8px 32px 0 rgba(31,38,135,0.37)",
+                  '&:before': {
+                    content: `" "`,
+                    position: "absolute",
+                    right: "30px",
+                    top: "-15.55px",
+                    borderTop: "none",
+                    borderRight: "15px solid transparent",
+                    borderLeft: "15px solid transparent",
+                    borderBottom: "15px solid rgba(0,0,0,0.7)",
+                  }
+                }}
+              >
+                <Typography variant="h2">{"Travel to Japanese Island"}</Typography>
+              </Box>
+            </HTML> */}
+
+          </Model>
+
+          <Trigger
+            name="triggerGreek"
+            targetIds="player"
+            radius={800}
+
+            x={-5559.07}
+            y={-1836.57}
+            z={-7679.60}
+
+            interval={1}
+
+            onEnter={(() => {
+              handleOnPlayerFly("greek-island")
+            })}
+            onExit={(() => {
+              handleOutPlayerFly()
+            })}
+          />
+
+          <Model
+            name="portalForest"
+
+            adjustColor="#00fff2"
+            physics="map"
+            width={245.36}
+            depth={245.36}
+
+
+            scale={34.99}
+
+            x={9839.41}
+            y={-468.15}
+            z={-10828.57}
+
+            rotationX={-76.79}
+            rotationY={0.48}
+            rotationZ={-33.41}
+
+            src="maps/item/stargate.glb"
+            onClick={((e) => {
+              handleClick(e)
+            })}
+          >
+
+          </Model>
+
+
+          <Trigger
+            name="triggerForest"
+            targetIds="player"
+            radius={800}
+
+            x={9839.41}
+            y={-468.15}
+            z={-10828.57}
+
+            interval={1}
+
+            onEnter={(() => {
+              handleOnPlayerFly("forest-island")
+            })}
+            onExit={(() => {
+              handleOutPlayerFly()
+            })}
+          />
+
+
+          {/* <HTML
+            // ref={htmlRef}
             visible={true}
             x={-31.44}
             y={-106.08}
@@ -403,30 +601,31 @@ const MainIsland = () => {
                 }
               }}
             >
-              <Typography variant="h2">
+              <Typography variant="h6">
                 Travel to Japanese Island
               </Typography>
             </Box>
-          </HTMLMesh>
+          </HTML> */}
 
 
         </Group>
 
         <AreaLight
           name="batteryLight"
-          x={0}
-          y={0}
-          z={0}
+          x={-85.85}
+          y={-682.16}
+          z={-487.23}
           rotationY={82.72}
         />
+
 
         <Group
           name="Battery"
 
-          x={-657.85}
-          y={58.76}
-          z={0}
-          animation={{ y: [58.76, 58.76 + 10, 58.76, 58.76 - 10, 58.76], rotationY: [0, 45, 90, 135, 180, 225, 270, 315] }}
+          x={-169.30}
+          y={-680.33}
+          z={-509.88}
+
 
         >
           <Trigger
@@ -443,8 +642,7 @@ const MainIsland = () => {
             name="batterySphere"
             scale={2.5}
             color="#ffa400"
-            opacity={0.3}
-            bloom
+            opacity={0.5}
           />
 
           <Model
@@ -452,29 +650,13 @@ const MainIsland = () => {
             src="item/coin.glb"
             bloom
             opacity={0.5}
+            y={0}
             animationPaused={false}
             animationRepeat={false}
-
+            animation={{ rotationY: [0, 45, 90, 135, 180, 225, 270, 315] }}
           />
 
         </Group>
-
-        {/* <OrbitCamera
-          name="orbitRef"
-          fov={90}
-          ref={orbitRef}
-          active={true}
-          transition={0.02}
-          innerZ={5091.64}
-          // x={-401.57}
-          // y={803.95}
-          // z={3891.64}
-          enableZoom
-          enableDamping
-          targetId="player"
-          autoRotate
-          minPolarAngle={100}
-        /> */}
 
         <Camera
           name="cameraRef"
@@ -500,15 +682,12 @@ const MainIsland = () => {
 
           transition={0.009}
           innerZ={223.68}
+          innerY={35.00}
 
           enableZoom
           minPolarAngle={100}
-          // azimuthAngle={90}
-          // minAzimuthAngle={180}
 
-          innerY={ySpring}
-          // innerZ={zSpring}
-          innerX={xSpring}
+
           y={100}
           zoom={1}
         >
@@ -517,7 +696,6 @@ const MainIsland = () => {
             id="player"
             name="player"
             ref={dummyRef}
-
 
             strideMove
             strideMode="free"
@@ -535,14 +713,14 @@ const MainIsland = () => {
             rotationY={-0.74}
             rotationZ={-180.00}
             x={-404.36}
-            y={200.93}
+            y={91.93}
             z={194.50}
             scale={1.5}
           >
             <Model
               ref={dummyBatteryRef}
               name="dummyBattery"
-              src="item/battery.glb"
+              src="item/coin.glb"
               opacity={0.5}
               scale={0.2}
               y={80}
@@ -567,28 +745,23 @@ const MainIsland = () => {
           z={arrowPosition.z}
         />
 
-        <Group
-          x={-952.22}
-          y={0.20}
-          z={-440.27}
-        >
-          <Circle
-            rotationX={270}
-            scale={2.87}
-            opacity={0.50}
-          />
-          <Trigger
-            pad
-            targetIds={"player"}
-            radius={150.00}
-            onEnter={(() => {
-              handleOnPlayerFly()
-            })}
-            onExit={(() => {
-              handleOutPlayerFly()
-            })}
-          />
-        </Group>
+
+
+        <Plane
+          id="plane"
+          name="plane"
+          visible={false}
+          x={1734.96}
+          y={-7603.29}
+          z={-509.88}
+          scale={150.00}
+          rotationX={-90.00}
+          intersectIds={["player"]}
+          onIntersect={(() => {
+            handlePlayerFall()
+          })}
+        />
+
 
       </World>
 
