@@ -20,7 +20,7 @@ const Nomenu = ({ url }) => {
         }}
         onClick={() => {
           // navigate(`../`);
-          window.location.assign("https://www.i-smart.com.sg/")
+          window.location.assign("https://www.i-smart.com.sg/metaverse")
           // window.location.assign("https://2vr360.com/basiir/test32/")
 
           
