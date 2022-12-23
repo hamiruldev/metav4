@@ -112,6 +112,20 @@ const Theme = {
         },
       },
     },
+    MuiLinearProgress: {
+      styleOverrides: {
+        root: {
+          backgroundColor: "#c4a300",
+        },
+      },
+    },
+    MuiLinearProgress: {
+      styleOverrides: {
+        bar: {
+          backgroundColor: "#c4a300",
+        },
+      },
+    },
   },
 };
 
