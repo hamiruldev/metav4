@@ -1,5 +1,5 @@
 import React from "react";
-import { Routes, Route, BrowserRouter } from "react-router-dom";
+import { Routes, Route, BrowserRouter, Link } from "react-router-dom";
 
 import { createTheme, ThemeProvider } from "@mui/material/styles";
 import { CssBaseline } from "@mui/material";
@@ -9,7 +9,6 @@ import Theme from "./Theme";
 import Iframe from "./page/Iframe";
 import Nomenu from "./page/Nomenu";
 import "./App.css";
-import { redirect } from "react-router-dom";
 import ResponsiveDrawer from "./component/Drawer";
 
 import Game from "./Game/Game";
@@ -24,13 +23,39 @@ function Home() {
   return (
     <div
       style={{
-        backgroundColor: "black",
+        backgroundColor: "transparent",
+        color: "white"
       }}
     >
       <h1>Home</h1>
-      <button>Metaverse</button>
-      <button>Website</button>
-    </div>
+      <nav>
+        <ul>
+          <li>
+            <Link to="/tunnel">tunnel</Link>
+          </li>
+          <li>
+            <Link to="/main-island">main-island</Link>
+          </li>
+
+          <li>
+            <Link to="/forest-island">forest-island</Link>
+          </li>
+
+          <li>
+            <Link to="/japan-island">japan-island</Link>
+          </li>
+
+          <li>
+            <Link to="/chinese-island">chinese-island</Link>
+          </li>
+
+          <li>
+            <Link to="/greek-island">greek-island</Link>
+          </li>
+        </ul>
+      </nav>
+
+    </div >
   );
 }
 
@@ -49,12 +74,12 @@ function App() {
 
               <Route index element={<Home />} />
 
-              <Route path="/tunnel" element={<World />} />
-              <Route path="/main-island" element={<MainIsland />} />
-              <Route path="/forest-island" element={<ForestIsland />} />
-              <Route path="/japan-island" element={<JapanIsland />} />
-              <Route path="/chinese-island" element={<ChineseIsland />} />
-              <Route path="/greek-island" element={<GreekIsland />} />
+              <Route path="tunnel" element={<World />} />
+              <Route path="main-island" element={<MainIsland />} />
+              <Route path="forest-island" element={<ForestIsland />} />
+              <Route path="japan-island" element={<JapanIsland />} />
+              <Route path="chinese-island" element={<ChineseIsland />} />
+              <Route path="greek-island" element={<GreekIsland />} />
 
               <Route
                 path="portfolio"

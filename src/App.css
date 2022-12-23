@@ -80,7 +80,7 @@
 .button-glow2 {
     animation: glowing 2000ms infinite;
     float: right;
-    z-Index: 1000;
+    z-index: 1000;
     position: absolute !important;
     right: 2%;
     bottom: 5vh;

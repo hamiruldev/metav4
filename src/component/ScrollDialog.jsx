@@ -11,7 +11,6 @@ import { Box, CircularProgress, ClickAwayListener, Stack, useTheme, styled, Icon
 
 import CloseIcon from "@mui/icons-material/Close";
 import CardFeed from "./CardFeed";
-import AddToCartTable from "./User/AddToCartTable";
 import AuthForm from "./UiUx/AuthForm";
 import AvatarCard from "./UiUx/AvatarCard";
 import Form from "./Form";
@@ -294,12 +293,6 @@ export default function ScrollDialog({
                     {htmlFor === "video" && "video"}
                     {htmlFor === "booth" && "booth"}
                     {htmlFor === "navBar" && "List of Your Cart"}
-
-                    {htmlFor === "navBar" && (
-                      <>
-                        <AddToCartTable data={dataContent} />
-                      </>
-                    )}
 
                     {htmlFor === "booth" && boothState?.id != 0 && (
                       <Stack
