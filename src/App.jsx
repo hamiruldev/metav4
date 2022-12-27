@@ -27,17 +27,17 @@ function App() {
             <Route path="/" element={<World />} />
             <Route path="/island" element={<Island />} />
             <Route
-              path="portfolio"
+              path="case-study"
               element={<Nomenu url={"https://360xp.co/ismartwebsite/"} />}
             />
             <Route
-              path="services"
+              path="service"
               element={
                 <Iframe url={"https://360xp.co/ismartwebsite/services/"} />
               }
             />
             <Route
-              path="services/softwaredev"
+              path="service/custom-software"
               element={
                 <Iframe
                   url={
@@ -47,7 +47,7 @@ function App() {
               }
             />
             <Route
-              path="services/ecommerce"
+              path="service/e-commerce"
               element={
                 <Iframe
                   url={
@@ -57,7 +57,7 @@ function App() {
               }
             />
             <Route
-              path="services/websitedesign"
+              path="service/website-design"
               element={
                 <Iframe
                   url={
@@ -67,7 +67,7 @@ function App() {
               }
             />
             <Route
-              path="services/webminigame"
+              path="service/web-mini-game"
               element={
                 <Iframe
                   url={
@@ -77,7 +77,7 @@ function App() {
               }
             />
             <Route
-              path="services/virtualevent"
+              path="service/virtual-event"
               element={
                 <Iframe
                   url={
@@ -87,7 +87,7 @@ function App() {
               }
             />
             <Route
-              path="services/onlineshowroom"
+              path="service/online-showroom"
               element={
                 <Iframe
                   url={
@@ -97,7 +97,7 @@ function App() {
               }
             />
             <Route
-              path="services/3dvisualization"
+              path="service/3d-visualization"
               element={
                 <Iframe
                   url={
@@ -107,7 +107,7 @@ function App() {
               }
             />
             <Route
-              path="services/metaverse"
+              path="service/metaverse"
               element={
                 <Iframe
                   url={
