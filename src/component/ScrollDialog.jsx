@@ -20,6 +20,7 @@ import WelcomeButton from "./UiUx/WelcomeButton";
 
 var menuData = [{ id: 1, name: 'Intrest form' }, { id: 2, name: 'share' }, { id: 3, name: 'help' }]
 
+const viteBaseUrl = import.meta.env.VITE_BASE_URL;
 const loginButton = () => {
   const loginEl = document.getElementById("formButton")
   loginEl.click()
@@ -190,10 +191,10 @@ export default function ScrollDialog({
         sx={{
           backgroundColor: "transparent",
           backgroundSize: "cover",
-          backgroundImage: (htmlFor == "welcome" || htmlFor == "avatar" || htmlFor == "login" || htmlFor == "register") && `url(img/sky/cover3.JPG)`,
+          backgroundImage: (htmlFor == "welcome" || htmlFor == "avatar" || htmlFor == "login" || htmlFor == "register") && `url(${viteBaseUrl}img/sky/cover3.JPG)`,
         }}
       >
-        <ClickAwayListener disableReactTree onClickAway={htmlFor != "welcome" && htmlFor != "instruction" ? handleClose : false}>
+        <ClickAwayListener disableReactTree onClickAway={htmlFor != "welcome" && htmlFor != "instruction" && htmlFor != "Info Board" ? handleClose : false}>
           <AnimateBox>
             <Stack
               sx={{
@@ -378,7 +379,7 @@ export default function ScrollDialog({
                     {htmlFor == "register" && "Start"}
                     {htmlFor == "login" && "Submit"}
                     {htmlFor == "welcome" && <WelcomeButton handleReady={handleReady} isReady={isReady} />}
-                    {htmlFor == "instruction" && "Start"}
+                    {htmlFor == "instruction" && <WelcomeButton handleReady={handleReady} isReady={isReady} />}
                     {htmlFor == "avatar" && isSuccess && "Success"}
                     {htmlFor == "avatar" && !isSuccess && "Start"}
                   </Button>

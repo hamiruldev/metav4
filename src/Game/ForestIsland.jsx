@@ -275,7 +275,7 @@ const ForestIsland = () => {
           antiAlias={true}
         />
 
-        <Skybox texture="img/sky/sky1.jpg" />
+        <Skybox texture={`${viteBaseUrl}img/sky/sky1.jpg`} />
 
         <Plane
           id="plane"
@@ -306,7 +306,7 @@ const ForestIsland = () => {
           y={-1083.90}
           z={-486.53}
           scale={70}
-          src="maps/forest/forest_island.glb"
+          src={`${viteBaseUrl}maps/forest/forest_island.glb`}
           onClick={!isMobile && handleClick}
         />
 
@@ -361,7 +361,7 @@ const ForestIsland = () => {
             scaleX={10}
             scaleY={10}
             scaleZ={10}
-            src="maps/item/stargate.glb"
+            src={`${viteBaseUrl}maps/item/stargate.glb`}
             onClick={((e) => {
               handleClick(e)
             })}
@@ -446,7 +446,7 @@ const ForestIsland = () => {
 
           <Model
             name="batteryModel"
-            src="item/coin.glb"
+            src={`${viteBaseUrl}item/coin.glb`}
             bloom
             animation={{ rotationY: [0, 45, 90, 135, 180, 225, 270, 315] }}
             opacity={0.5}
@@ -487,6 +487,7 @@ const ForestIsland = () => {
 
 
           y={100}
+          innerY={50}
           zoom={1}
         >
 
@@ -498,9 +499,9 @@ const ForestIsland = () => {
 
             strideMove
             strideMode="free"
-            src="3dCharacter/new/character1.glb"
+            src={`${viteBaseUrl}3dCharacter/new/character1.glb`}
             physics="character"
-            animations={{ float: "3dCharacter/new/Floating.fbx" }}
+            animations={{ float: `${viteBaseUrl}3dCharacter/new/Floating.fbx` }}
 
             width={50}
             depth={50}
@@ -519,7 +520,7 @@ const ForestIsland = () => {
             <Model
               ref={dummyBatteryRef}
               name="dummyBattery"
-              src="item/coin.glb"
+              src={`${viteBaseUrl}item/coin.glb`}
               opacity={0.5}
               scale={0.2}
               y={80}
@@ -532,7 +533,7 @@ const ForestIsland = () => {
         <Model
           name="p2p"
           ref={pointerRef}
-          src="dummy/p2p_a.glb"
+          src={`${viteBaseUrl}/dummy/p2p_a.glb`}
           emissiveColor="#ff0000"
           color="#ffffff"
           opacityFactor={4}

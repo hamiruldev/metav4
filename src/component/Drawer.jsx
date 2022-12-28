@@ -1,7 +1,7 @@
 import * as React from "react";
 import PropTypes from "prop-types";
 
-import { Outlet, useLocation, useNavigate } from "react-router-dom";
+import { redirect, useNavigate } from "react-router-dom";
 import {
   Box,
   Collapse,
@@ -19,11 +19,7 @@ import {
   useMediaQuery,
   Link,
 } from "@mui/material";
-import {
-  ExpandMore,
-  ExpandLess,
-  Menu as MenuIcon,
-} from "@mui/icons-material";
+import { ExpandMore, ExpandLess, Menu as MenuIcon } from "@mui/icons-material";
 import AudioBcg from "./AudioBcg";
 
 let dateNew = new Date();
@@ -55,7 +51,7 @@ const SubDrawer = () => {
           <img
             onClick={() => {
               // navigate(`../`);
-              window.location.assign("https://www.i-smart.com.sg/");
+              window.location.assign("https://www.i-smart.com.sg/metaverse");
               // window.location.assign("https://2vr360.com/basiir/test32/");
             }}
             src={`https://360xp.co/metagallery/wp-content/uploads/2022/10/ISMART-Logo-White-01.png`}
@@ -87,7 +83,7 @@ const SubDrawer = () => {
           onClick={() => {
             // navigate(`../`);
             // handleClickHome;
-            window.location.assign("https://www.i-smart.com.sg/");
+            window.location.assign("https://www.i-smart.com.sg/metaverse");
             // window.location.assign("https://2vr360.com/basiir/test32/");
           }}
         >
@@ -99,11 +95,11 @@ const SubDrawer = () => {
           <List component="div" disablePadding>
             <ListItemButton
               onClick={() => {
-                navigate(`../portfolio`);
+                navigate(`../case-study`);
               }}
               sx={{ pl: 4 }}
             >
-              <ListItemText primary="1.1 PORTFOLIO" />
+              <ListItemText primary="1.1 CASE STUDY" />
             </ListItemButton>
           </List>
         </Collapse>
@@ -114,7 +110,7 @@ const SubDrawer = () => {
           // }}
           onClick={handleClickServices}
         >
-          <ListItemText primary="2 SERVICES" />
+          <ListItemText primary="2 SERVICE" />
           {openServices ? <ExpandLess /> : <ExpandMore />}
         </ListItemButton>
 
@@ -122,7 +118,8 @@ const SubDrawer = () => {
           <List component="div" disablePadding>
             <ListItemButton
               onClick={() => {
-                navigate(`../services/softwaredev`);
+                // navigate(`../service/softwaredev`);
+                navigate(`../service/custom-software`);
               }}
               sx={{ pl: 4 }}
             >
@@ -130,7 +127,7 @@ const SubDrawer = () => {
             </ListItemButton>
             <ListItemButton
               onClick={() => {
-                navigate(`../services/ecommerce`);
+                navigate(`../service/e-commerce`);
               }}
               sx={{ pl: 4 }}
             >
@@ -138,7 +135,7 @@ const SubDrawer = () => {
             </ListItemButton>
             <ListItemButton
               onClick={() => {
-                navigate(`../services/websitedesign`);
+                navigate(`../service/website-design`);
               }}
               sx={{ pl: 4 }}
             >
@@ -146,7 +143,7 @@ const SubDrawer = () => {
             </ListItemButton>
             <ListItemButton
               onClick={() => {
-                navigate(`../services/webminigame`);
+                navigate(`../service/web-mini-game`);
               }}
               sx={{ pl: 4 }}
             >
@@ -154,7 +151,7 @@ const SubDrawer = () => {
             </ListItemButton>
             <ListItemButton
               onClick={() => {
-                navigate(`../services/virtualevent`);
+                navigate(`../service/virtual-event`);
               }}
               sx={{ pl: 4 }}
             >
@@ -162,7 +159,7 @@ const SubDrawer = () => {
             </ListItemButton>
             <ListItemButton
               onClick={() => {
-                navigate(`../services/onlineshowroom`);
+                navigate(`../service/online-showroom`);
               }}
               sx={{ pl: 4 }}
             >
@@ -170,7 +167,7 @@ const SubDrawer = () => {
             </ListItemButton>
             <ListItemButton
               onClick={() => {
-                navigate(`../services/3dvisualization`);
+                navigate(`../service/3d-visualization`);
               }}
               sx={{ pl: 4 }}
             >
@@ -178,7 +175,7 @@ const SubDrawer = () => {
             </ListItemButton>
             <ListItemButton
               onClick={() => {
-                navigate(`../services/metaverse`);
+                navigate(`../service/metaverse`);
               }}
               sx={{ pl: 4 }}
             >
@@ -234,8 +231,6 @@ function ResponsiveDrawer(props) {
   const [mobileOpen, setMobileOpen] = React.useState(false);
   const matches = useMediaQuery("(max-width:599px)");
   const navigate = useNavigate();
-  const location = useLocation();
-
   const handleDrawerToggle = () => {
     setMobileOpen(!mobileOpen);
   };
@@ -244,112 +239,89 @@ function ResponsiveDrawer(props) {
     window !== undefined ? () => window().document.body : undefined;
 
   return (
-    <>
-      <Box sx={{ display: "flex" }}>
-        <CssBaseline />
+    <Box sx={{ display: "flex" }}>
+      <CssBaseline />
 
-
-        {location.pathname == '/' || location.pathname == '/service' &&
-          <>
-            {matches && (
-              <AppBar
-                position="fixed"
-                sx={{
-                  width: { sm: `calc(100 % - ${drawerWidth}px)` },
-                  ml: { sm: `${drawerWidth}px` },
-                  bgcolor: "text.primary",
-                  display: { xs: "block", md: "none", lg: "none" }, // Hidden on desktop
-                }}
-              >
-                <Toolbar>
-                  <Link
-                    href="https://www.i-smart.com.sg"
-                    sx={{ color: "inherit", flexGrow: 1, textDecoration: "none" }}
-                  >
-                    <Typography
-                      variant="h6"
-                      noWrap
-                      sx={{ flexGrow: 1 }}
-                      component="div"
-                    >
-                      iSmart Support
-                    </Typography>
-                  </Link>
-                  <IconButton
-                    color="inherit"
-                    aria-label="open drawer"
-                    edge="end"
-                    onClick={handleDrawerToggle}
-                    sx={{ mr: 2, display: { sm: "none" } }}
-                  >
-                    <MenuIcon />
-                  </IconButton>
-                </Toolbar>
-              </AppBar>
-            )}
-
-            <Box
-              component="nav"
-              sx={{ width: { sm: drawerWidth }, flexShrink: { sm: 0 } }}
-              aria-label="mailbox folders"
-            >
-              {/* The implementation can be swapped with js to avoid SEO duplication of links. */}
-              {matches ? (
-                <Drawer
-                  container={container}
-                  variant="temporary"
-                  // variant="persistent"
-                  open={mobileOpen}
-                  onClose={handleDrawerToggle}
-                  ModalProps={{
-                    keepMounted: true, // Better open performance on mobile.
-                  }}
-                  sx={{
-                    display: { xs: "block", sm: "none" },
-                    "& .MuiDrawer-paper": {
-                      boxSizing: "border-box",
-                      width: drawerWidth,
-                      // pt: 8,
-                    },
-                  }}
-                >
-                  <SubDrawer />
-                </Drawer>
-              ) : (
-                <Drawer
-                  variant="permanent"
-                  sx={{
-                    display: { xs: "none", sm: "block" },
-                    "& .MuiDrawer-paper": {
-                      boxSizing: "border-box",
-                      width: drawerWidth,
-                    },
-                  }}
-                  open
-                >
-                  <SubDrawer />
-                </Drawer>
-              )}
-            </Box>
-          </>
-        }
-
-        <Box
-          component="main"
+      {matches && (
+        <AppBar
+          position="fixed"
           sx={{
-            display: "flex",
-            height: "100vh",
-            p: 3,
-            width: { sm: `calc(100% - ${drawerWidth}px)` },
-            backgroundColor: "transparent"
+            width: { sm: `calc(100 % - ${drawerWidth}px)` },
+            ml: { sm: `${drawerWidth}px` },
+            bgcolor: "text.primary",
+            display: { xs: "block", md: "none", lg: "none" }, // Hidden on desktop
           }}
         >
-          <Toolbar />
-          <Outlet />
-        </Box>
+          <Toolbar>
+            <Link
+              href="https://www.i-smart.com.sg/metaverse"
+              sx={{ color: "inherit", flexGrow: 1, textDecoration: 'none' }}>
+              <Typography
+                variant="h6"
+                noWrap
+                sx={{ flexGrow: 1 }}
+                component="div"
+              >
+                iSmart Support
+              </Typography>
+            </Link>
+            <IconButton
+              color="inherit"
+              aria-label="open drawer"
+              edge="end"
+              onClick={handleDrawerToggle}
+              sx={{ mr: 2, display: { sm: "none" } }}
+            >
+              <MenuIcon />
+            </IconButton>
+          </Toolbar>
+        </AppBar>
+      )}
 
+      <Box
+        component="nav"
+        sx={{ width: { sm: drawerWidth }, flexShrink: { sm: 0 } }}
+        aria-label="mailbox folders"
+      >
+        {/* The implementation can be swapped with js to avoid SEO duplication of links. */}
+        {matches ? (
+          <Drawer
+            container={container}
+            variant="temporary"
+            // variant="persistent"
+            open={mobileOpen}
+            onClose={handleDrawerToggle}
+            ModalProps={{
+              keepMounted: true, // Better open performance on mobile.
+            }}
+            sx={{
+              display: { xs: "block", sm: "none" },
+              "& .MuiDrawer-paper": {
+                boxSizing: "border-box",
+                width: drawerWidth,
+                pt: 8,
+              },
+            }}
+          >
+            <SubDrawer />
+          </Drawer>
+        ) : (
+          <Drawer
+            variant="permanent"
+            sx={{
+              display: { xs: "none", sm: "block" },
+              "& .MuiDrawer-paper": {
+                boxSizing: "border-box",
+                width: drawerWidth,
+              },
+            }}
+            open
+          >
+            <SubDrawer />
+          </Drawer>
+        )}
       </Box>
-    </>
+    </Box>
   );
 }
 

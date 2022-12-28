@@ -263,7 +263,7 @@ const GreekIsland = () => {
           antiAlias={true}
         />
 
-        <Skybox texture="img/sky/sky1.jpg" />
+        <Skybox texture={`${viteBaseUrl}img/sky/sky1.jpg`} />
 
         <Plane
           id="plane"
@@ -294,7 +294,7 @@ const GreekIsland = () => {
           y={-1400.54}
           z={-761.98}
           scale={70}
-          src="maps/greek/greek_island.glb"
+          src={`${viteBaseUrl}maps/greek/greek_island.glb`}
           onClick={!isMobile && handleClick}
         />
 
@@ -350,7 +350,7 @@ const GreekIsland = () => {
             scaleX={10}
             scaleY={10}
             scaleZ={10}
-            src="maps/item/stargate.glb"
+            src={`${viteBaseUrl}maps/item/stargate.glb`}
             onClick={((e) => {
               handleClick(e)
             })}
@@ -436,7 +436,7 @@ const GreekIsland = () => {
 
           <Model
             name="batteryModel"
-            src="item/coin.glb"
+            src={`${viteBaseUrl}item/coin.glb`}
             bloom
             opacity={0.5}
             animationPaused={false}
@@ -491,6 +491,7 @@ const GreekIsland = () => {
 
           enableZoom
           minPolarAngle={100}
+          innerY={50}
 
           y={100}
           zoom={1}
@@ -504,9 +505,9 @@ const GreekIsland = () => {
 
             strideMove
             strideMode="free"
-            src="3dCharacter/new/character1.glb"
+            src={`${viteBaseUrl}3dCharacter/new/character1.glb`}
             physics="character"
-            animations={{ float: "3dCharacter/new/Floating.fbx" }}
+            animations={{ float: `${viteBaseUrl}3dCharacter/new/Floating.fbx` }}
 
             width={50}
             depth={50}
@@ -521,11 +522,12 @@ const GreekIsland = () => {
             y={91.93}
             z={194.50}
             scale={1.5}
+
           >
             <Model
               ref={dummyBatteryRef}
               name="dummyBattery"
-              src="item/coin.glb"
+              src={`${viteBaseUrl}item/coin.glb`}
               opacity={0.5}
               scale={0.2}
               y={80}
@@ -538,7 +540,7 @@ const GreekIsland = () => {
         <Model
           name="p2p"
           ref={pointerRef}
-          src="dummy/p2p_a.glb"
+          src={`${viteBaseUrl}dummy/p2p_a.glb`}
           emissiveColor="#ff0000"
           color="#ffffff"
           opacityFactor={4}

@@ -140,12 +140,12 @@ body {
     0%,
     100% {
         color: #FFF;
-        text-shadow: 0 0 10px #0652DD, 0 0 50px #0652DD, 0 0 100px #0652DD;
+        text-shadow: 0 0 10px #c4a300, 0 0 50px #c4a300, 0 0 100px #c4a300;
     }
 
     10%,
     90% {
-        color: #111;
+        color: rgb(84, 81, 81);
         text-shadow: none;
     }
 }
@@ -282,7 +282,7 @@ body {
 }
 
 .BoxHtmlMesh {
-    background: rgba(0, 0, 0, 0.25);
+    background: rgba(0, 0, 0, 0.699);
     box-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.37);
     backdrop-filter: blur(4px);
     -webkit-backdrop-filter: blur(4px);
@@ -290,5 +290,16 @@ body {
     border: 1px solid rgba(255, 255, 255, 0.18);
     padding: 20px;
     border-radius: "%5";
-    background-color: grey;
+    border-radius: "10px";
+    color: white;
+    display: "flex";
+    align-items: "center";
+}
+
+.nipple {
+    top: 0vh !important
+}
+
+.loaderColor {
+    background-color: #c4a300;
 }

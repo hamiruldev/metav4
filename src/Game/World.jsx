@@ -13,6 +13,7 @@ import {
 import LoadingProgress from "../component/LoadingProgress";
 import Game from "./Game";
 import ScrollDialog from "../component/ScrollDialog";
+import ResponsiveDrawer from "../component/Drawer";
 
 const World = () => {
 
@@ -126,6 +127,7 @@ const World = () => {
         WHATSAPP
       </Button>
 
+      <ResponsiveDrawer />
 
       <Game />
 

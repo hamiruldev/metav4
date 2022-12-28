@@ -30,8 +30,6 @@ import {
 import * as THREE from 'three'
 
 import ScrollDialog from "../component/ScrollDialog";
-import LightArea1 from "../component/World/LightArea1";
-import Portal from "../component/World/Portal";
 
 const viteBaseUrl = import.meta.env.VITE_BASE_URL;
 

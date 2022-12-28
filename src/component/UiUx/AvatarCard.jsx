@@ -13,6 +13,7 @@ import { Box, Slide, Stack, Zoom } from '@mui/material';
 import { useState } from 'react';
 import { useRenderer, useScene } from 'lingo3d-react';
 
+const viteBaseUrl = import.meta.env.VITE_BASE_URL;
 const MyArray = [
     {
         id: 1,
@@ -117,7 +118,7 @@ export default function AvatarCard({ setAvatarButton }) {
                             component="img"
                             alt="green iguana"
                             height="100"
-                            src={item.image}
+                            src={viteBaseUrl + item.image}
                         />
                     </Stack>
                 </SwiperSlide>

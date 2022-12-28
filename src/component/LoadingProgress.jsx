@@ -8,16 +8,23 @@ function LinearProgressWithLabel(props) {
   return (
     <Box sx={{ display: "flex", alignItems: "center" }}>
       <Box sx={{ width: "100%", mr: 1 }}>
-        <LinearProgress variant="determinate" {...props} />
+        <LinearProgress
+          className="loaderColor"
+
+          sx={{
+            color: "#c4a300",
+            backgroundColor: "#c4a300",
+          }}
+          variant="determinate"
+          {...props}
+        />
       </Box>
       <Box sx={{ minWidth: 35 }}>
-        <Typography
-          variant="body2"
-          sx={{ color: "rgb(255 255 255 / 80%)" }}
-        >{props?.value}%</Typography>
+        <Typography variant="body2" sx={{ color: "rgb(255 255 255 / 80%)" }}>
+          {props?.value}%
+        </Typography>
       </Box>
     </Box>
-
   );
 }
 

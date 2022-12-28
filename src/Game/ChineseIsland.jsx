@@ -4,7 +4,6 @@ import { Box, Button, Stack, Tooltip, Typography } from "@mui/material";
 
 import {
   Dummy,
-  HTML,
   Find,
   Group,
   Model,
@@ -22,11 +21,8 @@ import {
   useScene,
   useRenderer,
   Circle,
-  usePreload,
-  Cube,
   Plane,
   Skybox,
-  OrbitCamera,
   Camera,
 
 } from "lingo3d-react";
@@ -35,7 +31,6 @@ import * as THREE from 'three'
 import { ImprovedNoise } from 'https://unpkg.com/three/examples/jsm/math/ImprovedNoise.js';
 
 import ScrollDialog from "../component/ScrollDialog";
-import LightArea1 from "../component/World/LightArea1";
 
 // import testVertexShader from '../shader/vertex.glsl'
 // import testFragmentShader from '../shader/fragment.glsl'
@@ -394,7 +389,7 @@ const ChineseIsland = () => {
           antiAlias={true}
         />
 
-        <Skybox texture="img/sky/sky1.jpg" />
+        <Skybox texture={`${viteBaseUrl}img/sky/sky1.jpg`} />
 
         <Model
           name="worldmap"
@@ -408,13 +403,13 @@ const ChineseIsland = () => {
           y={-1246.54}
           z={-761.98}
           scale={70}
-          src="maps/chinese/chinese_island.glb"
+          src={`${viteBaseUrl}maps/chinese/chinese_island.glb`}
           onClick={!isMobile && handleClick}
         >
 
           <Find name="tree"
             textureFlipY={true}
-            texture={"maps/chinese/chinese_island5_img4.png"}
+            texture={`${viteBaseUrl}maps/chinese/chinese_island5_img4.png`}
           />
 
         </Model>
@@ -470,7 +465,7 @@ const ChineseIsland = () => {
             scaleX={10}
             scaleY={10}
             scaleZ={10}
-            src="maps/item/stargate.glb"
+            src={`${viteBaseUrl}maps/item/stargate.glb`}
             onClick={((e) => {
               handleClick(e)
             })}
@@ -555,7 +550,7 @@ const ChineseIsland = () => {
 
           <Model
             name="batteryModel"
-            src="item/coin.glb"
+            src={`${viteBaseUrl}item/coin.glb`}
             bloom
             animation={{ rotationY: [0, 45, 90, 135, 180, 225, 270, 315] }}
 
@@ -566,23 +561,6 @@ const ChineseIsland = () => {
           />
 
         </Group>
-
-        {/* <OrbitCamera
-          name="orbitRef"
-          fov={90}
-          ref={orbitRef}
-          active={true}
-          transition={0.02}
-          innerZ={5091.64}
-          // x={-401.57}
-          // y={803.95}
-          // z={3891.64}
-          enableZoom
-          enableDamping
-          targetId="player"
-          autoRotate
-          minPolarAngle={100}
-        /> */}
 
         <Camera
           name="cameraRef"
@@ -614,9 +592,7 @@ const ChineseIsland = () => {
           // azimuthAngle={90}
           // minAzimuthAngle={180}
 
-          innerY={ySpring}
-          // innerZ={zSpring}
-          innerX={xSpring}
+          innerY={50}
           y={100}
           zoom={1}
         >
@@ -629,9 +605,9 @@ const ChineseIsland = () => {
 
             strideMove
             strideMode="free"
-            src="3dCharacter/new/character1.glb"
+            src={`${viteBaseUrl}3dCharacter/new/character1.glb`}
             physics="character"
-            animations={{ float: "3dCharacter/new/Floating.fbx" }}
+            animations={{ float: `${viteBaseUrl}3dCharacter/new/Floating.fbx` }}
 
             width={50}
             depth={50}
@@ -650,7 +626,7 @@ const ChineseIsland = () => {
             <Model
               ref={dummyBatteryRef}
               name="dummyBattery"
-              src="item/coin.glb"
+              src={`${viteBaseUrl}item/coin.glb`}
               opacity={0.5}
               scale={0.2}
               y={80}
@@ -663,7 +639,7 @@ const ChineseIsland = () => {
         <Model
           name="p2p"
           ref={pointerRef}
-          src="dummy/p2p_a.glb"
+          src={`${viteBaseUrl}dummy/p2p_a.glb`}
           emissiveColor="#ff0000"
           color="#ffffff"
           opacityFactor={4}

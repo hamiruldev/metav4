@@ -39,9 +39,11 @@ import LightArea1 from "../component/World/LightArea1";
 // import testVertexShader from '../shader/vertex.glsl'
 // import testFragmentShader from '../shader/fragment.glsl'
 
+const viteBaseUrl = import.meta.env.VITE_BASE_URL;
+
+
 const JapanIsland = () => {
 
-  const viteBaseUrl = import.meta.env.VITE_BASE_URL;
 
   const dummyRef = useRef(null);
   const dummyBatteryRef = useRef(null);
@@ -248,7 +250,7 @@ const JapanIsland = () => {
       }
 
       <World>
-        <LingoEditor />
+        {/* <LingoEditor /> */}
         {/* <Library /> */}
         {/* <Toolbar /> */}
         {/* <Editor /> */}
@@ -264,7 +266,7 @@ const JapanIsland = () => {
           antiAlias={true}
         />
 
-        <Skybox texture="img/sky/sky1.jpg" />
+        <Skybox texture={`${viteBaseUrl}img/sky/sky1.jpg`} />
 
         <Plane
           id="plane"
@@ -295,7 +297,7 @@ const JapanIsland = () => {
           y={-1246.54}
           z={-761.98}
           scale={70}
-          src="maps/japan/japan_island.glb"
+          src={`${viteBaseUrl}maps/japan/japan_island.glb`}
           onClick={!isMobile && handleClick}
         />
 
@@ -350,7 +352,7 @@ const JapanIsland = () => {
             scaleX={10}
             scaleY={10}
             scaleZ={10}
-            src="maps/item/stargate.glb"
+            src={`${viteBaseUrl}maps/item/stargate.glb`}
             onClick={((e) => {
               handleClick(e)
             })}
@@ -435,7 +437,7 @@ const JapanIsland = () => {
 
           <Model
             name="batteryModel"
-            src="item/coin.glb"
+            src={`${viteBaseUrl}item/coin.glb`}
             bloom
             opacity={0.5}
             animationPaused={false}
@@ -469,6 +471,7 @@ const JapanIsland = () => {
 
           transition={0.009}
           innerZ={223.68}
+          innerY={50}
 
           enableZoom
           minPolarAngle={100}
@@ -486,9 +489,9 @@ const JapanIsland = () => {
 
             strideMove
             strideMode="free"
-            src="3dCharacter/new/character1.glb"
+            src={`${viteBaseUrl}3dCharacter/new/character1.glb`}
             physics="character"
-            animations={{ float: "3dCharacter/new/Floating.fbx" }}
+            animations={{ float: `${viteBaseUrl}3dCharacter/new/Floating.fbx` }}
 
             width={50}
             depth={50}
@@ -507,7 +510,7 @@ const JapanIsland = () => {
             <Model
               ref={dummyBatteryRef}
               name="dummyBattery"
-              src="item/coin.glb"
+              src={`${viteBaseUrl}item/coin.glb`}
               opacity={0.5}
               scale={0.2}
               y={80}
@@ -520,7 +523,7 @@ const JapanIsland = () => {
         <Model
           name="p2p"
           ref={pointerRef}
-          src="dummy/p2p_a.glb"
+          src={`${viteBaseUrl}dummy/p2p_a.glb`}
           emissiveColor="#ff0000"
           color="#ffffff"
           opacityFactor={4}

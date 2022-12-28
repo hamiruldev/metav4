@@ -266,7 +266,7 @@ const Game = () => {
           z={0}
           scale={70}
           // src="maps/tunnel1.glb"
-          src="maps/tunnel/tunnel1.glb"
+          src={`${viteBaseUrl}maps/tunnel/tunnel1.glb`}
           onClick={!isMobile && handleClick}
         >
         </Model>
@@ -327,7 +327,7 @@ const Game = () => {
           scaleX={10}
           scaleY={10}
           scaleZ={10}
-          src="maps/item/stargate.glb"
+          src={`${viteBaseUrl}maps/item/stargate.glb`}
           onClick={((e) => {
             handleClick(e)
           })}
@@ -371,7 +371,7 @@ const Game = () => {
 
           <Model
             name="batteryModel"
-            src="item/coin.glb"
+            src={`${viteBaseUrl}item/coin.glb`}
             bloom
             opacity={0.5}
             animationPaused={false}
@@ -406,8 +406,8 @@ const Game = () => {
           fov={width < 640 ? 110 : 90}
           enableDamping
           transition={0.009}
-          y={100}
           zoom={1}
+          innerY={100}
         >
 
           <Dummy
@@ -417,7 +417,7 @@ const Game = () => {
 
             strideMove
             strideMode="free"
-            src="3dCharacter/new/character1.glb"
+            src={`${viteBaseUrl}3dCharacter/new/character1.glb`}
             physics="character"
             animation={running ? "running" : "idle"}
             width={50}
@@ -432,7 +432,7 @@ const Game = () => {
             <Model
               ref={dummyBatteryRef}
               name="dummyBattery"
-              src="item/coin.glb"
+              src={`${viteBaseUrl}item/coin.glb`}
               opacity={0.5}
               scale={0.2}
               y={80}
