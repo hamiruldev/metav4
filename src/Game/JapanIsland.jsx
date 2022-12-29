@@ -35,9 +35,8 @@ import * as THREE from 'three'
 
 import ScrollDialog from "../component/ScrollDialog";
 import LightArea1 from "../component/World/LightArea1";
+import HtmlTxt from "../component/UiUx/HtmlTxt";
 
-// import testVertexShader from '../shader/vertex.glsl'
-// import testFragmentShader from '../shader/fragment.glsl'
 
 const viteBaseUrl = import.meta.env.VITE_BASE_URL;
 
@@ -227,6 +226,16 @@ const JapanIsland = () => {
     window.requestAnimationFrame(animate)
   }
 
+  const handleOnHtmlTxt = (idTxt) => {
+    const htmlTextElm = document.getElementById(`htmlRef${idTxt}`)
+    htmlTextElm.style.visibility = "visible"
+  }
+
+  const handleOffHtmlTxt = (idTxt) => {
+    const htmlTextElm = document.getElementById(`htmlRef${idTxt}`)
+    htmlTextElm.style.visibility = "hidden"
+  }
+
   return (
     <>
       <ScrollDialog
@@ -299,7 +308,11 @@ const JapanIsland = () => {
           scale={70}
           src={`${viteBaseUrl}maps/japan/japan_island.glb`}
           onClick={!isMobile && handleClick}
-        />
+        >
+          <Find name="water.001" />
+          <Find name="mountain" />
+
+        </Model>
 
         <AreaLight
           x={474.83}
@@ -359,46 +372,32 @@ const JapanIsland = () => {
           >
             <Find bloom={isMobile ? false : false} adjustColor="#00458f" name="Portal">
             </Find>
+            <HtmlTxt text={"Travel to Main Island"} url={''} id="main-island" />
           </Model>
 
-          {/* <HTML
-            ref={htmlRef}
-            visible={true}
-            x={-31.44}
-            y={-106.08}
-            z={927.94}
-          >
-            <Box
-              sx={{
-                mt: 2,
-                padding: "30px",
-                width: "300px",
-                height: "max-content",
-                color: "white",
-                borderRadius: "20px",
-                backdropFilter: "blur(4px)",
-                webkitBackdropFilter: "blur(4px)",
-                background: "rgba(0,0,0,0.7)",
-                border: "1px solid rgba(255,255,255,0.18)",
-                boxShadow: "0 8px 32px 0 rgba(31,38,135,0.37)",
-                '&:before': {
-                  content: `" "`,
-                  position: "absolute",
-                  right: "30px",
-                  top: "-15.55px",
-                  borderTop: "none",
-                  borderRight: "15px solid transparent",
-                  borderLeft: "15px solid transparent",
-                  borderBottom: "15px solid rgba(0,0,0,0.7)",
-                }
-              }}
-            >
-              <Typography variant="h2">
-                Travel to Japanese Island
-              </Typography>
-            </Box>
-          </HTML> */}
+          <Cube
+            name="triggerMainHtml"
+            intersectIds={["player"]}
+            color="red"
 
+            opacity={0.1}
+
+            visible={false}
+
+            x={53.49}
+            y={-22.02}
+            z={509.59}
+
+            scale={10.00}
+
+            onIntersect={(() => {
+              handleOnHtmlTxt("main-island")
+            })}
+
+            onIntersectOut={(() => {
+              handleOffHtmlTxt("main-island")
+            })}
+          />
 
         </Group>
 

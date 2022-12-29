@@ -24,16 +24,20 @@ import {
   Plane,
   Skybox,
   Camera,
-
+  useLoop,
+  useKeyboard,
+  Cube
 } from "lingo3d-react";
 
-import * as THREE from 'three'
+import *  as THREE from 'three'
+import { Water } from 'three/examples/jsm/objects/Water';
+
 import { ImprovedNoise } from 'https://unpkg.com/three/examples/jsm/math/ImprovedNoise.js';
 
 import ScrollDialog from "../component/ScrollDialog";
+import { render } from "react-dom";
+import HtmlTxt from "../component/UiUx/HtmlTxt";
 
-// import testVertexShader from '../shader/vertex.glsl'
-// import testFragmentShader from '../shader/fragment.glsl'
 
 const viteBaseUrl = import.meta.env.VITE_BASE_URL;
 
@@ -41,23 +45,35 @@ const viteBaseUrl = import.meta.env.VITE_BASE_URL;
 const ChineseIsland = () => {
 
 
+  const worldRef = useRef(null);
   const dummyRef = useRef(null);
   const dummyBatteryRef = useRef(null);
   const cameraRef = useRef(null);
   const tpcRef = useRef(null);
-  const orbitRef = useRef(null);
 
+  const triggerBatteryRef = useRef(null);
   const pointerRef = useRef(null);
   const portalRef = useRef(null);
-  const triggerBatteryRef = useRef(null);
-  const worldRef = useRef(null);
-  const htmlRef = useRef(null);
 
   const scene = useScene()
+  const key = useKeyboard()
+
+  const water = scene.getObjectByName("waterShader")
+  const cloud = scene.getObjectByName("cloudShader")
+
   const getRenderer = useRenderer()
+
   const { width, height } = useWindowSize();
   const [isGame, setGame] = useState(true);
+  const [isWater, setWater] = useState(false);
   const [arrowPosition, setArrowPosition] = useState({ x: 0, y: 0, z: 0 });
+
+
+  useLoop(() => {
+    water.material.uniforms['time'].value += 1.0 / 60.0
+    cloud.material.uniforms['frame'].value++; 1
+  }, isWater);
+
 
   const isInital = sessionStorage.getItem("inital");
   const isLogin = sessionStorage.getItem("login");
@@ -71,15 +87,6 @@ const ChineseIsland = () => {
   const [htmlFor, setHtmlFor] = useState();
 
   const isMobile = width < height;
-  const camX = mouseOver ? 50 : 0;
-  const camY = mouseOver ? 100 : 100;
-  const camZ = mouseOver ? 100 : 300;
-
-  // Camera spring animation
-  // 相机的弹簧动画
-  const xSpring = useSpring({ to: camX, bounce: 0 });
-  const ySpring = useSpring({ to: camY, bounce: 0 });
-  const zSpring = useSpring({ to: camZ, bounce: 0 });
 
   const handleInstructionClose = () => {
     setGame(false);
@@ -227,28 +234,17 @@ const ChineseIsland = () => {
     }, 1000)
   };
 
-  const animate = () => {
-    const camera = scene.getObjectByName("camera");
-    getRenderer.render(scene, camera.userData.manager.camera)
-    window.requestAnimationFrame(animate)
-  };
+  const handleOnShader = () => {
 
-  const handleShader = () => {
-
+    handleSky()
 
     const vertexShader = /* glsl */`
     attribute float size;
-
     varying vec3 vColor;
-
     void main() {
-
       vColor = color;
-
       vec4 mvPosition = modelViewMatrix * vec4( position, 1.0 );
-
       gl_PointSize = size * ( 300.0 / -mvPosition.z );
-
       gl_Position = projectionMatrix * mvPosition;
 
     }
@@ -256,18 +252,12 @@ const ChineseIsland = () => {
 
     const fragmentShader = /* glsl */`
     uniform sampler2D pointTexture;
-
     varying vec3 vColor;
-
     void main() {
-
       gl_FragColor = vec4( vColor, 1.0 );
-
       gl_FragColor = gl_FragColor * texture2D( pointTexture, gl_PointCoord );
-
     }
 				`;
-
 
     // Texture
 
@@ -333,26 +323,336 @@ const ChineseIsland = () => {
     const mesh = new THREE.Mesh(geometry1, shaderMaterial);
     const cube = new THREE.Mesh(geometry, shaderMaterial);
 
+    const waterGeometry = new THREE.PlaneGeometry(20, 20);
+
+    let water;
+
+    water = new Water(
+      waterGeometry,
+      {
+        textureWidth: 512,
+        textureHeight: 512,
+        waterNormals: new THREE.TextureLoader().load('img/shader/waternormals.jpg', function (texture) {
+
+          texture.wrapS = texture.wrapT = THREE.RepeatWrapping;
+
+        }),
+        sunDirection: new THREE.Vector3(),
+        sunColor: 0xffffff,
+        waterColor: 0x001e0f,
+        distortionScale: 3.7,
+        fog: scene.fog !== undefined
+      }
+    );
+
 
     // mesh.parent = cube.parent
 
-    console.log("cube", cube)
-    console.log("mesh", mesh)
+    water.rotation.x = - Math.PI / 2;
 
-    // scene.children.push(mesh)
+
+    console.log("water", water)
+    console.log("cube", cube)
+    // console.log("mesh", mesh)
+
+    cube.name = "cubeShader"
+    cube.position.x = -5
+    cube.position.y = 0
+    cube.position.z = 0
+
+    water.name = "waterShader"
+    water.position.y = -1.1;
+
+    setWater(true)
+
+    scene.add(water);
     scene.add(cube)
 
 
+
   };
+
+  const handleOffShader = () => {
+    const cubeShader = scene.getObjectByName("cubeShader")
+    const waterShader = scene.getObjectByName("waterShader")
+    const cloudShader = scene.getObjectByName("cloudShader")
+
+    console.log("scene", scene)
+
+    waterShader?.geometry.dispose()
+    waterShader?.material.dispose()
+
+    cloudShader?.material.dispose()
+    cloudShader?.geometry.dispose()
+
+    scene.remove(cloudShader)
+    scene.remove(cubeShader)
+    scene.remove(waterShader)
+  }
+
+  const handleScene = () => {
+    console.log("scene", scene.children)
+    console.log("render", getRenderer.info.memory)
+  }
+
+  const handleSky = () => {
+
+
+    const size = 128;
+    const data = new Uint8Array(size * size * size)
+
+    let i = 0;
+    const scale = 0.05;
+    const perlin = new ImprovedNoise();
+    const vector = new THREE.Vector3();
+
+    for (let z = 0; z < size; z++) {
+
+      for (let y = 0; y < size; y++) {
+
+        for (let x = 0; x < size; x++) {
+
+          const d = 1.0 - vector.set(x, y, z).subScalar(size / 2).divideScalar(size).length();
+          data[i] = (128 + 128 * perlin.noise(x * scale / 1.5, y * scale, z * scale / 1.5)) * d * d;
+          i++;
+
+        }
+
+      }
+
+    }
+
+
+    const texture = new THREE.Data3DTexture(data, size, size, size);
+    texture.format = THREE.RedFormat;
+    texture.minFilter = THREE.LinearFilter;
+    texture.magFilter = THREE.LinearFilter;
+    texture.unpackAlignment = 1;
+    texture.needsUpdate = true;
+
+    // Material
+    const vertexShader = /* glsl */`
+      in vec3 position;
+  
+      uniform mat4 modelMatrix;
+      uniform mat4 modelViewMatrix;
+      uniform mat4 projectionMatrix;
+      uniform vec3 cameraPos;
+  
+      out vec3 vOrigin;
+      out vec3 vDirection;
+  
+      void main() {
+        vec4 mvPosition = modelViewMatrix * vec4( position, 1.0 );
+  
+        vOrigin = vec3( inverse( modelMatrix ) * vec4( cameraPos, 1.0 ) ).xyz;
+        vDirection = position - vOrigin;
+  
+        gl_Position = projectionMatrix * mvPosition;
+      }
+    `;
+
+    const fragmentShader = /* glsl */`
+      precision highp float;
+      precision highp sampler3D;
+  
+      uniform mat4 modelViewMatrix;
+      uniform mat4 projectionMatrix;
+  
+      in vec3 vOrigin;
+      in vec3 vDirection;
+  
+      out vec4 color;
+  
+      uniform vec3 base;
+      uniform sampler3D map;
+  
+      uniform float threshold;
+      uniform float range;
+      uniform float opacity;
+      uniform float steps;
+      uniform float frame;
+  
+      uint wang_hash(uint seed)
+      {
+        seed = (seed ^ 61u) ^ (seed >> 16u);
+        seed *= 9u;
+        seed = seed ^ (seed >> 4u);
+        seed *= 0x27d4eb2du;
+        seed = seed ^ (seed >> 15u);
+        return seed;
+      }
+  
+      float randomFloat(inout uint seed)
+      {
+        return float(wang_hash(seed)) / 4294967296.;
+      }
+  
+      vec2 hitBox( vec3 orig, vec3 dir ) {
+      const vec3 box_min = vec3( - 0.5 );
+      const vec3 box_max = vec3( 0.5 );
+      vec3 inv_dir = 1.0 / dir;
+      vec3 tmin_tmp = ( box_min - orig ) * inv_dir;
+      vec3 tmax_tmp = ( box_max - orig ) * inv_dir;
+      vec3 tmin = min( tmin_tmp, tmax_tmp );
+      vec3 tmax = max( tmin_tmp, tmax_tmp );
+      float t0 = max( tmin.x, max( tmin.y, tmin.z ) );
+      float t1 = min( tmax.x, min( tmax.y, tmax.z ) );
+      return vec2( t0, t1 );
+      }
+  
+      float sample1( vec3 p ) {
+      return texture( map, p ).r;
+      }
+  
+      float shading( vec3 coord ) {
+      float step = 0.01;
+      return sample1( coord + vec3( - step ) ) - sample1( coord + vec3( step ) );
+      }
+  
+      void main(){
+      vec3 rayDir = normalize( vDirection );
+      vec2 bounds = hitBox( vOrigin, rayDir );
+  
+      if ( bounds.x > bounds.y ) discard;
+  
+      bounds.x = max( bounds.x, 0.0 );
+  
+      vec3 p = vOrigin + bounds.x * rayDir;
+      vec3 inc = 1.0 / abs( rayDir );
+      float delta = min( inc.x, min( inc.y, inc.z ) );
+      delta /= steps;
+  
+      // Jitter
+  
+      // Nice little seed from
+      // https://blog.demofox.org/2020/05/25/casual-shadertoy-path-tracing-1-basic-camera-diffuse-emissive/
+      uint seed = uint( gl_FragCoord.x ) * uint( 1973 ) + uint( gl_FragCoord.y ) * uint( 9277 ) + uint( frame ) * uint( 26699 );
+      vec3 size = vec3( textureSize( map, 0 ) );
+      float randNum = randomFloat( seed ) * 2.0 - 1.0;
+      p += rayDir * randNum * ( 1.0 / size );
+  
+      //
+  
+      vec4 ac = vec4( base, 0.0 );
+  
+      for ( float t = bounds.x; t < bounds.y; t += delta ) {
+  
+        float d = sample1( p + 0.5 );
+  
+        d = smoothstep( threshold - range, threshold + range, d ) * opacity;
+  
+        float col = shading( p + 0.5 ) * 3.0 + ( ( p.x + p.y ) * 0.25 ) + 0.2;
+  
+        ac.rgb += ( 1.0 - ac.a ) * d * col;
+  
+        ac.a += ( 1.0 - ac.a ) * d;
+  
+        if ( ac.a >= 0.95 ) break;
+  
+        p += rayDir * delta;
+  
+      }
+  
+      color = ac;
+  
+      if ( color.a == 0.0 ) discard;
+  
+      }
+      `;
+
+    const geometry = new THREE.BoxGeometry(1, 1, 1);
+
+    const material = new THREE.RawShaderMaterial({
+      glslVersion: THREE.GLSL3,
+      uniforms: {
+        base: { value: new THREE.Color(0x798aa0) },
+        map: { value: texture },
+        cameraPos: { value: new THREE.Vector3() },
+        threshold: { value: 0.25 },
+        opacity: { value: 0.25 },
+        range: { value: 0.1 },
+        steps: { value: 100 },
+        frame: { value: 0 }
+      },
+      vertexShader,
+      fragmentShader,
+      side: THREE.BackSide,
+      transparent: true
+    });
+
+    let mesh;
+
+    mesh = new THREE.Mesh(geometry, material);
+
+    console.log("mesh", mesh)
+
+    mesh.name = "cloudShader"
+    mesh.position.x = -2
+    mesh.position.y = 1
+    mesh.position.z = 0
+
+
+    const parameters = {
+      threshold: 0.25,
+      opacity: 0.25,
+      range: 0.1,
+      steps: 100
+    };
+
+    material.uniforms.threshold.value = parameters.threshold;
+    material.uniforms.opacity.value = parameters.opacity;
+    material.uniforms.range.value = parameters.range;
+    material.uniforms.steps.value = parameters.steps;
+
+    scene.add(mesh);
+
+  }
+
+  const animate = () => {
+    const camera = scene.getObjectByName("camera");
+    getRenderer.render(scene, camera)
+    requestAnimationFrame(animate)
+  };
+
+
+  const handleOnHtmlTxt = (idTxt) => {
+    const htmlTextElm = document.getElementById(`htmlRef${idTxt}`)
+    htmlTextElm.style.visibility = "visible"
+  }
+
+  const handleOffHtmlTxt = (idTxt) => {
+    const htmlTextElm = document.getElementById(`htmlRef${idTxt}`)
+    htmlTextElm.style.visibility = "hidden"
+  }
+
 
   return (
     <>
       {/* <Button
         className="testButton"
-        onClick={handleShader}
+        onClick={handleScene}
       >
-        shader
+        scene
+      </Button>
+
+      <Button
+        className="testButton"
+        onClick={handleOnShader}
+      >
+        shaderOn
+      </Button>
+
+      <Button
+        className="testButton"
+        onClick={handleOffShader}
+      >
+        shaderOff
       </Button> */}
+
+
+
+
       <ScrollDialog
         htmlFor={"welcome"}
         boothState={undefined}
@@ -407,12 +707,18 @@ const ChineseIsland = () => {
           onClick={!isMobile && handleClick}
         >
 
-          <Find name="tree"
-            textureFlipY={true}
-            texture={`${viteBaseUrl}maps/chinese/chinese_island5_img4.png`}
+          <Find name="AM113_021_Populus_Defintion.023"
+            textureFlipY={false}
+            opacity={0.9}
+            texture={`${viteBaseUrl}maps/chinese/new/chinese_island_img4.png`}
           />
 
+          <Find name="water.001" />
+          <Find name="mountain" />
+
         </Model>
+
+
 
         <AreaLight
           x={474.83}
@@ -472,47 +778,36 @@ const ChineseIsland = () => {
           >
             <Find bloom={isMobile ? false : false} adjustColor="#00458f" name="Portal">
             </Find>
+            <HtmlTxt text={"Travel to Main Island"} url={''} id="main-island" />
           </Model>
 
-          {/* <HTML
-            ref={htmlRef}
-            visible={true}
-            x={-31.44}
-            y={-106.08}
-            z={927.94}
-          >
-            <Box
-              sx={{
-                mt: 2,
-                padding: "30px",
-                height: "max-content",
-                color: "white",
-                borderRadius: "20px",
-                backdropFilter: "blur(4px)",
-                webkitBackdropFilter: "blur(4px)",
-                background: "rgba(0,0,0,0.7)",
-                border: "1px solid rgba(255,255,255,0.18)",
-                boxShadow: "0 8px 32px 0 rgba(31,38,135,0.37)",
-                '&:before': {
-                  content: `" "`,
-                  position: "absolute",
-                  right: "30px",
-                  top: "-15.55px",
-                  borderTop: "none",
-                  borderRight: "15px solid transparent",
-                  borderLeft: "15px solid transparent",
-                  borderBottom: "15px solid rgba(0,0,0,0.7)",
-                }
-              }}
-            >
-              <Typography variant="h2">
-                Travel to Japanese Island
-              </Typography>
-            </Box>
-          </HTML> */}
+          <Cube
+            name="triggerMainHtml"
+            intersectIds={["player"]}
+            color="red"
 
+            opacity={0.1}
+
+            visible={false}
+
+            x={53.49}
+            y={-22.02}
+            z={509.59}
+
+            scale={10.00}
+
+            onIntersect={(() => {
+              handleOnHtmlTxt("main-island")
+            })}
+
+            onIntersectOut={(() => {
+              handleOffHtmlTxt("main-island")
+            })}
+          />
 
         </Group>
+
+
 
         <AreaLight
           name="batteryLight"

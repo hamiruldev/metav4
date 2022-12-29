@@ -26,6 +26,7 @@ const HtmlTxt = forwardRef((props, ref) => {
                                 borderBottom: "15px solid rgba(0,0,0,0.7)",
                             }
                         }}>
+
                         <Typography variant="body2" sx={{ textAlign: "center" }}>
                             {text}
                         </Typography>

@@ -14,7 +14,6 @@ import {
   LingoEditor,
   useWindowSize,
   World,
-  useSpring,
   Joystick,
   Trigger,
   AreaLight,
@@ -22,11 +21,9 @@ import {
   useScene,
   useRenderer,
   Circle,
-  usePreload,
   Cube,
   Plane,
   Skybox,
-  OrbitCamera,
   Camera,
 
 } from "lingo3d-react";
@@ -34,10 +31,7 @@ import {
 import * as THREE from 'three'
 
 import ScrollDialog from "../component/ScrollDialog";
-import LightArea1 from "../component/World/LightArea1";
-
-// import testVertexShader from '../shader/vertex.glsl'
-// import testFragmentShader from '../shader/fragment.glsl'
+import HtmlTxt from "../component/UiUx/HtmlTxt";
 
 const viteBaseUrl = import.meta.env.VITE_BASE_URL;
 
@@ -48,13 +42,11 @@ const ForestIsland = () => {
   const dummyBatteryRef = useRef(null);
   const cameraRef = useRef(null);
   const tpcRef = useRef(null);
-  const orbitRef = useRef(null);
 
   const pointerRef = useRef(null);
   const portalRef = useRef(null);
   const triggerBatteryRef = useRef(null);
   const worldRef = useRef(null);
-  const htmlRef = useRef(null);
 
   const scene = useScene()
   const getRenderer = useRenderer()
@@ -68,21 +60,10 @@ const ForestIsland = () => {
   isInital == null && sessionStorage.setItem("inital", false);
   isLogin == null && sessionStorage.setItem("login", false);
 
-  //mouseOver
-  const [mouseOver, setMouseOver] = useState(false);
   const [dialogOpen, setDialogOpen] = useState(false);
   const [htmlFor, setHtmlFor] = useState();
 
   const isMobile = width < height;
-  const camX = mouseOver ? 50 : 0;
-  const camY = mouseOver ? 100 : 100;
-  const camZ = mouseOver ? 100 : 300;
-
-  // Camera spring animation
-  // 相机的弹簧动画
-  const xSpring = useSpring({ to: camX, bounce: 0 });
-  const ySpring = useSpring({ to: camY, bounce: 0 });
-  const zSpring = useSpring({ to: camZ, bounce: 0 });
 
   const handleInstructionClose = () => {
     setGame(false);
@@ -236,8 +217,19 @@ const ForestIsland = () => {
     window.requestAnimationFrame(animate)
   }
 
+  const handleOnHtmlTxt = (idTxt) => {
+    const htmlTextElm = document.getElementById(`htmlRef${idTxt}`)
+    htmlTextElm.style.visibility = "visible"
+  }
+
+  const handleOffHtmlTxt = (idTxt) => {
+    const htmlTextElm = document.getElementById(`htmlRef${idTxt}`)
+    htmlTextElm.style.visibility = "hidden"
+  }
+
   return (
     <>
+
       <ScrollDialog
         htmlFor={"welcome"}
         boothState={undefined}
@@ -259,12 +251,14 @@ const ForestIsland = () => {
       }
 
       <World>
+
         {/* <LingoEditor /> */}
         {/* <Library /> */}
         {/* <Toolbar /> */}
         {/* <Editor /> */}
         {/* <Environment /> */}
         {/* <Stats /> */}
+
         <Setup
           ref={worldRef}
           pixelRatio={5}
@@ -273,9 +267,12 @@ const ForestIsland = () => {
           repulsion={5}
           gridHelper={true}
           antiAlias={true}
+          receiveShadow={true}
+
         />
 
-        <Skybox texture={`${viteBaseUrl}img/sky/sky1.jpg`} />
+
+        <Skybox texture={`img/sky/sky1.jpg`} />
 
         <Plane
           id="plane"
@@ -292,7 +289,6 @@ const ForestIsland = () => {
           })}
         />
 
-        {/* <LightArea1 /> */}
 
         <Model
           name="worldmap"
@@ -306,21 +302,30 @@ const ForestIsland = () => {
           y={-1083.90}
           z={-486.53}
           scale={70}
-          src={`${viteBaseUrl}maps/forest/forest_island.glb`}
+          // src={`maps/forest/Grassland.glb`}
+          src={`maps/forest/forest_island.glb`}
           onClick={!isMobile && handleClick}
-        />
+          receiveShadow={true}
 
-        <AreaLight
-          x={474.83}
-          y={-1698.09}
-          z={-7039.36}
-          rotationX={177.94}
-          scale={3}
-          opacityFactor={10}
-          intensity={50.00}
-          color={"#0368ff"}
-          visible={false}
-        />
+
+        >
+          <Find name="AM113_045_Pinus_Defintion.010"
+            texture={`maps/forest/new/forest_island_img6.png`}
+            textureFlipY={false}
+            opacity={0.9}
+          />
+
+          <Find name="AM113_061_Aesculus_Glabra_Defintion1"
+            texture={`maps/forest/new/forest_island_img7.png`}
+            textureFlipY={false}
+            opacity={0.9}
+          />
+
+          <Find name="water.001" />
+          <Find name="mountain" />
+
+
+        </Model>
 
         <Group
           name="groupPortal"
@@ -344,7 +349,7 @@ const ForestIsland = () => {
           />
 
           <Trigger
-            radius={600}
+            radius={400}
             targetIds="player"
             onEnter={(() => {
               openPortal(`main-island`)
@@ -361,52 +366,42 @@ const ForestIsland = () => {
             scaleX={10}
             scaleY={10}
             scaleZ={10}
-            src={`${viteBaseUrl}maps/item/stargate.glb`}
+            src={`maps/item/stargate.glb`}
             onClick={((e) => {
               handleClick(e)
             })}
           >
             <Find bloom={isMobile ? false : false} adjustColor="#00458f" name="Portal">
             </Find>
+            <HtmlTxt text={"Travel to Main Island"} url={''} id="main-island" />
+
           </Model>
 
-          {/* 
-          <HTML
-            ref={htmlRef}
-            visible={true}
-            x={-31.44}
-            y={-106.08}
-            z={927.94}
-          >
-            <Box
-              sx={{
-                mt: 2,
-                padding: "30px",
-                height: "max-content",
-                color: "white",
-                borderRadius: "20px",
-                backdropFilter: "blur(4px)",
-                webkitBackdropFilter: "blur(4px)",
-                background: "rgba(0,0,0,0.7)",
-                border: "1px solid rgba(255,255,255,0.18)",
-                boxShadow: "0 8px 32px 0 rgba(31,38,135,0.37)",
-                '&:before': {
-                  content: `" "`,
-                  position: "absolute",
-                  right: "30px",
-                  top: "-15.55px",
-                  borderTop: "none",
-                  borderRight: "15px solid transparent",
-                  borderLeft: "15px solid transparent",
-                  borderBottom: "15px solid rgba(0,0,0,0.7)",
-                }
-              }}
-            >
-              <Typography variant="h2">
-                Travel to Japanese Island
-              </Typography>
-            </Box>
-          </HTML> */}
+
+          <Cube
+            name="triggerMainHtml"
+            intersectIds={["player"]}
+            color="red"
+
+            opacity={0.1}
+
+            visible={false}
+
+            x={587.39}
+            y={-187.98}
+            z={923.22}
+
+            scale={31.00}
+
+            onIntersect={(() => {
+              handleOnHtmlTxt("main-island")
+            })}
+
+            onIntersectOut={(() => {
+              handleOffHtmlTxt("main-island")
+            })}
+          />
+
 
 
         </Group>
@@ -424,7 +419,6 @@ const ForestIsland = () => {
           x={-657.85}
           y={247.94}
           z={0}
-          animation={{ y: [58.76, 58.76 + 10, 58.76, 58.76 - 10, 58.76] }}
 
         >
           <Trigger
@@ -446,7 +440,7 @@ const ForestIsland = () => {
 
           <Model
             name="batteryModel"
-            src={`${viteBaseUrl}item/coin.glb`}
+            src={`item/coin.glb`}
             bloom
             animation={{ rotationY: [0, 45, 90, 135, 180, 225, 270, 315] }}
             opacity={0.5}
@@ -496,19 +490,17 @@ const ForestIsland = () => {
             name="player"
             ref={dummyRef}
 
-
             strideMove
             strideMode="free"
-            src={`${viteBaseUrl}3dCharacter/new/character1.glb`}
+            src={`3dCharacter/new/character1.glb`}
             physics="character"
-            animations={{ float: `${viteBaseUrl}3dCharacter/new/Floating.fbx` }}
+            animations={{ float: `3dCharacter/new/Floating.fbx` }}
 
             width={50}
             depth={50}
 
             mass={1}
-
-            // preset="rifle"
+            receiveShadow={true}
             rotationX={-180.00}
             rotationY={-0.74}
             rotationZ={-180.00}
@@ -520,7 +512,7 @@ const ForestIsland = () => {
             <Model
               ref={dummyBatteryRef}
               name="dummyBattery"
-              src={`${viteBaseUrl}item/coin.glb`}
+              src={`item/coin.glb`}
               opacity={0.5}
               scale={0.2}
               y={80}
@@ -533,7 +525,7 @@ const ForestIsland = () => {
         <Model
           name="p2p"
           ref={pointerRef}
-          src={`${viteBaseUrl}/dummy/p2p_a.glb`}
+          src={`dummy/p2p_a.glb`}
           emissiveColor="#ff0000"
           color="#ffffff"
           opacityFactor={4}

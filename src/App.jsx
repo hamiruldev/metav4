@@ -42,12 +42,14 @@ function App() {
               path="case-study"
               element={<Nomenu url={"https://360xp.co/ismartwebsite/"} />}
             />
+
             <Route
               path="service"
               element={
                 <Iframe url={"https://360xp.co/ismartwebsite/services/"} />
               }
             />
+
             <Route
               path="service/custom-software"
               element={
@@ -58,6 +60,7 @@ function App() {
                 />
               }
             />
+
             <Route
               path="service/e-commerce"
               element={
@@ -68,6 +71,7 @@ function App() {
                 />
               }
             />
+
             <Route
               path="service/website-design"
               element={
@@ -78,6 +82,7 @@ function App() {
                 />
               }
             />
+
             <Route
               path="service/web-mini-game"
               element={
@@ -88,6 +93,7 @@ function App() {
                 />
               }
             />
+
             <Route
               path="service/virtual-event"
               element={
@@ -98,6 +104,7 @@ function App() {
                 />
               }
             />
+
             <Route
               path="service/online-showroom"
               element={
@@ -108,6 +115,7 @@ function App() {
                 />
               }
             />
+
             <Route
               path="service/3d-visualization"
               element={
@@ -118,6 +126,7 @@ function App() {
                 />
               }
             />
+
             <Route
               path="service/metaverse"
               element={
@@ -128,18 +137,21 @@ function App() {
                 />
               }
             />
+
             <Route
               path="about-us"
               element={
                 <Iframe url={"https://360xp.co/ismartwebsite/about-us/"} />
               }
             />
+
             <Route
               path="contact-us"
               element={
                 <Iframe url={"https://360xp.co/ismartwebsite/contact-us/"} />
               }
             />
+
           </Routes>
         </BrowserRouter>
       </ThemeProvider>

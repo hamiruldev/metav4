@@ -40,9 +40,6 @@ import * as THREE from 'three'
 import LightArea from "../component/World/LightArea";
 import ScrollDialog from "../component/ScrollDialog";
 
-// import testVertexShader from '../shader/vertex.glsl'
-// import testFragmentShader from '../shader/fragment.glsl'
-
 const viteBaseUrl = import.meta.env.VITE_BASE_URL;
 
 const Game = () => {
@@ -220,6 +217,7 @@ const Game = () => {
         open={dialogOpen}
         onClose={handleClose}
       />
+
       <World>
         {/* <LingoEditor /> */}
         {/* <Library /> */}
@@ -310,12 +308,10 @@ const Game = () => {
           z={-6561.98}
           y={-1657.27}
           animation={{ y: [-1657.27, -1657.27 + 20, -1657.27, -1657.27 - 20, -1657.27] }}
-
         />
 
         <Model
           name="portalModel"
-
           ref={portalRef}
           adjustColor="#00fff2"
           x={250.22}
@@ -338,121 +334,8 @@ const Game = () => {
 
         </Model>
 
-        <AreaLight
-          name="batteryLight"
-          x={-32.52}
-          y={-1929.34}
-          z={5372.94}
-          rotationY={82.72}
-        />
 
-        <Group
-          name="Battery"
-
-          x={-123.60}
-          y={-1900}
-          z={5356.52}
-          animation={{ y: [-1932.51, -1932.51 + 10, -1932.51, -1932.51 - 10, -1932.51] }}
-
-        >
-
-          <Sphere
-            ref={triggerBatteryRef}
-            intersectIds={['player']}
-            onIntersect={(() => {
-              handleItem("Battery")
-            })}
-            name="batterySphere"
-            scale={2.5}
-            color="#ffa400"
-            opacity={0.3}
-            bloom
-          />
-
-          <Model
-            name="batteryModel"
-            src={`${viteBaseUrl}item/coin.glb`}
-            bloom
-            opacity={0.5}
-            animationPaused={false}
-            animationRepeat={false}
-            animation={{ rotationY: [0, 45, 90, 135, 180, 225, 270, 315] }}
-
-          />
-
-        </Group>
-
-        <Camera
-          name="cameraRef"
-          active={true}
-          ref={cameraRef}
-          transition={0.02}
-          innerZ={223.68}
-          x={331.29}
-          y={-841.35}
-          z={-4588.04}
-          rotationY={1.48}
-          rotationX={-5.30}
-          rotationZ={-0.99}
-
-        />
-
-        <ThirdPersonCamera
-          name="tpc"
-          ref={tpcRef}
-          mouseControl={"drag"}
-          active={false}
-          lockTargetRotation={isMobile ? true : false}
-          fov={width < 640 ? 110 : 90}
-          enableDamping
-          transition={0.009}
-          zoom={1}
-          innerY={100}
-        >
-
-          <Dummy
-            id="player"
-            name="player"
-            ref={dummyRef}
-
-            strideMove
-            strideMode="free"
-            src={`${viteBaseUrl}3dCharacter/new/character1.glb`}
-            physics="character"
-            animation={running ? "running" : "idle"}
-            width={50}
-            depth={50}
-
-            rotationY={180.74}
-            x={599.08}
-            y={-2004.04}
-            z={6631.41}
-            scale={1.5}
-          >
-            <Model
-              ref={dummyBatteryRef}
-              name="dummyBattery"
-              src={`${viteBaseUrl}item/coin.glb`}
-              opacity={0.5}
-              scale={0.2}
-              y={80}
-              visible={false}
-              bloom
-
-            />
-
-            <AreaLight
-              scale={0.20}
-              rotationY={82.72}
-              x={9.59}
-              y={78.85}
-              z={-9.10}
-              helper={true}
-            />
-
-          </Dummy>
-
-        </ThirdPersonCamera>
+        {/* // tunnel */}
 
         {/*
          ***TV PANEL  difference Z = 1,518.1
@@ -964,6 +847,135 @@ const Game = () => {
           />
         </Group>
 
+        <Reflector
+          x={71.21}
+          y={-2102.46}
+          z={6110.8}
+          scaleX={48.02}
+          scaleY={264.46}
+          rotationZ={0.68}
+          normalScale={{ isVector2: true, x: 1, y: 1 }}
+          color="#5c5757"
+          resolution={556}
+          blur={800}
+          opacity={0.4}
+        />
+        {/* // tunnel */}
+
+
+        <AreaLight
+          name="batteryLight"
+          x={-32.52}
+          y={-1929.34}
+          z={5372.94}
+          rotationY={82.72}
+        />
+
+        <Group
+          name="Battery"
+          x={-123.60}
+          y={-1900}
+          z={5356.52}
+        >
+
+          <Sphere
+            ref={triggerBatteryRef}
+            intersectIds={['player']}
+            onIntersect={(() => {
+              handleItem("Battery")
+            })}
+            name="batterySphere"
+            scale={2.5}
+            color="#ffa400"
+            opacity={0.3}
+            bloom
+          />
+
+          <Model
+            name="batteryModel"
+            src={`${viteBaseUrl}item/coin.glb`}
+            bloom
+            opacity={0.5}
+            animationPaused={false}
+            animationRepeat={false}
+            animation={{ rotationY: [0, 45, 90, 135, 180, 225, 270, 315] }}
+
+          />
+
+        </Group>
+
+        <Camera
+          name="cameraRef"
+          active={true}
+          ref={cameraRef}
+          transition={0.02}
+          innerZ={223.68}
+          x={331.29}
+          y={-841.35}
+          z={-4588.04}
+          rotationY={1.48}
+          rotationX={-5.30}
+          rotationZ={-0.99}
+
+        />
+
+        <ThirdPersonCamera
+          name="tpc"
+          ref={tpcRef}
+          mouseControl={"drag"}
+          active={false}
+          lockTargetRotation={isMobile ? true : false}
+          fov={width < 640 ? 110 : 90}
+          enableDamping
+          transition={0.009}
+          zoom={1}
+          innerY={100}
+        >
+
+          <Dummy
+            id="player"
+            name="player"
+            ref={dummyRef}
+
+            strideMove
+            strideMode="free"
+            src={`${viteBaseUrl}3dCharacter/new/character1.glb`}
+            physics="character"
+            animation={running ? "running" : "idle"}
+            width={50}
+            depth={50}
+
+            rotationY={180.74}
+            x={599.08}
+            y={-2004.04}
+            z={6631.41}
+            scale={1.5}
+          >
+            <Model
+              ref={dummyBatteryRef}
+              name="dummyBattery"
+              src={`${viteBaseUrl}item/coin.glb`}
+              opacity={0.5}
+              scale={0.2}
+              y={80}
+              visible={false}
+              bloom
+
+            />
+
+            <AreaLight
+              scale={0.20}
+              rotationY={82.72}
+              x={9.59}
+              y={78.85}
+              z={-9.10}
+              helper={true}
+            />
+
+          </Dummy>
+
+        </ThirdPersonCamera>
+
         <Model
           name="p2p"
           ref={pointerRef}
@@ -977,20 +989,6 @@ const Game = () => {
           x={arrowPosition.x}
           y={arrowPosition.y + 50}
           z={arrowPosition.z}
-        />
-
-        <Reflector
-          x={71.21}
-          y={-2102.46}
-          z={6110.8}
-          scaleX={48.02}
-          scaleY={264.46}
-          rotationZ={0.68}
-          normalScale={{ isVector2: true, x: 1, y: 1 }}
-          color="#5c5757"
-          resolution={556}
-          blur={800}
-          opacity={0.4}
         />
 
       </World>

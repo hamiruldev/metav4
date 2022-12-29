@@ -25,11 +25,13 @@ import {
   Skybox,
   OrbitCamera,
   Camera,
+  DirectionalLight,
 } from "lingo3d-react";
 
 import * as THREE from 'three'
 
 import ScrollDialog from "../component/ScrollDialog";
+import HtmlTxt from "../component/UiUx/HtmlTxt";
 
 const viteBaseUrl = import.meta.env.VITE_BASE_URL;
 
@@ -207,6 +209,19 @@ const MainIsland = () => {
     dummy.z = -96.23
   };
 
+  const handleOnHtmlTxt = (idTxt) => {
+    const htmlTextElm = document.getElementById(`htmlRef${idTxt}`)
+    htmlTextElm.style.visibility = "visible"
+    setTimeout(() => {
+      htmlTextElm.style.visibility = "hidden"
+    }, 2500);
+  }
+
+  const handleOffHtmlTxt = (idTxt) => {
+    const htmlTextElm = document.getElementById(`htmlRef${idTxt}`)
+    htmlTextElm.style.visibility = "hidden"
+  }
+
   const handleCamera = () => {
     setTimeout(() => {
       tpcRef.current.active = true
@@ -229,36 +244,37 @@ const MainIsland = () => {
     const Battery = scene.getObjectByName("Battery")
     const cubeLingo = scene.getObjectByName("cube")
 
-
-
     const cubeLingo1 = Object.getOwnPropertyDescriptors(cubeLingo);
-
 
     // cubeLingo1.userData = {}
     // cubeLingo1.parent = null
     // cubeLingo1.children = []
-
     // const copyCube = cubeLingo1.clone(true)
-
     // copyCube.name = "copyCube"
     // copyCube.position.set(-169.30, -680.33, -509.88)
-
-
     // scene.add(copyCube);
-
-
     // console.log("cube", cube)
     // console.log("copyCube", copyCube)
+
     console.log("cubeLingo1", cubeLingo1)
 
   };
 
+  const handleMenu = () => {
+    setDialogOpen(true);
+    setHtmlFor("menu")
+  }
+
   return (
     <>
 
-      {/* <Button onClick={tree} className="testButton">
+      <Button onClick={tree} className="testButton">
         camera
-      </Button> */}
+      </Button>
+
+      <Button onClick={handleMenu} className="testButton">
+        menu
+      </Button>
 
 
       <ScrollDialog
@@ -281,19 +297,14 @@ const MainIsland = () => {
         />
       }
 
-      <World>
+      <World >
+
         {/* <LingoEditor /> */}
         {/* <Library /> */}
         {/* <Toolbar /> */}
         {/* <Editor /> */}
         {/* <Stats /> */}
 
-        {/* <Cube
-          x={-169.30}
-          y={-680.33}
-          z={-509.88}
-          name="cube"
-          color="red" /> */}
 
 
         <Setup
@@ -307,8 +318,6 @@ const MainIsland = () => {
         />
 
         <Skybox texture="img/sky/sky1.jpg" />
-
-
 
         <Model
           name="worldmap"
@@ -324,7 +333,6 @@ const MainIsland = () => {
           onClick={!isMobile && handleClick}
         >
         </Model>
-
 
 
         <Group
@@ -371,7 +379,7 @@ const MainIsland = () => {
               handleClick(e)
             })}
           >
-
+            <HtmlTxt ref={htmlRef} text={"Travel to Japan Island"} url={''} id="japan-island" />
           </Model>
 
           <Trigger
@@ -390,6 +398,35 @@ const MainIsland = () => {
             })}
             onExit={(() => {
               handleOutPlayerFly()
+            })}
+          />
+
+
+          <Cube
+            name="triggerJapanHtml"
+            intersectIds={["player"]}
+            color="red"
+
+            rotationX={-166.00}
+            rotationY={32.00}
+            rotationZ={-3.00}
+
+            opacity={0.1}
+
+            visible={false}
+
+            x={13475.40}
+            y={-3747.40}
+            z={4060.09}
+
+            scale={100.00}
+
+            onIntersect={(() => {
+              handleOnHtmlTxt("japan-island")
+            })}
+
+            onIntersectOut={(() => {
+              handleOffHtmlTxt("japan-island")
             })}
           />
 
@@ -416,6 +453,7 @@ const MainIsland = () => {
               handleClick(e)
             })}
           >
+            <HtmlTxt text={"Travel to China Island"} url={''} id="china-island" />
 
           </Model>
 
@@ -436,6 +474,34 @@ const MainIsland = () => {
             })}
             onExit={(() => {
               handleOutPlayerFly()
+            })}
+          />
+
+          <Cube
+            name="triggerChinaHtml"
+            intersectIds={["player"]}
+            color="red"
+
+            rotationX={-166.00}
+            rotationY={32.00}
+            rotationZ={-3.00}
+
+            opacity={0.1}
+
+            visible={false}
+
+            x={-1707.08}
+            y={-5089.14}
+            z={6920.60}
+
+            scale={100.00}
+
+            onIntersect={(() => {
+              handleOnHtmlTxt("china-island")
+            })}
+
+            onIntersectOut={(() => {
+              handleOffHtmlTxt("china-island")
             })}
           />
 
@@ -464,40 +530,7 @@ const MainIsland = () => {
             })}
           >
 
-            {/* <HTML
-              ref={htmlRef}
-              visible={true}
-              x={-31.44}
-              y={-106.08}
-              z={927.94}
-            >
-              <Box
-                sx={{
-                  mt: 2,
-                  padding: "30px",
-                  height: "max-content",
-                  color: "white",
-                  borderRadius: "20px",
-                  backdropFilter: "blur(4px)",
-                  webkitBackdropFilter: "blur(4px)",
-                  background: "rgba(0,0,0,0.7)",
-                  border: "1px solid rgba(255,255,255,0.18)",
-                  boxShadow: "0 8px 32px 0 rgba(31,38,135,0.37)",
-                  '&:before': {
-                    content: `" "`,
-                    position: "absolute",
-                    right: "30px",
-                    top: "-15.55px",
-                    borderTop: "none",
-                    borderRight: "15px solid transparent",
-                    borderLeft: "15px solid transparent",
-                    borderBottom: "15px solid rgba(0,0,0,0.7)",
-                  }
-                }}
-              >
-                <Typography variant="h2">{"Travel to Japanese Island"}</Typography>
-              </Box>
-            </HTML> */}
+            <HtmlTxt text={"Travel to Greek Island"} url={''} id="greek-island" />
 
           </Model>
 
@@ -519,6 +552,35 @@ const MainIsland = () => {
               handleOutPlayerFly()
             })}
           />
+
+          <Cube
+            name="triggerGreekHtml"
+            intersectIds={["player"]}
+            color="red"
+
+            rotationX={-166.00}
+            rotationY={32.00}
+            rotationZ={-3.00}
+
+            opacity={0.1}
+
+            visible={false}
+
+            x={-5559.07}
+            y={-1836.57}
+            z={-7679.60}
+
+            scale={100.00}
+
+            onIntersect={(() => {
+              handleOnHtmlTxt("greek-island")
+            })}
+
+            onIntersectOut={(() => {
+              handleOffHtmlTxt("greek-island")
+            })}
+          />
+
 
           <Model
             name="portalForest"
@@ -544,7 +606,7 @@ const MainIsland = () => {
               handleClick(e)
             })}
           >
-
+            <HtmlTxt text={"Travel to Forest Island"} url={''} id="forest-island" />
           </Model>
 
 
@@ -567,44 +629,33 @@ const MainIsland = () => {
             })}
           />
 
+          <Cube
+            name="triggerForestHtml"
+            intersectIds={["player"]}
+            color="red"
 
-          {/* <HTML
-            // ref={htmlRef}
-            visible={true}
-            x={-31.44}
-            y={-106.08}
-            z={927.94}
-          >
-            <Box
-              sx={{
-                mt: 2,
-                padding: "30px",
-                height: "max-content",
-                color: "white",
-                borderRadius: "20px",
-                backdropFilter: "blur(4px)",
-                webkitBackdropFilter: "blur(4px)",
-                background: "rgba(0,0,0,0.7)",
-                border: "1px solid rgba(255,255,255,0.18)",
-                boxShadow: "0 8px 32px 0 rgba(31,38,135,0.37)",
-                '&:before': {
-                  content: `" "`,
-                  position: "absolute",
-                  right: "30px",
-                  top: "-15.55px",
-                  borderTop: "none",
-                  borderRight: "15px solid transparent",
-                  borderLeft: "15px solid transparent",
-                  borderBottom: "15px solid rgba(0,0,0,0.7)",
-                }
-              }}
-            >
-              <Typography variant="h6">
-                Travel to Japanese Island
-              </Typography>
-            </Box>
-          </HTML> */}
+            rotationX={-166.00}
+            rotationY={32.00}
+            rotationZ={-3.00}
 
+            opacity={0.1}
+
+            visible={false}
+
+            x={9839.41}
+            y={-468.15}
+            z={-10828.57}
+
+            scale={100.00}
+
+            onIntersect={(() => {
+              handleOnHtmlTxt("forest-island")
+            })}
+
+            onIntersectOut={(() => {
+              handleOffHtmlTxt("forest-island")
+            })}
+          />
 
         </Group>
 
@@ -616,31 +667,42 @@ const MainIsland = () => {
           rotationY={82.72}
         />
 
-
         <Group
           name="Battery"
-
           x={-169.30}
           y={-680.33}
           z={-509.88}
-
-
         >
+
+          {/* //collect token */}
           <Trigger
             ref={triggerBatteryRef}
-            radius={100}
+            radius={450.00}
             name="triggerBattery"
             targetIds="player"
             onEnter={(() => {
-              handleItem("Battery")
+              handleOnHtmlTxt("props-coin")
             })}
+            onExit={(() => {
+              handleOffHtmlTxt("props-coin")
+            })}
+            helper={true}
+            visible={true}
+
           />
 
+          {/* //info token */}
           <Sphere
             name="batterySphere"
-            scale={2.5}
+            scale={3.00}
             color="#ffa400"
             opacity={0.5}
+            visible={true}
+            intersectIds={["player"]}
+            onIntersect={(() => {
+              handleItem("Battery")
+            })}
+
           />
 
           <Model
@@ -652,7 +714,11 @@ const MainIsland = () => {
             animationPaused={false}
             animationRepeat={false}
             animation={{ rotationY: [0, 45, 90, 135, 180, 225, 270, 315] }}
-          />
+          >
+
+            <HtmlTxt ref={htmlRef} text={"Collect your coin"} url={''} id="props-coin" />
+
+          </Model>
 
         </Group>
 
@@ -705,6 +771,7 @@ const MainIsland = () => {
             depth={50}
 
             mass={1}
+            receiveShadow={true}
 
             // preset="rifle"
             rotationX={-180.00}
@@ -714,6 +781,8 @@ const MainIsland = () => {
             y={91.93}
             z={194.50}
             scale={1.5}
+
+
           >
             <Model
               ref={dummyBatteryRef}
@@ -742,8 +811,6 @@ const MainIsland = () => {
           y={arrowPosition.y + 50}
           z={arrowPosition.z}
         />
-
-
 
         <Plane
           id="plane"

@@ -37,6 +37,7 @@ const LightArea1 = () => {
                 scaleZ={0.0}
                 intensity={5}
                 color="#ffbd46"
+                
             />
 
             <AreaLight
