@@ -50,6 +50,7 @@ const ChineseIsland = () => {
   const dummyBatteryRef = useRef(null);
   const cameraRef = useRef(null);
   const tpcRef = useRef(null);
+  const htmlRef = useRef(null);
 
   const triggerBatteryRef = useRef(null);
   const pointerRef = useRef(null);
@@ -130,7 +131,7 @@ const ChineseIsland = () => {
 
   const handleItem = (name) => {
 
-    name == "Battery" && handleDialogToggle("Info Board")
+    name == "Battery" && handleDialogToggle("coin Collected")
 
     const allChildren = scene.children
     const array1 = allChildren.filter(x => x.name == name)
@@ -626,6 +627,16 @@ const ChineseIsland = () => {
     htmlTextElm.style.visibility = "hidden"
   }
 
+  const handleMenu = () => {
+    setDialogOpen(true);
+    setHtmlFor("menu")
+  }
+
+  const handleMap = () => {
+    setDialogOpen(true);
+    setHtmlFor("map")
+  }
+
 
   return (
     <>
@@ -649,6 +660,24 @@ const ChineseIsland = () => {
       >
         shaderOff
       </Button> */}
+
+
+
+      <Stack
+        sx={{
+          position: "relative",
+          float: "right",
+        }}
+      >
+        <Button onClick={handleMenu} className="listButtonMenu ButtonStandard">
+          menu
+        </Button>
+
+        <Button onClick={handleMap} className="listButtonMenu ButtonStandard">
+          map
+        </Button>
+
+      </Stack>
 
 
 
@@ -825,23 +854,38 @@ const ChineseIsland = () => {
           z={0}
 
         >
+
+
+          {/* //collect token */}
           <Trigger
             ref={triggerBatteryRef}
-            radius={100}
+            radius={250.00}
             name="triggerBattery"
             targetIds="player"
             onEnter={(() => {
+              handleOnHtmlTxt("props-coin")
+            })}
+            onExit={(() => {
+              handleOffHtmlTxt("props-coin")
+            })}
+            helper={true}
+            visible={true}
+
+          />
+
+          {/* //info token */}
+          <Sphere
+            name="batterySphere"
+            scale={2.50}
+            color="#ffa400"
+            opacity={0.5}
+            visible={true}
+            intersectIds={["player"]}
+            onIntersect={(() => {
               handleItem("Battery")
             })}
           />
 
-          <Sphere
-            name="batterySphere"
-            scale={2.5}
-            color="#ffa400"
-            opacity={0.3}
-
-          />
 
           <Model
             name="batteryModel"
@@ -853,7 +897,9 @@ const ChineseIsland = () => {
             animationPaused={false}
             animationRepeat={false}
 
-          />
+          >
+            <HtmlTxt ref={htmlRef} text={"Collect your coin"} url={''} id="props-coin" />
+          </Model>
 
         </Group>
 
@@ -951,12 +997,12 @@ const ChineseIsland = () => {
           y={0.20}
           z={-440.27}
         >
-          <Circle
+          {/* <Circle
             rotationX={270}
             scale={2.87}
             opacity={0.50}
           />
-          <Trigger
+           <Trigger
             pad
             targetIds={"player"}
             radius={150.00}
@@ -966,7 +1012,7 @@ const ChineseIsland = () => {
             onExit={(() => {
               handleOutPlayerFly()
             })}
-          />
+          /> */}
         </Group>
 
         <Plane

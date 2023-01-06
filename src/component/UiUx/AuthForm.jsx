@@ -1,37 +1,38 @@
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 
 import {
   Button,
   FormControl,
   FormHelperText,
-  InputLabel,
   OutlinedInput,
   Stack,
   CircularProgress,
   Box,
   Typography,
   useMediaQuery,
+  Divider,
 } from "@mui/material";
 
 import CheckCircleIcon from "@mui/icons-material/CheckCircle";
 
 import { Formik } from "formik";
 
-import axios from "axios";
-
-import emailjs from "@emailjs/browser";
 import BasicTabs from "./BasicTabs";
 import TabPanel from "./TabPanel";
+import { loginAuth, registerAuth } from '../../api/authApi'
 
-
-const AuthForm = ({ htmlFor }) => {
+const AuthForm = ({ htmlFor, handleFormStatus }) => {
   const [isLoading, setLoading] = useState(false);
   const [message, setMessage] = useState();
+  const [messageErr, setMessageErr] = useState();
   const [value, setValue] = useState(0);
 
   const matches = useMediaQuery("(max-width:425px)");
 
   const handleForm = (title, index) => {
+
+    setMessageErr("")
+    setMessage("")
 
     const elTitle = document.getElementById("titleDialog")
     elTitle.textContent = title
@@ -58,45 +59,55 @@ const AuthForm = ({ htmlFor }) => {
                 }}
                 onSubmit={async (values) => {
                   setMessage("");
+                  setMessageErr("");
                   setLoading(true);
 
-                  sessionStorage.setItem("login", "true");
+                  const avatarId = sessionStorage.getItem("avatar")
 
-                  setLoading(false);
+                  const formData = {
+                    'username': values.username,
+                    'email': values.email,
+                    'password': values.password,
+                    'avatar_id': avatarId
+                  }
+
+                  registerAuth(formData).then((res) => {
+
+                    setLoading(false);
+
+                    if (res?.response?.data?.success == false) {
+                      if (res?.response?.data?.data?.email) {
+                        setMessageErr("Email has already been taken");
+                      }
+                      else if (res?.response?.data?.data?.username) {
+                        setMessageErr("Username has already been taken");
+                      } else {
+                        setMessageErr("Email and Username Taken");
+                      }
+                    }
+
+                    if (res?.status == 200) {
+                      setMessage("Register is successfull.");
+                      handleFormStatus("successRegister")
+                      const { avatar_id, email, password, token, username, user_id } = res?.data?.data
+
+                      const userData = { avatar_id, email, username, user_id }
+                      const JsonUserData = JSON.stringify(userData);
+
+                      sessionStorage.setItem("token", token);
+                      sessionStorage.setItem("user", JsonUserData);
+                      sessionStorage.setItem("login", "true");
+
+                    }
 
 
-                  console.log("values", values)
+                  }).catch((err) => {
+                    if (err) setLoading(false);
+                    setMessage("Something went wrong, please try again");
+                    return err;
+                  });
 
-                  // const formData = {
-                  //     'first_name': values.name,
-                  //     'last_name': values.name,
-                  //     'status_id': values.name,
-                  //     'email': values.email,
-                  //     'phone': values.phone,
-                  //     'company_name': values.company,
-                  //     'hear_about_us': values.hear,
-                  //     'inquiry': values.help
-                  // }
 
-                  // emailjs
-                  //   .send(
-                  //     "service_sy7u3st",
-                  //     "template_ou2urpc",
-                  //     {
-                  //       username: values?.username,
-                  //       password: values?.password
-                  //     },
-                  //     "YgahqqRIDGkQP1JX_"
-                  //   )
-                  //   .then((res) => {
-                  //     setLoading(false);
-                  //     setMessage("Message is sent.");
-                  //   })
-                  //   .catch((err) => {
-                  //     if (err) setLoading(false);
-                  //     setMessage("Something went wrong, please try again");
-                  //     return err;
-                  //   });
                 }}
               >
                 {(props) => (
@@ -156,33 +167,47 @@ const AuthForm = ({ htmlFor }) => {
                           />
                         </FormControl>
 
+                        {
+                          messageErr && (
+                            <>
+                              <FormHelperText sx={{ color: "red", textAlign: "start" }}>
+                                {messageErr}
+                              </FormHelperText>
+                            </>
+                          )
+                        }
+
+
                         <Box
                           sx={{
                             alignItems: "center",
-                            pb: 3,
                             display: "flex",
                             justifyContent: "center",
                           }}
                         >
                           <Button
                             id="formButton"
+                            className="ButtonStandard"
                             sx={{
-                              display: "none",
-                              width: "50%",
-                              color: "black",
+                              width: "30%",
                               backgroundColor: "#FFC000",
                               boxShadow: "5px 7px 7px -5px #000000 !important",
                               "&:hover": {
                                 backgroundColor: "#ff9d00",
                               },
+
+                              background: message == "Register is successfull." ? "linear-gradient(180deg,#89ff68 0%,#336d16 100%) !important" : "linear-gradient(to bottom, #ffec64 5%, #ffab23 100%)",
+                              color: message == "Register is successfull." ? "#333333" : "white",
+
                             }}
                             size="large"
                             type="submit"
                           >
                             {isLoading ? (
                               <CircularProgress sx={{ color: "black" }} size={20} />
-                            ) : (
-                              "Submit"
+                            ) : (<>
+                              {message == "Register is successfull." ? "Success" : "Submit"}
+                            </>
                             )}
                           </Button>
                         </Box>
@@ -193,13 +218,15 @@ const AuthForm = ({ htmlFor }) => {
               </Formik>
 
               <Stack sx={{ pt: 3 }}>
-
                 <Typography
                   component={"p"}
                   variant="p"
                   sx={{ color: "white", textAlign: "center" }}
                 >
-                  Already have account ?  <span style={{ color: "red", cursor: "pointer" }} onClick={(() => {
+                  Already have account ?  <span style={{
+                    color: "red", cursor: "pointer",
+                    textDecoration: "underline",
+                  }} onClick={(() => {
                     handleForm("LOGIN", 1)
                   })}>Log In</span>
                 </Typography>
@@ -209,50 +236,51 @@ const AuthForm = ({ htmlFor }) => {
             <TabPanel value={value} index={1}>
               <Formik
                 initialValues={{
-                  username: "",
+                  email: "",
                   password: "",
                 }}
+
                 onSubmit={async (values) => {
                   setMessage("");
-
+                  setMessageErr("");
                   setLoading(true);
 
-                  sessionStorage.setItem("login", true);
+                  const formData = {
+                    'email': values.email,
+                    'password': values.password,
+                  }
 
-                  setLoading(false);
+                  loginAuth(formData).then((res) => {
 
-                  console.log("values", values)
+                    setLoading(false);
+                    if (res?.response?.data?.success == false) {
+                      setMessageErr("Email or passord incorrent");
+                    }
+                    if (res?.status == 200) {
+                      setMessage("Login is successfull.");
+                      handleFormStatus("successLogin")
 
-                  // const formData = {
-                  //     'first_name': values.name,
-                  //     'last_name': values.name,
-                  //     'status_id': values.name,
-                  //     'email': values.email,
-                  //     'phone': values.phone,
-                  //     'company_name': values.company,
-                  //     'hear_about_us': values.hear,
-                  //     'inquiry': values.help
-                  // }
+                      const { avatar_id, token, username, user_id } = res?.data?.data
+                      const userData = { avatar_id, username, user_id }
+                      const JsonUserData = JSON.stringify(userData);
 
-                  // emailjs
-                  //   .send(
-                  //     "service_sy7u3st",
-                  //     "template_ou2urpc",
-                  //     {
-                  //       username: values?.username,
-                  //       password: values?.password
-                  //     },
-                  //     "YgahqqRIDGkQP1JX_"
-                  //   )
-                  //   .then((res) => {
-                  //     setLoading(false);
-                  //     setMessage("Message is sent.");
-                  //   })
-                  //   .catch((err) => {
-                  //     if (err) setLoading(false);
-                  //     setMessage("Something went wrong, please try again");
-                  //     return err;
-                  //   });
+                      sessionStorage.setItem("token", token);
+                      sessionStorage.setItem("user", JsonUserData);
+                      sessionStorage.setItem("login", "true");
+
+                    }
+
+
+
+
+
+                  }).catch((err) => {
+                    if (err) setLoading(false);
+                    setMessageErr("Something went wrong, please try again");
+                    return err;
+                  });
+
+
                 }}
               >
                 {(props) => (
@@ -270,12 +298,12 @@ const AuthForm = ({ htmlFor }) => {
                         <FormControl hiddenLabel fullWidth>
                           <OutlinedInput
                             required
-                            placeholder="Username"
+                            placeholder="Email"
                             id="outlined-adornment-name-register"
-                            type="text"
-                            name="username"
+                            type="email"
+                            name="email"
                             size="small"
-                            value={props.values.username}
+                            value={props.values.email}
                             onBlur={props.handleBlur}
                             onChange={props.handleChange}
                             sx={{ backgroundColor: "white" }}
@@ -297,42 +325,61 @@ const AuthForm = ({ htmlFor }) => {
                           />
                         </FormControl>
 
+
+                        {
+                          messageErr && (
+                            <>
+                              <FormHelperText sx={{ color: "red", textAlign: "start" }}>
+                                {messageErr}
+                              </FormHelperText>
+                            </>
+                          )
+                        }
+
                         <Box
                           sx={{
                             alignItems: "center",
                             pb: 3,
                             display: "flex",
                             justifyContent: "center",
-                            // display: 'none',
                           }}
                         >
                           <Button
+                            className="ButtonStandard"
                             id="formButton"
                             sx={{
-                              display: "none",
-                              width: "50%",
-                              color: "black",
+                              width: "40%",
                               backgroundColor: "#FFC000",
                               boxShadow: "5px 7px 7px -5px #000000 !important",
                               "&:hover": {
                                 backgroundColor: "#ff9d00",
                               },
+
+                              background: message == "Login is successfull." ? "linear-gradient(180deg,#89ff68 0%,#336d16 100%) !important" : "linear-gradient(to bottom, #ffec64 5%, #ffab23 100%)",
+                              color: message == "Login is successfull." ? "#333333" : "white",
+
                             }}
                             size="large"
                             type="submit"
                           >
                             {isLoading ? (
                               <CircularProgress sx={{ color: "black" }} size={20} />
-                            ) : (
-                              "Submit"
+                            ) : (<>
+                              {message == "Login is successfull." ? "Success" : "Submit"}
+                            </>
                             )}
                           </Button>
+
                         </Box>
+
+
                       </Stack>
                     </form>
                   </>
                 )}
               </Formik>
+
+              <Divider> OR</Divider>
 
               <Stack sx={{ pt: 3 }}>
                 <Typography
@@ -340,16 +387,17 @@ const AuthForm = ({ htmlFor }) => {
                   variant="p"
                   sx={{ color: "white", textAlign: "center" }}
                 >
-                  Forgot Password ?  <span style={{ color: "red", cursor: "pointer" }} onClick={(() => {
+                  Forgot Password ?  <span style={{ color: "red", cursor: "pointer", textDecoration: "underline" }} onClick={(() => {
                     handleForm("RESET", 2)
                   })} >Reset</span>
                 </Typography>
+
                 <Typography
                   component={"p"}
                   variant="p"
                   sx={{ color: "white", textAlign: "center" }}
                 >
-                  Don’t have account ?  <span style={{ color: "red", cursor: "pointer" }} onClick={(() => {
+                  Don’t have account ?  <span style={{ color: "red", cursor: "pointer", textDecoration: "underline" }} onClick={(() => {
                     handleForm("REGISTER", 0)
                   })} >Sign Up</span>
                 </Typography>
@@ -365,38 +413,7 @@ const AuthForm = ({ htmlFor }) => {
                   setMessage("");
                   setLoading(true);
 
-                  console.log("values", values)
 
-                  // const formData = {
-                  //     'first_name': values.name,
-                  //     'last_name': values.name,
-                  //     'status_id': values.name,
-                  //     'email': values.email,
-                  //     'phone': values.phone,
-                  //     'company_name': values.company,
-                  //     'hear_about_us': values.hear,
-                  //     'inquiry': values.help
-                  // }
-
-                  // emailjs
-                  //   .send(
-                  //     "service_sy7u3st",
-                  //     "template_ou2urpc",
-                  //     {
-                  //       username: values?.username,
-                  //       password: values?.password
-                  //     },
-                  //     "YgahqqRIDGkQP1JX_"
-                  //   )
-                  //   .then((res) => {
-                  //     setLoading(false);
-                  //     setMessage("Message is sent.");
-                  //   })
-                  //   .catch((err) => {
-                  //     if (err) setLoading(false);
-                  //     setMessage("Something went wrong, please try again");
-                  //     return err;
-                  //   });
                 }}
               >
                 {(props) => (
@@ -429,17 +446,15 @@ const AuthForm = ({ htmlFor }) => {
                         <Box
                           sx={{
                             alignItems: "center",
-                            pb: 3,
                             display: "flex",
                             justifyContent: "center",
-                            // display: 'none',
                           }}
                         >
                           <Button
+                            className="ButtonStandard"
                             id="formButton"
                             sx={{
-                              display: "none",
-                              width: "50%",
+                              width: "30%",
                               color: "black",
                               backgroundColor: "#FFC000",
                               boxShadow: "5px 7px 7px -5px #000000 !important",
@@ -456,6 +471,17 @@ const AuthForm = ({ htmlFor }) => {
                               "Submit"
                             )}
                           </Button>
+
+                          {
+                            messageErr && (
+                              <>
+                                <FormHelperText sx={{ color: "red", textAlign: "center", p: 2 }}>
+                                  {messageErr}
+                                </FormHelperText>
+                              </>
+                            )
+                          }
+
                         </Box>
                       </Stack>
                     </form>
@@ -500,15 +526,10 @@ const AuthForm = ({ htmlFor }) => {
             </Typography>
           </Stack>
         </>
-      )}
+      )
+      }
 
-      {message == "Something went wrong, please try again" && (
-        <>
-          <FormHelperText sx={{ color: "red", textAlign: "center", p: 2 }}>
-            {message}
-          </FormHelperText>
-        </>
-      )}
+
     </>
   );
 };

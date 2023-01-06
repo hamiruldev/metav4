@@ -42,6 +42,7 @@ const ForestIsland = () => {
   const dummyBatteryRef = useRef(null);
   const cameraRef = useRef(null);
   const tpcRef = useRef(null);
+  const htmlRef = useRef(null);
 
   const pointerRef = useRef(null);
   const portalRef = useRef(null);
@@ -107,7 +108,7 @@ const ForestIsland = () => {
 
   const handleItem = (name) => {
 
-    name == "Battery" && handleDialogToggle("Info Board")
+    name == "Battery" && handleDialogToggle("coin Collected")
 
     const allChildren = scene.children
     const array1 = allChildren.filter(x => x.name == name)
@@ -227,8 +228,36 @@ const ForestIsland = () => {
     htmlTextElm.style.visibility = "hidden"
   }
 
+  const handleMenu = () => {
+    setDialogOpen(true);
+    setHtmlFor("menu")
+  }
+
+  const handleMap = () => {
+    setDialogOpen(true);
+    setHtmlFor("map")
+  }
+
+
+
   return (
     <>
+      <Stack
+        sx={{
+          position: "relative",
+          float: "right",
+        }}
+      >
+        <Button onClick={handleMenu} className="listButtonMenu ButtonStandard">
+          menu
+        </Button>
+
+        <Button onClick={handleMap} className="listButtonMenu ButtonStandard">
+          map
+        </Button>
+
+      </Stack>
+
 
       <ScrollDialog
         htmlFor={"welcome"}
@@ -421,21 +450,36 @@ const ForestIsland = () => {
           z={0}
 
         >
+
+          {/* //collect token */}
           <Trigger
             ref={triggerBatteryRef}
-            radius={150}
+            radius={250.00}
             name="triggerBattery"
             targetIds="player"
             onEnter={(() => {
-              handleItem("Battery")
+              handleOnHtmlTxt("props-coin")
             })}
+            onExit={(() => {
+              handleOffHtmlTxt("props-coin")
+            })}
+            helper={true}
+            visible={true}
+
           />
 
+          {/* //info token */}
           <Sphere
             name="batterySphere"
-            scale={2.5}
+            scale={2.50}
             color="#ffa400"
-            opacity={0.3}
+            opacity={0.5}
+            visible={true}
+            intersectIds={["player"]}
+            onIntersect={(() => {
+              handleItem("Battery")
+            })}
+
           />
 
           <Model
@@ -447,7 +491,9 @@ const ForestIsland = () => {
             animationPaused={false}
             animationRepeat={false}
 
-          />
+          >
+            <HtmlTxt ref={htmlRef} text={"Collect your coin"} url={''} id="props-coin" />
+          </Model>
 
         </Group>
 

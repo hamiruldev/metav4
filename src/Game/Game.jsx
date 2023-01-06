@@ -39,6 +39,7 @@ import * as THREE from 'three'
 
 import LightArea from "../component/World/LightArea";
 import ScrollDialog from "../component/ScrollDialog";
+import HtmlTxt from "../component/UiUx/HtmlTxt";
 
 const viteBaseUrl = import.meta.env.VITE_BASE_URL;
 
@@ -51,7 +52,8 @@ const Game = () => {
   const pointerRef = useRef(null);
   const portalRef = useRef(null);
   const triggerBatteryRef = useRef(null);
-  const worldRef = useRef(null);
+  const htmlRef = useRef(null);
+
 
   const scene = useScene()
   const { width, height } = useWindowSize();
@@ -200,6 +202,20 @@ const Game = () => {
     }, 500)
   }
 
+  const handleOnHtmlTxt = (idTxt) => {
+    const htmlTextElm = document.getElementById(`htmlRef${idTxt}`)
+    htmlTextElm.style.visibility = "visible"
+    setTimeout(() => {
+      htmlTextElm.style.visibility = "hidden"
+    }, 2500);
+  }
+
+  const handleOffHtmlTxt = (idTxt) => {
+    const htmlTextElm = document.getElementById(`htmlRef${idTxt}`)
+    htmlTextElm.style.visibility = "hidden"
+  }
+
+
   return (
     <>
       <Button onClick={handleCamera} id="cameraButton" sx={{ display: "none" }}>
@@ -267,6 +283,7 @@ const Game = () => {
           src={`${viteBaseUrl}maps/tunnel/tunnel1.glb`}
           onClick={!isMobile && handleClick}
         >
+
         </Model>
 
         <AreaLight
@@ -331,8 +348,32 @@ const Game = () => {
 
           <Find bloom={isMobile ? false : false} adjustColor="#00458f" name="Portal">
           </Find>
+          <HtmlTxt text={"Travel to Main Island"} url={''} id="main-island" />
 
         </Model>
+
+        <Cube
+          name="triggerMainHtml"
+          intersectIds={["player"]}
+          color="red"
+
+          opacity={0.1}
+
+          visible={false}
+          x={287.07}
+          y={-1584.27}
+          z={-6662.48}
+
+          scale={20.00}
+
+          onIntersect={(() => {
+            handleOnHtmlTxt("main-island")
+          })}
+
+          onIntersectOut={(() => {
+            handleOffHtmlTxt("main-island")
+          })}
+        />
 
 
         {/* // tunnel */}
@@ -878,17 +919,36 @@ const Game = () => {
           z={5356.52}
         >
 
-          <Sphere
+
+          {/* //collect token */}
+          <Trigger
             ref={triggerBatteryRef}
-            intersectIds={['player']}
+            radius={250.00}
+            name="triggerBattery"
+            targetIds="player"
+            onEnter={(() => {
+              handleOnHtmlTxt("props-coin")
+            })}
+            onExit={(() => {
+              handleOffHtmlTxt("props-coin")
+            })}
+            helper={true}
+            visible={true}
+
+          />
+
+          {/* //info token */}
+          <Sphere
+            name="batterySphere"
+            scale={2.50}
+            color="#ffa400"
+            opacity={0.5}
+            visible={true}
+            intersectIds={["player"]}
             onIntersect={(() => {
               handleItem("Battery")
             })}
-            name="batterySphere"
-            scale={2.5}
-            color="#ffa400"
-            opacity={0.3}
-            bloom
+
           />
 
           <Model
@@ -900,7 +960,9 @@ const Game = () => {
             animationRepeat={false}
             animation={{ rotationY: [0, 45, 90, 135, 180, 225, 270, 315] }}
 
-          />
+          >
+            <HtmlTxt ref={htmlRef} text={"Collect your coin"} url={''} id="props-coin" />
+          </Model>
 
         </Group>
 

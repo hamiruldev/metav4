@@ -14,6 +14,7 @@ import { useState } from 'react';
 import { useRenderer, useScene } from 'lingo3d-react';
 
 const viteBaseUrl = import.meta.env.VITE_BASE_URL;
+
 const MyArray = [
     {
         id: 1,
@@ -46,13 +47,15 @@ export default function AvatarCard({ setAvatarButton }) {
 
     const [avatar, setAvatar] = useState({ name: "", image: "", model: "", state: false })
 
-    const handleAvatar = (id, image, model, state) => {
+    const handleAvatar = (id, name, image, model, state) => {
 
         getRenderer.render(scene, camera.userData.manager.camera)
         currentAvatar.userData.manager.srcState.set("3dCharacter/new/character1.glb")
         getRenderer.render(scene, camera.userData.manager.camera)
 
-        setAvatar({ name: id, image: image, model: model, state: state })
+        sessionStorage.setItem("avatar", id)
+
+        setAvatar({ name: name, image: image, model: model, state: state })
 
         setTimeout(() => {
             currentAvatar.userData.manager.srcState.set(model)
@@ -60,13 +63,13 @@ export default function AvatarCard({ setAvatarButton }) {
 
         }, 500);
 
-
         const animation = currentAvatar.userData.manager.animationManagers
         animation["idle"].play()
 
         setAvatarButton(true)
 
     }
+
 
     return (
         <Swiper
@@ -111,7 +114,7 @@ export default function AvatarCard({ setAvatarButton }) {
                         <CardMedia
                             onClick={
                                 (() => {
-                                    handleAvatar(item.name, item.image, item.model, true)
+                                    handleAvatar(item.id, item.name, item.image, item.model, true)
                                 })}
                             key={key}
                             id="cardmedia"

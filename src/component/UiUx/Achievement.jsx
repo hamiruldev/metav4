@@ -5,43 +5,50 @@ import PersonIcon from '@mui/icons-material/Person';
 import MonetizationOnIcon from '@mui/icons-material/MonetizationOn';
 import SavingsIcon from '@mui/icons-material/Savings';
 import HttpsIcon from '@mui/icons-material/Https';
+import OneKkOutlinedIcon from '@mui/icons-material/OneKkOutlined';
+import FiveKOutlinedIcon from '@mui/icons-material/FiveKOutlined';
+import DiamondOutlinedIcon from '@mui/icons-material/DiamondOutlined';
+import StarOutlinedIcon from '@mui/icons-material/StarOutlined';
+import MilitaryTechOutlinedIcon from '@mui/icons-material/MilitaryTechOutlined';
+import OneKkIcon from '@mui/icons-material/OneKk';
+import FiveKIcon from '@mui/icons-material/FiveK';
 
 const mockAchievement = [
     {
         id: 1,
         title: "SUCCESS",
         task: 'Completed register',
-        Boolen: true
+        status: false
     },
     {
         id: 2,
         title: "5K SCORE",
-        task: 'Collect 5,000 coins',
-        Boolen: true
+        task: 'Collect 5k coins',
+        status: false
     },
     {
         id: 3,
         title: "10K SCORE",
-        task: 'Collect 10,000 coins',
-        Boolen: true
+        task: 'Collect 10k coins',
+        status: false
     },
     {
         id: 4,
         title: "30K SCORE",
-        task: 'Collect 30,000 coins',
-        Boolen: false
+        task: 'Collect 30k coins',
+        status: false
     },
     {
         id: 5,
         title: "MASTER COINS",
-        task: 'Collect 100,000 coins',
-        Boolen: false
+        task: 'Collect 100k coins',
+        status: true
     },
     {
         id: 6,
         title: "STAR PLAYER",
         task: 'Be the 1st ranking',
-        Boolen: false
+        status: true
     },
 
 ]
@@ -66,12 +73,12 @@ const Achievement = () => {
                         width: '0.7em'
                     },
                     '&::-webkit-scrollbar-track': {
-                        backgroundColor: 'white',
+                        backgroundColor: 'transparent',
                         borderRadius: '5px',
                         p: 2
                     },
                     '&::-webkit-scrollbar-thumb': {
-                        backgroundColor: '#b5a837',
+                        backgroundColor: 'orange',
                         borderRadius: '5px',
                         position: 'relative',
                         left: '20px',
@@ -88,54 +95,46 @@ const Achievement = () => {
                         justifyContent: "center;"
                     }}
                 >
-
-
                     {mockAchievement?.reverse().map((i, k) => {
-                        console.log("masuk")
                         return (<>
                             <Grid item key={k}>
                                 <Card key={k} sx={{
                                     display: 'flex',
-                                    backgroundColor: "grey !important",
                                     width: matches ? "250px" : "304px",
                                     justifyContent: "flex-start !important",
-                                    border: "2px solid white"
+                                    textAlign: "start"
                                 }}>
-
-                                    {/* <CardMedia
-                                        component="img"
-                                        sx={{ width: matches ? "20%" : 151 }}
-                                        image="/img/avatar/avatar1.jpg"
-                                        alt="Live from space album cover"
-                                    /> */}
-
                                     <Box sx={{
                                         p: 2,
-                                        border: '1px solid white',
-                                        borderRadius: "5px"
+                                        borderRadius: "5px",
+                                        borderBottom: "0.5px solid orange",
+                                        borderRight: "1px solid orange",
+                                        borderLeft: "4px solid orange",
+                                        borderTop: "4px solid orange",
+                                        opacity: i?.status == true ? 0.5 : 1
                                     }}>
-                                        <PersonIcon fontSize='medium' sx={{ color: "orange" }} />
-                                    </Box>
+                                        {i.title == "SUCCESS" && <PersonIcon sx={{ color: "orange", fontSize: '3.5rem' }} />}
+                                        {i.title == "5K SCORE" && <FiveKIcon sx={{ color: "orange", fontSize: '3.5rem' }} />}
+                                        {i.title == "10K SCORE" && <OneKkIcon sx={{ color: "orange", fontSize: '3.5rem' }} />}
+                                        {i.title == "30K SCORE" && <PersonIcon sx={{ color: "orange", fontSize: '3.5rem' }} />}
+                                        {i.title == "MASTER COINS" && <MilitaryTechOutlinedIcon sx={{ color: "orange", fontSize: '3.5rem' }} />}
+                                        {i.title == "STAR PLAYER" && <StarOutlinedIcon sx={{ color: "orange", fontSize: '3.5rem' }} />}
 
-                                    <Box sx={{ display: 'flex', flexDirection: 'column' }}>
+                                    </Box>
+                                    <Box sx={{ display: 'flex', flexDirection: 'column', opacity: i?.status == true ? 0.5 : 1 }}>
                                         <CardContent sx={{ flex: '1 0 auto', color: "white" }}>
-                                            <Typography component="div" variant="h6">
+                                            <Typography component="div" variant="body2">
                                                 {i.title}
                                             </Typography>
-                                            <Typography variant="subtitle1" component="div">
+                                            <Typography variant="span" component="div">
                                                 {i.task}
                                             </Typography>
                                         </CardContent>
                                     </Box>
-
-
                                 </Card>
                             </Grid>
                         </>)
                     })}
-
-
-
 
                 </Grid>
 

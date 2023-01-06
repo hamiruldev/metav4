@@ -135,6 +135,19 @@ const Theme = {
         },
       },
     },
+
+    MuiDivider: {
+      styleOverrides: {
+        root: {
+          "&:before": {
+            borderTop: "thin solid white",
+          },
+          "&:after": {
+            borderTop: "thin solid white",
+          },
+        },
+      },
+    },
   },
 };
 

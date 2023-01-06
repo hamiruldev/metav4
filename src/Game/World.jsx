@@ -105,6 +105,7 @@ const World = () => {
           variant="contained"
           sx={{
             top: `calc(100vh - ${matches ? "90vh" : "95vh"})`,
+            p: 2.5
           }}
           onClick={() => {
             setOpen(true);
@@ -117,6 +118,9 @@ const World = () => {
       <Button
         className="button-glow2"
         variant="contained"
+        sx={{
+          p: 2.5
+        }}
         onClick={() => {
           window.open(
             "https://wasap.my/6585351972/Hi%20iSmart%20Support,%20I%20am%20coming%20from%20your%20website",
@@ -127,7 +131,7 @@ const World = () => {
         WHATSAPP
       </Button>
 
-      <ResponsiveDrawer />
+      {/* <ResponsiveDrawer /> */}
 
       <Game />
 

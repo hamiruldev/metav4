@@ -26,6 +26,7 @@ import {
   OrbitCamera,
   Camera,
   DirectionalLight,
+  Environment,
 } from "lingo3d-react";
 
 import * as THREE from 'three'
@@ -106,7 +107,7 @@ const MainIsland = () => {
 
   const handleItem = (name) => {
 
-    name == "Battery" && handleDialogToggle("Info Board")
+    name == "Battery" && handleDialogToggle("coin Collected")
 
     const allChildren = scene.children
     const array1 = allChildren.filter(x => x.name == name)
@@ -146,11 +147,10 @@ const MainIsland = () => {
 
   const openDialogToggle = (name) => {
 
-    setDialogOpen(false);
     setTimeout(() => {
       if (isLogin == "false") {
         setDialogOpen(true);
-        setHtmlFor(name)
+        setHtmlFor("register")
       }
       else {
         setDialogOpen(false);
@@ -162,7 +162,7 @@ const MainIsland = () => {
   };
 
   const handleClose = (id) => {
-    id = "avatarClose" ? openDialogToggle("register") : setDialogOpen(false);
+    setDialogOpen(false);
   };
 
   const handleOnPlayerFly = (url) => {
@@ -265,16 +265,49 @@ const MainIsland = () => {
     setHtmlFor("menu")
   }
 
+  const handleMap = () => {
+    setDialogOpen(true);
+    setHtmlFor("map")
+  }
+
+  const handleRegister = () => {
+    openDialogToggle("register")
+  }
+
+
+
   return (
     <>
 
-      <Button onClick={tree} className="testButton">
-        camera
-      </Button>
+      <Stack
+        sx={{
+          position: "relative",
+          float: "right",
+        }}
+      >
+        <Button id="RegisterButton"
+          sx={{ display: "none" }}
+          onClick={handleRegister}
 
-      <Button onClick={handleMenu} className="testButton">
-        menu
-      </Button>
+          className="listButtonMenu ButtonStandard">
+          Register
+        </Button>
+
+        <Button
+          id="cameraButton"
+          sx={{ display: "none" }}
+          onClick={handleCamera} className="listButtonMenu ButtonStandard">
+          Camera
+        </Button>
+
+        <Button onClick={handleMenu} className="listButtonMenu ButtonStandard">
+          menu
+        </Button>
+
+        <Button onClick={handleMap} className="listButtonMenu ButtonStandard">
+          map
+        </Button>
+      </Stack>
 
 
       <ScrollDialog
@@ -306,7 +339,6 @@ const MainIsland = () => {
         {/* <Stats /> */}
 
 
-
         <Setup
           ref={worldRef}
           pixelRatio={5}
@@ -315,6 +347,7 @@ const MainIsland = () => {
           repulsion={5}
           gridHelper={false}
           antiAlias={true}
+
         />
 
         <Skybox texture="img/sky/sky1.jpg" />

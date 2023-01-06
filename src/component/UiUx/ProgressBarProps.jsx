@@ -3,19 +3,38 @@ import PropTypes from 'prop-types';
 import LinearProgress from '@mui/material/LinearProgress';
 import Typography from '@mui/material/Typography';
 import Box from '@mui/material/Box';
+import MonetizationOnIcon from '@mui/icons-material/MonetizationOn';
+import { Chip, Stack } from '@mui/material';
+
 
 function LinearProgressWithLabel(props) {
     return (
-        <Box sx={{ display: 'flex', alignItems: 'center' }}>
+        <Box sx={{ width: '100%', mr: 1, height: 0 }}>
+            <LinearProgress variant="determinate" {...props} />
+            <Stack
 
-            <Box sx={{ minWidth: 35 }}>
-                <Typography variant="body2" sx={{ color: "white" }}>{`${Math.round(
-                    props.value,
-                )}%`}</Typography>
-            </Box>
-            <Box sx={{ width: '100%', mr: 1 }}>
-                <LinearProgress variant="determinate" {...props} />
-            </Box>
+                sx={{
+                    position: "relative",
+                    top: "-32px",
+                    width: "max-content",
+                    left: `${props.value}%`
+                }}
+            >
+                <Typography variant="body2"
+                    sx={{ color: "white", }}
+                >{`${props.value !== undefined ? Math.round(props.value) : 0}`}
+                </Typography>
+
+                <MonetizationOnIcon
+                    sx={{
+                        background: "black",
+                        borderRadius: "50px",
+                        color: "orange",
+                    }}
+                >
+
+                </MonetizationOnIcon>
+            </Stack>
         </Box>
     );
 }
@@ -28,21 +47,11 @@ LinearProgressWithLabel.propTypes = {
     value: PropTypes.number.isRequired,
 };
 
-export default function LinearWithValueLabel() {
-    const [progress, setProgress] = React.useState(10);
-
-    React.useEffect(() => {
-        const timer = setInterval(() => {
-            setProgress((prevProgress) => (prevProgress >= 100 ? 10 : prevProgress + 10));
-        }, 800);
-        return () => {
-            clearInterval(timer);
-        };
-    }, []);
+export default function LinearWithValueLabel({ value }) {
 
     return (
         <Box sx={{ width: '50%' }}>
-            <LinearProgressWithLabel value={progress} />
+            <LinearProgressWithLabel value={value} />
         </Box>
     );
 }

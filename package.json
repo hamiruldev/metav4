@@ -2,7 +2,7 @@
   "name": "lingo3d-app",
   "private": true,
   "version": "0.0.0",
-  "homepage": "https://2vr360.com/hamirul/test25/",
+  "homepage": "https://360xp.co/metaverse/",
   "scripts": {
     "dev": "vite --host",
     "build": "tsc && vite build",

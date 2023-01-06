@@ -17,21 +17,13 @@ import Form from "./Form";
 import InstructionCtx from "./UiUx/InstructionCtx";
 import ListMenu from "./UiUx/listMenu";
 import WelcomeButton from "./UiUx/WelcomeButton";
+import Maps from "./UiUx/Maps";
+import { useState } from "react";
 
 var menuData = [{ id: 1, name: 'Intrest form' }, { id: 2, name: 'share' }, { id: 3, name: 'help' }]
 
 const viteBaseUrl = import.meta.env.VITE_BASE_URL;
-const loginButton = () => {
-  const loginEl = document.getElementById("formButton")
-  loginEl.click()
-  loginEl.style.display = "block"
-}
 
-const registerButton = () => {
-  const loginEl = document.getElementById("formButton")
-  loginEl.click()
-  loginEl.style.display = "block"
-}
 
 
 const Transition = React.forwardRef(function Transition(props, ref) {
@@ -61,7 +53,6 @@ const BootstrapDialog = styled(Dialog)(({ theme }) => ({
     padding: theme.spacing(1),
   },
   "& .MuiPaper-root": {
-    backgroundColor: "transparent",
     overflow: "visible",
     boxShadow: "none",
     display: "flex",
@@ -80,6 +71,8 @@ const BootstrapDialog = styled(Dialog)(({ theme }) => ({
 const BootstrapDialogTitle = (props) => {
   const { children, handleClose, htmlFor, ...other } = props;
   const matches = useMediaQuery("(max-width:425px)");
+
+
 
 
   return (
@@ -142,24 +135,27 @@ export default function ScrollDialog({
   const [isLoading, setLoading] = React.useState(false);
   const [isSuccess, setSuccess] = React.useState(false);
   const [isReady, setReady] = React.useState(false)
+  const [formStatus, setFormStatus] = React.useState('')
 
   const matches = useMediaQuery("(max-width:425px)");
 
   const isLogin = sessionStorage.getItem("login");
 
+
   const handleAvatar = () => {
 
 
     setLoading(true)
-
     setTimeout(() => {
-
       setLoading(false)
       setSuccess(true)
       setTimeout(() => {
         setSuccess(false)
         setAvatarButton(false)
-        isLogin == false ? handleClose("avatarClose") : handleClose()
+        handleClose()
+
+        const registerEl = document.getElementById("RegisterButton")
+        registerEl.click()
 
       }, 500)
 
@@ -171,9 +167,33 @@ export default function ScrollDialog({
     handleClose("instructionClose")
   }
 
+  const handleFormStatus = (status) => {
+    setFormStatus(status)
+    setLoading(false)
+    handleClose()
+
+    const cameraEl = document.getElementById("cameraButton")
+    cameraEl.click()
+
+  }
+
   const handleReady = () => {
     setReady(true)
   }
+
+  const loginButton = () => {
+    const loginEl = document.getElementById("formButton")
+    loginEl.click()
+    loginEl.style.display = "block"
+  }
+
+  const registerButton = () => {
+    const loginEl = document.getElementById("formButton")
+    loginEl.click()
+    loginEl.style.display = "block"
+    setLoading(true)
+  }
+
 
   return (
     <>
@@ -191,10 +211,13 @@ export default function ScrollDialog({
         sx={{
           backgroundColor: "transparent",
           backgroundSize: "cover",
-          backgroundImage: (htmlFor == "welcome" || htmlFor == "avatar" || htmlFor == "login" || htmlFor == "register") && `url(${viteBaseUrl}img/sky/cover3.JPG)`,
+          backgroundImage: (htmlFor == "welcome" || htmlFor == "avatar" || htmlFor == "login" || htmlFor == "register" || htmlFor == 'instruction') && `url(${viteBaseUrl}img/sky/cover3.JPG)`,
+          "& .MuiPaper-root": {
+            backgroundColor: "transparent",
+          },
         }}
       >
-        <ClickAwayListener disableReactTree onClickAway={htmlFor != "welcome" && htmlFor != "instruction" && htmlFor != "Info Board" ? handleClose : false}>
+        <ClickAwayListener disableReactTree onClickAway={htmlFor != "welcome" && htmlFor != "instruction" && htmlFor != "Info Board" && htmlFor != "coin Collected" && htmlFor != "avatar" ? handleClose : false}>
           <AnimateBox>
             <Stack
               sx={{
@@ -237,9 +260,11 @@ export default function ScrollDialog({
                   {htmlFor == "instruction" && "INSTRUCTION"}
                   {htmlFor == "login" && "LOGIN"}
                   {htmlFor == "register" && "REGISTER"}
-                  {htmlFor == "menu" && "MENU"}
                   {htmlFor == "avatar" && "CHOOSE AVATAR"}
                   {htmlFor == "Info Board" && "INFO BOARD"}
+                  {htmlFor == "coin Collected" && "Congrats 🌟"}
+                  {htmlFor == "map" && "YOU NOW AT ?"}
+                  {/* {htmlFor == "menu" && "MENU"} */}
                 </Typography>
 
                 <Slide
@@ -259,8 +284,8 @@ export default function ScrollDialog({
                       width: "100%",
                       height: htmlFor == "needHelp" && matches && "50vh",
                       overflow: htmlFor == "needHelp" && matches && "auto",
-                      display: htmlFor == "menu" && "flex",
-                      justifyContent: htmlFor == "menu" && "center",
+                      display: htmlFor == "menu" || htmlFor == "welcome" ? "flex" : "unset",
+                      justifyContent: htmlFor == "menu" || htmlFor == "welcome" ? "center" : "unset",
 
                       '&::-webkit-scrollbar': {
                         width: '0.3em',
@@ -281,14 +306,24 @@ export default function ScrollDialog({
 
                   >
 
-                    {htmlFor == "welcome" && `You are now in Fantasy Island. Choose your favourite avatar before start your exploration.`}
+                    {htmlFor == "welcome" && <Typography variant="body1" sx={{ width: "90%" }}>
+                      {`You are now in Fantasy Island. Choose your favourite avatar before start your exploration.`}
+                    </Typography>}
+
                     {htmlFor == "Info Board" && `Congrats! You can now play a game in the fantasy island. Go to future teleport at the end of this tunnel to explore the island.`}
+                    {htmlFor == "coin Collected" &&
+                      <Typography variant="body1">
+                        {`You collected a golden coin in this Island.`}
+                      </Typography>
+                    }
+
                     {htmlFor == "instruction" && <InstructionCtx />}
                     {htmlFor == "menu" && <ListMenu />}
+                    {htmlFor == "map" && <Maps />}
                     {htmlFor == "avatar" && <AvatarCard setAvatarButton={setAvatarButton} />}
                     {htmlFor == "needHelp" && <Form />}
-                    {htmlFor == "register" && <AuthForm htmlFor={htmlFor} />}
-                    {htmlFor == "login" && <AuthForm htmlFor={htmlFor} />}
+                    {htmlFor == "register" && <AuthForm htmlFor={htmlFor} handleFormStatus={handleFormStatus} />}
+                    {htmlFor == "login" && <AuthForm htmlFor={htmlFor} handleFormStatus={handleFormStatus} />}
 
                     {htmlFor == "product" && "products"}
                     {htmlFor === "video" && "video"}
@@ -361,7 +396,9 @@ export default function ScrollDialog({
                       position: "relative",
                       border: "2px solid white",
                       boxShadow: "0px 1px 0px 0px #fff6af",
-                      display: htmlFor == "needHelp" || htmlFor == "Info Board" || htmlFor == "menu" ? "none" : "flex",
+                      display:
+                        htmlFor == "needHelp" || htmlFor == "Info Board" || htmlFor == "coin Collected" || htmlFor == "menu" || htmlFor == "map" || htmlFor == "register" || htmlFor == "login"
+                          ? "none" : "flex",
                       background: htmlFor == "avatar" && isSuccess ? "linear-gradient(180deg,#89ff68 0%,#336d16 100%);" : "linear-gradient(to bottom, #ffec64 5%, #ffab23 100%)",
                       color: htmlFor == "avatar" && isSuccess ? "#333333" : "#333333",
                     }}
@@ -376,8 +413,6 @@ export default function ScrollDialog({
                     endIcon={htmlFor == "avatar" && isLoading && <CircularProgress sx={{ color: "black" }} size={24} />}
                   >
 
-                    {htmlFor == "register" && "Start"}
-                    {htmlFor == "login" && "Submit"}
                     {htmlFor == "welcome" && <WelcomeButton handleReady={handleReady} isReady={isReady} />}
                     {htmlFor == "instruction" && <WelcomeButton handleReady={handleReady} isReady={isReady} />}
                     {htmlFor == "avatar" && isSuccess && "Success"}

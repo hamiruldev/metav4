@@ -1,10 +1,12 @@
-import { Box, Button, Stack, Tab, Tabs, useMediaQuery } from '@mui/material'
+import { Box, Button, Stack, Tab, Tabs, Typography, useMediaQuery } from '@mui/material'
 import React, { useEffect, useState } from 'react'
 import TabPanel from './TabPanel';
 
 import ArrowBackIcon from '@mui/icons-material/ArrowBack';
 import Profile from './Profile';
 import Achievement from './Achievement';
+import Leaderboard from './Leaderboard';
+import Exit from './Exit';
 
 
 const ListMenu = () => {
@@ -17,15 +19,20 @@ const ListMenu = () => {
         const titleEl = document.getElementById("titleDialog")
         const menuTitle = document.getElementById(text)
 
-        titleEl.textContent = text != 'menu' ? menuTitle?.textContent : 'MENU'
+        titleEl.textContent = text != 'menu' ? menuTitle?.textContent : ''
 
         setValue(newValue);
     };
 
 
+
     return (
         <>
             <Stack direction={"column"} width={value == 0 ? "unset" : "100%"}>
+
+                {value == 0 && <Typography variant={matches ? "h5" : "h4"} sx={{ pb: "5%" }}>
+                    MENU
+                </Typography>}
 
                 {value != 0 &&
                     <Box
@@ -64,18 +71,7 @@ const ListMenu = () => {
                             <Button
                                 id="profileButton"
                                 fullWidth
-                                sx={{
-                                    border: "2px solid white",
-                                    borderRadius: "5px",
-                                    my: 1,
-                                    boxShadow: "0px 1px 0px 0px #fff6af",
-                                    background: "linear-gradient(to bottom, #ffec64 5%, #ffab23 100%)",
-                                    backgroundColor: "#ffec64",
-                                    color: "#333333",
-                                    position: "relative",
-                                    zIndex: "10000000",
-                                    fontWeight: 900,
-                                }}
+                                className='ButtonStandard'
                                 onClick={((e) => {
                                     handleChange(e, 1, "profileButton")
                                 })}
@@ -86,18 +82,7 @@ const ListMenu = () => {
                             <Button
                                 fullWidth
                                 id="achievementButton"
-                                sx={{
-                                    border: "2px solid white",
-                                    borderRadius: "5px",
-                                    my: 1,
-                                    boxShadow: "0px 1px 0px 0px #fff6af",
-                                    background: "linear-gradient(to bottom, #ffec64 5%, #ffab23 100%)",
-                                    backgroundColor: "#ffec64",
-                                    color: "#333333",
-                                    position: "relative",
-                                    zIndex: "10000000",
-                                    fontWeight: 900,
-                                }}
+                                className='ButtonStandard'
                                 onClick={((e) => {
                                     handleChange(e, 2, "achievementButton")
                                 })}
@@ -108,40 +93,18 @@ const ListMenu = () => {
                             <Button
                                 id="leaderBoardButton"
                                 fullWidth
-                                sx={{
-                                    border: "2px solid white",
-                                    borderRadius: "5px",
-                                    my: 1,
-                                    boxShadow: "0px 1px 0px 0px #fff6af",
-                                    background: "linear-gradient(to bottom, #ffec64 5%, #ffab23 100%)",
-                                    backgroundColor: "#ffec64",
-                                    color: "#333333",
-                                    position: "relative",
-                                    zIndex: "10000000",
-                                    fontWeight: 900,
-                                }}
+                                className='ButtonStandard'
                                 onClick={((e) => {
                                     handleChange(e, 3, 'leaderBoardButton')
                                 })}
                             >
-                                L E D E A R B O A R D
+                                L E A D E A R B O A R D
                             </Button>
 
                             <Button
                                 id="exitButton"
                                 fullWidth
-                                sx={{
-                                    border: "2px solid white",
-                                    borderRadius: "5px",
-                                    my: 1,
-                                    boxShadow: "0px 1px 0px 0px #fff6af",
-                                    background: "linear-gradient(to bottom, #ffec64 5%, #ffab23 100%)",
-                                    backgroundColor: "#ffec64",
-                                    color: "#333333",
-                                    position: "relative",
-                                    zIndex: "10000000",
-                                    fontWeight: 900,
-                                }}
+                                className='ButtonStandard'
                                 onClick={((e) => {
                                     handleChange(e, 4, 'exitButton')
                                 })}
@@ -161,10 +124,10 @@ const ListMenu = () => {
                                 <Achievement />
                             </TabPanel>
                             <TabPanel value={value} index={3}>
-                                Item Three
+                                <Leaderboard />
                             </TabPanel>
                             <TabPanel value={value} index={4}>
-                                Item Three
+                                <Exit />
                             </TabPanel>
                         </>
                     }
