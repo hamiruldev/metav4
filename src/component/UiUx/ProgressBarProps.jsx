@@ -22,7 +22,7 @@ function LinearProgressWithLabel(props) {
             >
                 <Typography variant="body2"
                     sx={{ color: "white", }}
-                >{`${props.value !== undefined ? Math.round(props.value) : 0}`}
+                >{`${props.value !== undefined ? Math.round(props.value * 5000) : 0}`}
                 </Typography>
 
                 <MonetizationOnIcon

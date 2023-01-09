@@ -4,7 +4,9 @@ import { Box, Typography, Button, Stack } from '@mui/material'
 const Exit = () => {
 
     const closeWin = () => {
-        window.close();
+        sessionStorage.clear()
+        localStorage.clear()
+        window.location.replace('/metaverse/');
     }
 
     return (

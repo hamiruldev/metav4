@@ -32,6 +32,7 @@ import * as THREE from 'three'
 
 import ScrollDialog from "../component/ScrollDialog";
 import HtmlTxt from "../component/UiUx/HtmlTxt";
+import { getObjFilter, setObj } from "../api/gameApi";
 
 const viteBaseUrl = import.meta.env.VITE_BASE_URL;
 
@@ -108,37 +109,35 @@ const ForestIsland = () => {
 
   const handleItem = (name) => {
 
-    name == "Battery" && handleDialogToggle("coin Collected")
+    if (name == "Battery") {
 
-    const allChildren = scene.children
-    const array1 = allChildren.filter(x => x.name == name)
+      const allChildren = scene.children
+      const array1 = allChildren.filter(x => x.name == name)
 
-    // active portal
-    const animationPortal = portalRef.current.animationManagers
-    animationPortal["Take 001"].play()
-    portalRef.current.bloom = true
+      //remove battery
+      const MeshInModel = array1[0].children.filter(x => x.type != `Group` && x.name == 'batterySphere' || x.name == 'batteryModel')
+      MeshInModel.map((item) => {
+        item.children.filter(x => x.type == 'Mesh').map((item) => {
+          item.material.dispose()
+          item.geometry.dispose()
+          item.parent.remove(item)
+        })
+      })
 
-    //pass battery to player
-    dummyBatteryRef.current.visible = true
-    dummyBatteryRef.current.animation = {
-      y: [80, 80 + 0.5, 80, 80 - 0.5, 80],
-      rotationY: [0, 45, 90, 135, 180, 225, 270, 315]
+      scene.remove(array1[0])
+      triggerBatteryRef.current.dispose();
+
+      setObj({ id: 3, item: "coin", value: 1, location: 'forest-island' }).then((res) => {
+        res?.status == 200 && handleDialogToggle("coin Collected")
+
+        // active portal
+        const animationPortal = portalRef.current.animationManagers
+        animationPortal["Take 001"].play()
+        portalRef.current.bloom = true
+
+      })
     }
 
-    //remove battery
-    const MeshInModel = array1[0].children.filter(x => x.type != `Group` && x.name == 'batterySphere' || x.name == 'batteryModel')
-    MeshInModel.map((item) => {
-      item.children.filter(x => x.type == 'Mesh').map((item) => {
-        item.material.dispose()
-        item.geometry.dispose()
-        item.parent.remove(item)
-      })
-    })
-
-    scene.remove(array1[0])
-    triggerBatteryRef.current.dispose();
-
-    // animate()
   }
 
   const handleDialogToggle = (name) => {
@@ -238,6 +237,34 @@ const ForestIsland = () => {
     setHtmlFor("map")
   }
 
+
+  const handleInitialObjHistory = () => {
+    isLogin == "true" && getObjFilter('forest-island').then((res) => {
+
+      if (res.length != 0) {
+
+        //remove battery
+        const allChildren = scene.children
+        const array1 = allChildren.filter(x => x.name == "Battery")
+        const MeshInModel = array1[0].children.filter(x => x.type != `Group` && x.name == 'batterySphere' || x.name == 'batteryModel')
+
+        MeshInModel.map((item) => {
+          item.children.filter(x => x.type == 'Mesh').map((item) => {
+            item.material.dispose()
+            item.geometry.dispose()
+            item.parent.remove(item)
+          })
+        })
+
+        scene.remove(array1[0])
+        triggerBatteryRef.current.dispose();
+      }
+    })
+  }
+
+  useEffect(() => {
+    handleInitialObjHistory()
+  }, [])
 
 
   return (
@@ -555,7 +582,7 @@ const ForestIsland = () => {
             z={194.50}
             scale={1.5}
           >
-            <Model
+            {/* <Model
               ref={dummyBatteryRef}
               name="dummyBattery"
               src={`item/coin.glb`}
@@ -563,7 +590,7 @@ const ForestIsland = () => {
               scale={0.2}
               y={80}
               visible={false}
-            />
+            /> */}
           </Dummy>
 
         </ThirdPersonCamera>

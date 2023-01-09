@@ -275,7 +275,7 @@ const Leaderboard = () => {
                                                     {i.username}
                                                 </Typography>
                                                 <Typography variant="span" component="div">
-                                                    {i.sum}
+                                                    {i.sum * 5000}
                                                 </Typography>
                                             </CardContent>
                                         </Box>
