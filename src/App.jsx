@@ -19,7 +19,6 @@ import "./App.css";
 
 const viteBaseUrl = import.meta.env.VITE_BASE_URL;
 
-
 function App() {
   const theme = createTheme(Theme);
 
@@ -29,7 +28,6 @@ function App() {
         <CssBaseline />
         <BrowserRouter basename={`${viteBaseUrl}`}>
           <Routes>
-
             <Route index element={<World />} />
 
             <Route path="main-island" element={<MainIsland />} />
@@ -151,7 +149,6 @@ function App() {
                 <Iframe url={"https://360xp.co/ismartwebsite/contact-us/"} />
               }
             />
-
           </Routes>
         </BrowserRouter>
       </ThemeProvider>

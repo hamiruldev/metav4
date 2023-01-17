@@ -17,6 +17,7 @@ import ResponsiveDrawer from "../component/Drawer";
 
 const World = () => {
 
+  /* A react hook. */
   const [isGame, setGame] = useState(true);
   const [open, setOpen] = useState(false);
   const [startAnimate, setAnimate] = useState(false);
@@ -26,6 +27,7 @@ const World = () => {
 
   isInital == null && sessionStorage.setItem("inital", false);
 
+  /* A react hook that preload the assets. */
   const progress = usePreload(
     [
       "maps/tunnel/tunnel1.glb",
@@ -38,11 +40,18 @@ const World = () => {
     "0.10mb"
   );
 
+  /**
+   * When the user clicks the close button, the modal will close and the sessionStorage will be set to
+   * true.
+   */
   const handleClose = () => {
     setOpen(false);
     sessionStorage.setItem("inital", true);
   };
 
+  /**
+   * When the user clicks the "Start Game" button, the game starts and the camera is turned on.
+   */
   const handleInstructionClose = () => {
     setGame(false);
     const buttonCamera = document.getElementById("cameraButton")
@@ -50,6 +59,7 @@ const World = () => {
   };
 
 
+  /* A react hook that will set the state of `startAnimate` to true after 5 seconds. */
   useEffect(() => {
     const timer = setTimeout(() => {
       setAnimate(true);
@@ -57,8 +67,10 @@ const World = () => {
     return () => clearTimeout(timer);
   }, []);
 
+  /* A loading screen. */
   if (progress < 100)
 
+    /* A loading screen. */
     return (
       <div
         style={{

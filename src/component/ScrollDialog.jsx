@@ -7,7 +7,16 @@ import DialogTitle from "@mui/material/DialogTitle";
 import Typography from "@mui/material/Typography";
 import useMediaQuery from "@mui/material/useMediaQuery";
 
-import { Box, CircularProgress, ClickAwayListener, Stack, useTheme, styled, IconButton, Slide } from "@mui/material";
+import {
+  Box,
+  CircularProgress,
+  ClickAwayListener,
+  Stack,
+  useTheme,
+  styled,
+  IconButton,
+  Slide,
+} from "@mui/material";
 
 import CloseIcon from "@mui/icons-material/Close";
 import CardFeed from "./CardFeed";
@@ -20,29 +29,32 @@ import WelcomeButton from "./UiUx/WelcomeButton";
 import Maps from "./UiUx/Maps";
 import { useState } from "react";
 
-var menuData = [{ id: 1, name: 'Intrest form' }, { id: 2, name: 'share' }, { id: 3, name: 'help' }]
+var menuData = [
+  { id: 1, name: "Intrest form" },
+  { id: 2, name: "share" },
+  { id: 3, name: "help" },
+];
 
 const viteBaseUrl = import.meta.env.VITE_BASE_URL;
 
-
-
 const Transition = React.forwardRef(function Transition(props, ref) {
-  return <Slide
-    ref={ref}
-    {...props}
-    direction="up"
-    mountOnEnter
-    unmountOnExit
-    in={props.in}
-    style={{
-      transformOrigin: "0 0 0",
-      position: "relative",
-      zIndex: "1000000",
-    }}
-    {...(true ? { timeout: 1000 } : {})}
-  />;
+  return (
+    <Slide
+      ref={ref}
+      {...props}
+      direction="up"
+      mountOnEnter
+      unmountOnExit
+      in={props.in}
+      style={{
+        transformOrigin: "0 0 0",
+        position: "relative",
+        zIndex: "1000000",
+      }}
+      {...(true ? { timeout: 1000 } : {})}
+    />
+  );
 });
-
 
 const BootstrapDialog = styled(Dialog)(({ theme }) => ({
   "& .MuiDialogContent-root": {
@@ -72,11 +84,17 @@ const BootstrapDialogTitle = (props) => {
   const { children, handleClose, htmlFor, ...other } = props;
   const matches = useMediaQuery("(max-width:425px)");
 
-
-
-
   return (
-    <DialogTitle sx={{ m: 0, p: 2, display: "flex", justifyContent: "flex-end", width: "100%" }} {...other}>
+    <DialogTitle
+      sx={{
+        m: 0,
+        p: 2,
+        display: "flex",
+        justifyContent: "flex-end",
+        width: "100%",
+      }}
+      {...other}
+    >
       {htmlFor != "welcome" && htmlFor != "instruction" && handleClose ? (
         <IconButton
           aria-label="close"
@@ -94,23 +112,22 @@ const BootstrapDialogTitle = (props) => {
         >
           <CloseIcon sx={{ fontSize: matches ? "1em" : "1.5em" }} />
         </IconButton>
-      ) : null
-      }
-    </DialogTitle >
+      ) : null}
+    </DialogTitle>
   );
 };
 
 const AnimateBox = styled("div")({
   "@keyframes pulsate": {
     "0%": {
-      backgroundPosition: "0% 50%"
+      backgroundPosition: "0% 50%",
     },
     "50%": {
-      backgroundPosition: "100% 50%"
+      backgroundPosition: "100% 50%",
     },
     "100%": {
-      backgroundPosition: "0% 50%"
-    }
+      backgroundPosition: "0% 50%",
+    },
   },
   animation: "pulsate 4s ease infinite",
   background: "linear-gradient(270deg, #833ab4, #fd1d1d, #fcb045)",
@@ -134,66 +151,70 @@ export default function ScrollDialog({
   const [isAvatar, setAvatarButton] = React.useState(false);
   const [isLoading, setLoading] = React.useState(false);
   const [isSuccess, setSuccess] = React.useState(false);
-  const [isReady, setReady] = React.useState(false)
-  const [formStatus, setFormStatus] = React.useState('')
+  const [isReady, setReady] = React.useState(false);
+  const [formStatus, setFormStatus] = React.useState("");
 
   const matches = useMediaQuery("(max-width:425px)");
 
   const isLogin = sessionStorage.getItem("login");
 
-
   const handleAvatar = () => {
-
-
-    setLoading(true)
+    setLoading(true);
     setTimeout(() => {
-      setLoading(false)
-      setSuccess(true)
+      setLoading(false);
+      setSuccess(true);
       setTimeout(() => {
-        setSuccess(false)
-        setAvatarButton(false)
-        handleClose()
+        setSuccess(false);
+        setAvatarButton(false);
+        handleClose();
 
-        const registerEl = document.getElementById("RegisterButton")
-        registerEl.click()
-
-      }, 500)
-
-
+        const registerEl = document.getElementById("RegisterButton");
+        registerEl.click();
+      }, 500);
     }, 1000);
-  }
+  };
 
   const handleInst = () => {
-    handleClose("instructionClose")
-  }
+    handleClose("instructionClose");
+  };
 
   const handleFormStatus = (status) => {
-    setFormStatus(status)
-    setLoading(false)
-    handleClose()
+    setFormStatus(status);
+    setLoading(false);
+    handleClose();
 
-    const cameraEl = document.getElementById("cameraButton")
-    cameraEl.click()
-
-  }
+    const cameraEl = document.getElementById("cameraButton");
+    cameraEl.click();
+  };
 
   const handleReady = () => {
-    setReady(true)
-  }
+    setReady(true);
+  };
 
   const loginButton = () => {
-    const loginEl = document.getElementById("formButton")
-    loginEl.click()
-    loginEl.style.display = "block"
-  }
+    const loginEl = document.getElementById("formButton");
+    loginEl.click();
+    loginEl.style.display = "block";
+  };
 
   const registerButton = () => {
-    const loginEl = document.getElementById("formButton")
-    loginEl.click()
-    loginEl.style.display = "block"
-    setLoading(true)
-  }
+    const loginEl = document.getElementById("formButton");
+    loginEl.click();
+    loginEl.style.display = "block";
+    setLoading(true);
+  };
 
+  const notHTML = () => {
+    if (
+      htmlFor != "welcome" &&
+      htmlFor != "instruction" &&
+      htmlFor != "Info Board" &&
+      htmlFor != "coin Collected" &&
+      htmlFor != "avatar"
+    ) {
+      handleClose = false;
+    }
+  };
 
   return (
     <>
@@ -207,17 +228,29 @@ export default function ScrollDialog({
         scroll={scroll}
         aria-labelledby="scroll-dialog-title"
         aria-describedby="scroll-dialog-description"
-        className={(htmlFor == "welcome" || htmlFor == "avatar" || htmlFor == "login" || htmlFor == "register") && "imgBcg"}
+        className={
+          (htmlFor == "welcome" ||
+            htmlFor == "avatar" ||
+            htmlFor == "login" ||
+            htmlFor == "register") &&
+          "imgBcg"
+        }
         sx={{
           backgroundColor: "transparent",
           backgroundSize: "cover",
-          backgroundImage: (htmlFor == "welcome" || htmlFor == "avatar" || htmlFor == "login" || htmlFor == "register" || htmlFor == 'instruction') && `url(${viteBaseUrl}img/sky/cover3.JPG)`,
+          backgroundImage:
+            (htmlFor == "welcome" ||
+              htmlFor == "avatar" ||
+              htmlFor == "login" ||
+              htmlFor == "register" ||
+              htmlFor == "instruction") &&
+            `url(${viteBaseUrl}img/sky/cover3.JPG)`,
           "& .MuiPaper-root": {
             backgroundColor: "transparent",
           },
         }}
       >
-        <ClickAwayListener disableReactTree onClickAway={htmlFor != "welcome" && htmlFor != "instruction" && htmlFor != "Info Board" && htmlFor != "coin Collected" && htmlFor != "avatar" ? handleClose : false}>
+        <ClickAwayListener disableReactTree onClickAway={notHTML}>
           <AnimateBox>
             <Stack
               sx={{
@@ -234,7 +267,6 @@ export default function ScrollDialog({
                 borderRadius: "30px",
               }}
             >
-
               <BootstrapDialogTitle
                 component="div"
                 id="customized-dialog-title"
@@ -249,13 +281,17 @@ export default function ScrollDialog({
                   textAlign: "center",
                   flexDirection: "column",
                   pb: 0,
-                  overflow: "visible"
+                  overflow: "visible",
                 }}
                 dividers={scroll === "paper"}
               >
-
                 <Typography variant={matches ? "h5" : "h4"} id="titleDialog">
-                  {htmlFor == "needHelp" && <>How can we <span style={{ color: 'red' }}> HELP  </span> you ?</>}
+                  {htmlFor == "needHelp" && (
+                    <>
+                      How can we <span style={{ color: "red" }}> HELP </span>{" "}
+                      you ?
+                    </>
+                  )}
                   {htmlFor == "welcome" && "WELCOME"}
                   {htmlFor == "instruction" && "INSTRUCTION"}
                   {htmlFor == "login" && "LOGIN"}
@@ -277,53 +313,71 @@ export default function ScrollDialog({
                   }}
                   {...(true ? { timeout: 1000 } : {})}
                 >
-
                   <Box
                     sx={{
                       mt: 2,
                       width: "100%",
                       height: htmlFor == "needHelp" && matches && "50vh",
                       overflow: htmlFor == "needHelp" && matches && "auto",
-                      display: htmlFor == "menu" || htmlFor == "welcome" ? "flex" : "unset",
-                      justifyContent: htmlFor == "menu" || htmlFor == "welcome" ? "center" : "unset",
+                      display:
+                        htmlFor == "menu" || htmlFor == "welcome"
+                          ? "flex"
+                          : "unset",
+                      justifyContent:
+                        htmlFor == "menu" || htmlFor == "welcome"
+                          ? "center"
+                          : "unset",
 
-                      '&::-webkit-scrollbar': {
-                        width: '0.3em',
+                      "&::-webkit-scrollbar": {
+                        width: "0.3em",
                       },
-                      '&::-webkit-scrollbar-track': {
+                      "&::-webkit-scrollbar-track": {
                         background: "#f1f1f1",
                         borderRadius: "50px",
                       },
-                      '&::-webkit-scrollbar-thumb': {
-                        backgroundColor: '#888',
+                      "&::-webkit-scrollbar-thumb": {
+                        backgroundColor: "#888",
                         borderRadius: "50px",
                       },
-                      '&::-webkit-scrollbar-thumb:hover': {
-                        background: '#555',
+                      "&::-webkit-scrollbar-thumb:hover": {
+                        background: "#555",
                         borderRadius: "50px",
-                      }
+                      },
                     }}
-
                   >
+                    {htmlFor == "welcome" && (
+                      <Typography variant="body1" sx={{ width: "90%" }}>
+                        {`You are now in Fantasy Island. Choose your favourite avatar before start your exploration.`}
+                      </Typography>
+                    )}
 
-                    {htmlFor == "welcome" && <Typography variant="body1" sx={{ width: "90%" }}>
-                      {`You are now in Fantasy Island. Choose your favourite avatar before start your exploration.`}
-                    </Typography>}
-
-                    {htmlFor == "Info Board" && `Congrats! You can now play a game in the fantasy island. Go to future teleport at the end of this tunnel to explore the island.`}
-                    {htmlFor == "coin Collected" &&
+                    {htmlFor == "Info Board" &&
+                      `Congrats! You can now play a game in the fantasy island. Go to future teleport at the end of this tunnel to explore the island.`}
+                    {htmlFor == "coin Collected" && (
                       <Typography variant="body1">
                         {`You collected a golden coin in this Island.`}
                       </Typography>
-                    }
+                    )}
 
                     {htmlFor == "instruction" && <InstructionCtx />}
                     {htmlFor == "menu" && <ListMenu />}
                     {htmlFor == "map" && <Maps />}
-                    {htmlFor == "avatar" && <AvatarCard setAvatarButton={setAvatarButton} />}
+                    {htmlFor == "avatar" && (
+                      <AvatarCard setAvatarButton={setAvatarButton} />
+                    )}
                     {htmlFor == "needHelp" && <Form />}
-                    {htmlFor == "register" && <AuthForm htmlFor={htmlFor} handleFormStatus={handleFormStatus} />}
-                    {htmlFor == "login" && <AuthForm htmlFor={htmlFor} handleFormStatus={handleFormStatus} />}
+                    {htmlFor == "register" && (
+                      <AuthForm
+                        htmlFor={htmlFor}
+                        handleFormStatus={handleFormStatus}
+                      />
+                    )}
+                    {htmlFor == "login" && (
+                      <AuthForm
+                        htmlFor={htmlFor}
+                        handleFormStatus={handleFormStatus}
+                      />
+                    )}
 
                     {htmlFor == "product" && "products"}
                     {htmlFor === "video" && "video"}
@@ -357,11 +411,8 @@ export default function ScrollDialog({
                         allowFullScreen
                       ></iframe>
                     )}
-
-
                   </Box>
                 </Slide>
-
               </DialogContent>
 
               <DialogActions
@@ -373,7 +424,6 @@ export default function ScrollDialog({
                   // width: matches ? "300px" : "300px"
                 }}
               >
-
                 <Slide
                   direction="up"
                   in={true}
@@ -384,10 +434,12 @@ export default function ScrollDialog({
                   }}
                   {...(true ? { timeout: 1500 } : {})}
                 >
-
                   <Button
                     fullWidth
-                    disabled={htmlFor == "avatar" && !isAvatar || htmlFor == "welcome" && !isReady}
+                    disabled={
+                      (htmlFor == "avatar" && !isAvatar) ||
+                      (htmlFor == "welcome" && !isReady)
+                    }
                     sx={{
                       my: 2,
                       fontWeight: 900,
@@ -397,32 +449,55 @@ export default function ScrollDialog({
                       border: "2px solid white",
                       boxShadow: "0px 1px 0px 0px #fff6af",
                       display:
-                        htmlFor == "needHelp" || htmlFor == "Info Board" || htmlFor == "coin Collected" || htmlFor == "menu" || htmlFor == "map" || htmlFor == "register" || htmlFor == "login"
-                          ? "none" : "flex",
-                      background: htmlFor == "avatar" && isSuccess ? "linear-gradient(180deg,#89ff68 0%,#336d16 100%);" : "linear-gradient(to bottom, #ffec64 5%, #ffab23 100%)",
-                      color: htmlFor == "avatar" && isSuccess ? "#333333" : "#333333",
+                        htmlFor == "needHelp" ||
+                        htmlFor == "Info Board" ||
+                        htmlFor == "coin Collected" ||
+                        htmlFor == "menu" ||
+                        htmlFor == "map" ||
+                        htmlFor == "register" ||
+                        htmlFor == "login"
+                          ? "none"
+                          : "flex",
+                      background:
+                        htmlFor == "avatar" && isSuccess
+                          ? "linear-gradient(180deg,#89ff68 0%,#336d16 100%);"
+                          : "linear-gradient(to bottom, #ffec64 5%, #ffab23 100%)",
+                      color:
+                        htmlFor == "avatar" && isSuccess
+                          ? "#333333"
+                          : "#333333",
                     }}
-                    onClick={(() => {
-                      htmlFor == "login" && loginButton()
-                      htmlFor == "register" && registerButton()
-                      htmlFor == "avatar" && handleAvatar()
-                      htmlFor == "instruction" && handleInst()
-                      htmlFor == "welcome" && handleClose()
-
-                    })}
-                    endIcon={htmlFor == "avatar" && isLoading && <CircularProgress sx={{ color: "black" }} size={24} />}
+                    onClick={() => {
+                      htmlFor == "login" && loginButton();
+                      htmlFor == "register" && registerButton();
+                      htmlFor == "avatar" && handleAvatar();
+                      htmlFor == "instruction" && handleInst();
+                      htmlFor == "welcome" && handleClose();
+                    }}
+                    endIcon={
+                      htmlFor == "avatar" &&
+                      isLoading && (
+                        <CircularProgress sx={{ color: "black" }} size={24} />
+                      )
+                    }
                   >
-
-                    {htmlFor == "welcome" && <WelcomeButton handleReady={handleReady} isReady={isReady} />}
-                    {htmlFor == "instruction" && <WelcomeButton handleReady={handleReady} isReady={isReady} />}
+                    {htmlFor == "welcome" && (
+                      <WelcomeButton
+                        handleReady={handleReady}
+                        isReady={isReady}
+                      />
+                    )}
+                    {htmlFor == "instruction" && (
+                      <WelcomeButton
+                        handleReady={handleReady}
+                        isReady={isReady}
+                      />
+                    )}
                     {htmlFor == "avatar" && isSuccess && "Success"}
                     {htmlFor == "avatar" && !isSuccess && "Start"}
                   </Button>
-
                 </Slide>
-
               </DialogActions>
-
             </Stack>
           </AnimateBox>
         </ClickAwayListener>

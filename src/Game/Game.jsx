@@ -35,7 +35,7 @@ import {
   Camera,
 } from "lingo3d-react";
 
-import * as THREE from 'three'
+import * as THREE from "three";
 
 import LightArea from "../component/World/LightArea";
 import ScrollDialog from "../component/ScrollDialog";
@@ -44,7 +44,7 @@ import HtmlTxt from "../component/UiUx/HtmlTxt";
 const viteBaseUrl = import.meta.env.VITE_BASE_URL;
 
 const Game = () => {
-
+  /* Setting up the state of the game. */
   const dummyRef = useRef(null);
   const dummyBatteryRef = useRef(null);
   const cameraRef = useRef(null);
@@ -54,10 +54,9 @@ const Game = () => {
   const triggerBatteryRef = useRef(null);
   const htmlRef = useRef(null);
 
-
-  const scene = useScene()
+  const scene = useScene();
   const { width, height } = useWindowSize();
-  const getRenderer = useRenderer()
+  const getRenderer = useRenderer();
   const [running, setRunning] = useState(false);
   const [arrowPosition, setArrowPosition] = useState({ x: 0, y: 0, z: 0 });
   const [isVisible, setVisible] = useState({ state: false, name: "" });
@@ -66,12 +65,11 @@ const Game = () => {
   const [htmlFor, setHtmlFor] = useState();
   const [isGame, setGame] = useState(true);
 
-
+  /* Checking if the width is less than the height. */
   const isMobile = width < height;
 
   //player movement
   const handleClick = (e) => {
-
     const dummy = dummyRef.current;
     if (!dummy) return;
 
@@ -80,25 +78,35 @@ const Game = () => {
 
     setArrowPosition(e.point);
 
-    pointAnimation.visible = true
-    pointAnimation.bloom = true
+    pointAnimation.visible = true;
+    pointAnimation.bloom = true;
 
-    const animation = pointAnimation.animationManagers
-    animation["Scene"].play()
+    const animation = pointAnimation.animationManagers;
+    animation["Scene"].play();
 
     dummy.lookTo(e.point.x, undefined, e.point.z, 0.2);
     dummy.moveTo(e.point.x, undefined, e.point.z, 12);
 
     // active portal
-    const animationPortal = dummy.animationManagers
-    animationPortal["running"].play()
+    const animationPortal = dummy.animationManagers;
+    animationPortal["running"].play();
 
     dummy.onMoveToEnd = () => {
-      animationPortal["idle"].play()
-      pointAnimation.visible = false
+      animationPortal["idle"].play();
+      pointAnimation.visible = false;
     };
   };
 
+  /**
+   * "When the user clicks on the map, the player will move to the clicked location."
+   *
+   * The function is called when the user clicks on the map. The function is passed the event object and
+   * the id of the player. The function then sets the state of the player to visible and sets the
+   * position of the arrow to the clicked location. The function then checks if the device is mobile and
+   * if not, it moves the player to the clicked location.
+   *
+   * The function is called from the following code:
+   */
   const movePlayer = (e, id) => {
     setVisible({ state: true, name: id });
     const dummy = dummyRef.current;
@@ -109,69 +117,71 @@ const Game = () => {
     !isMobile && dummy.moveTo(e.point.x, undefined, e.point.z + 200, 12);
     !isMobile && setRunning(true);
 
-    if (!isMobile) dummy.onMoveToEnd = () => {
-      setRunning(false);
-    };
+    if (!isMobile)
+      dummy.onMoveToEnd = () => {
+        setRunning(false);
+      };
   };
 
   const openDialogToggle = (name) => {
-
     setDialogOpen(false);
     setTimeout(() => {
       if (isLogin == "false") {
         setDialogOpen(true);
-        setHtmlFor(name)
-      }
-      else {
+        setHtmlFor(name);
+      } else {
         setDialogOpen(false);
-        setHtmlFor()
-        hanldeCamera()
-      };
-
+        setHtmlFor();
+        hanldeCamera();
+      }
     }, 500);
   };
 
   const openPortal = (url) => {
-    window.open(` ${viteBaseUrl + url}`, "_self")
-  }
+    window.open(` ${viteBaseUrl + url}`, "_self");
+  };
 
   const handleItem = (name) => {
+    name == "Battery" && handleDialogToggle("Info Board");
 
-    name == "Battery" && handleDialogToggle("Info Board")
-
-    const allChildren = scene.children
-    const array1 = allChildren.filter(x => x.name == name)
+    const allChildren = scene.children;
+    const array1 = allChildren.filter((x) => x.name == name);
 
     // active portal
-    const animationPortal = portalRef.current.animationManagers
-    animationPortal["Take 001"].play()
-    portalRef.current.bloom = true
+    const animationPortal = portalRef.current.animationManagers;
+    animationPortal["Take 001"].play();
+    portalRef.current.bloom = true;
 
     //pass battery to player
-    dummyBatteryRef.current.visible = true
+    dummyBatteryRef.current.visible = true;
     dummyBatteryRef.current.animation = {
       y: [80, 80 + 0.5, 80, 80 - 0.5, 80],
-      rotationY: [0, 45, 90, 135, 180, 225, 270, 315]
-    }
+      rotationY: [0, 45, 90, 135, 180, 225, 270, 315],
+    };
 
     //remove battery
-    const MeshInModel = array1[0].children.filter(x => x.type != `Group` && x.name == 'batterySphere' || x.name == 'batteryModel')
+    const MeshInModel = array1[0].children.filter(
+      (x) =>
+        (x.type != `Group` && x.name == "batterySphere") ||
+        x.name == "batteryModel"
+    );
     MeshInModel?.map((item) => {
-      item.children.filter(x => x.type == 'Mesh').map((item) => {
-        item.material.dispose()
-        item.geometry.dispose()
-        item.parent.remove(item)
-      })
-    })
+      item.children
+        .filter((x) => x.type == "Mesh")
+        .map((item) => {
+          item.material.dispose();
+          item.geometry.dispose();
+          item.parent.remove(item);
+        });
+    });
 
-    scene.remove(array1[0])
+    scene.remove(array1[0]);
     triggerBatteryRef.current.dispose();
-
-  }
+  };
 
   const handleDialogToggle = (name) => {
     setDialogOpen(!dialogOpen);
-    setHtmlFor(name)
+    setHtmlFor(name);
   };
 
   const handleClose = (id) => {
@@ -180,41 +190,46 @@ const Game = () => {
 
   const animate = () => {
     const camera = scene.getObjectByName("cameraRef");
-    getRenderer.render(scene, camera.userData.manager.camera)
-    window.requestAnimationFrame(animate)
-  }
+    getRenderer.render(scene, camera.userData.manager.camera);
+    window.requestAnimationFrame(animate);
+  };
 
   const handlePlayerFall = () => {
-
     const dummy = dummyRef.current;
-    dummy.animationManagers["idle"].play()
+    dummy.animationManagers["idle"].play();
 
-    dummy.moveTo(-404.36, undefined, 194.50, 12);
+    dummy.moveTo(-404.36, undefined, 194.5, 12);
 
-    dummy.y = 238.87
-    dummy.x = -404.36
-    dummy.z = 194.50
-  }
+    dummy.y = 238.87;
+    dummy.x = -404.36;
+    dummy.z = 194.5;
+  };
 
   const handleCamera = () => {
     setTimeout(() => {
-      tpcRef.current.active = true
-    }, 500)
-  }
+      tpcRef.current.active = true;
+    }, 500);
+  };
 
+  /**
+   * It takes an idTxt as an argument, finds the element with that id, sets its visibility to visible,
+   * and then after 2.5 seconds sets its visibility back to hidden.
+   */
   const handleOnHtmlTxt = (idTxt) => {
-    const htmlTextElm = document.getElementById(`htmlRef${idTxt}`)
-    htmlTextElm.style.visibility = "visible"
+    const htmlTextElm = document.getElementById(`htmlRef${idTxt}`);
+    htmlTextElm.style.visibility = "visible";
     setTimeout(() => {
-      htmlTextElm.style.visibility = "hidden"
+      htmlTextElm.style.visibility = "hidden";
     }, 2500);
-  }
+  };
 
+  /**
+   * When the user clicks on the text, the text will disappear.
+   */
   const handleOffHtmlTxt = (idTxt) => {
-    const htmlTextElm = document.getElementById(`htmlRef${idTxt}`)
-    htmlTextElm.style.visibility = "hidden"
-  }
-
+    const htmlTextElm = document.getElementById(`htmlRef${idTxt}`);
+    htmlTextElm.style.visibility = "hidden";
+  };
 
   return (
     <>
@@ -235,7 +250,7 @@ const Game = () => {
       />
 
       <World>
-        {/* <LingoEditor /> */}
+        <LingoEditor />
         {/* <Library /> */}
         {/* <Toolbar /> */}
         {/* <Editor /> */}
@@ -250,21 +265,26 @@ const Game = () => {
 
         <LightArea />
 
-        <Model y={-2151.96} x={-3374.39} name="ground" src="maps/item/ground.glb" />
+        <Model
+          y={-2151.96}
+          x={-3374.39}
+          name="ground"
+          src="maps/item/ground.glb"
+        />
 
         <Plane
           id="plane"
           name="plane"
           visible={false}
           x={1412.35}
-          y={-2633.30}
+          y={-2633.3}
           z={-973.84}
-          scale={80.00}
-          rotationX={-90.00}
+          scale={80.0}
+          rotationX={-90.0}
           intersectIds={["player"]}
-          onIntersect={(() => {
-            handlePlayerFall()
-          })}
+          onIntersect={() => {
+            handlePlayerFall();
+          }}
         />
 
         <Model
@@ -280,11 +300,9 @@ const Game = () => {
           z={0}
           scale={70}
           // src="maps/tunnel1.glb"
-          src={`${viteBaseUrl}maps/tunnel/tunnel1.glb`}
+          src={`${viteBaseUrl}maps/tunnel/smgisland.glb`}
           onClick={!isMobile && handleClick}
-        >
-
-        </Model>
+        ></Model>
 
         <AreaLight
           x={474.83}
@@ -293,7 +311,7 @@ const Game = () => {
           rotationX={177.94}
           scale={3}
           opacityFactor={10}
-          intensity={50.00}
+          intensity={50.0}
           color={"#0368ff"}
           visible={false}
         />
@@ -304,9 +322,9 @@ const Game = () => {
           z={-6915.49}
           radius={400}
           targetIds="player"
-          onEnter={(() => {
-            openPortal(`main-island`)
-          })}
+          onEnter={() => {
+            openPortal(`main-island`);
+          }}
         />
 
         <SvgMesh
@@ -317,14 +335,16 @@ const Game = () => {
           roughnessFactor={0.4}
           roughness={0.4}
           scaleZ={0.1}
-          scaleX={1.50}
-          scaleY={1.50}
+          scaleX={1.5}
+          scaleY={1.5}
           color="#ff0000"
           emissiveColor="#223056"
           x={280.38}
           z={-6561.98}
           y={-1657.27}
-          animation={{ y: [-1657.27, -1657.27 + 20, -1657.27, -1657.27 - 20, -1657.27] }}
+          animation={{
+            y: [-1657.27, -1657.27 + 20, -1657.27, -1657.27 - 20, -1657.27],
+          }}
         />
 
         <Model
@@ -341,40 +361,35 @@ const Game = () => {
           scaleY={10}
           scaleZ={10}
           src={`${viteBaseUrl}maps/item/stargate.glb`}
-          onClick={((e) => {
-            handleClick(e)
-          })}
+          onClick={(e) => {
+            handleClick(e);
+          }}
         >
-
-          <Find bloom={isMobile ? false : false} adjustColor="#00458f" name="Portal">
-          </Find>
-          <HtmlTxt text={"Travel to Main Island"} url={''} id="main-island" />
-
+          <Find
+            bloom={isMobile ? false : false}
+            adjustColor="#00458f"
+            name="Portal"
+          ></Find>
+          <HtmlTxt text={"Travel to Main Island"} url={""} id="main-island" />
         </Model>
 
         <Cube
           name="triggerMainHtml"
           intersectIds={["player"]}
           color="red"
-
           opacity={0.1}
-
-          visible={false}
+          visible={true}
           x={287.07}
           y={-1584.27}
           z={-6662.48}
-
-          scale={20.00}
-
-          onIntersect={(() => {
-            handleOnHtmlTxt("main-island")
-          })}
-
-          onIntersectOut={(() => {
-            handleOffHtmlTxt("main-island")
-          })}
+          scale={20.0}
+          onIntersect={() => {
+            handleOnHtmlTxt("main-island");
+          }}
+          onIntersectOut={() => {
+            handleOffHtmlTxt("main-island");
+          }}
         />
-
 
         {/* // tunnel */}
 
@@ -409,9 +424,9 @@ const Game = () => {
             onClick={(e) => {
               movePlayer(e, "tvkiri01");
             }}
-          // outline={mouseOver}
-          // onMouseOver={() => setMouseOver(true)}
-          // onMouseOut={() => setMouseOver(false)}
+            // outline={mouseOver}
+            // onMouseOver={() => setMouseOver(true)}
+            // onMouseOut={() => setMouseOver(false)}
           >
             {/* {mouseOver && (
               <HTML>
@@ -903,7 +918,6 @@ const Game = () => {
         />
         {/* // tunnel */}
 
-
         <AreaLight
           name="batteryLight"
           x={-32.52}
@@ -912,43 +926,34 @@ const Game = () => {
           rotationY={82.72}
         />
 
-        <Group
-          name="Battery"
-          x={-123.60}
-          y={-1900}
-          z={5356.52}
-        >
-
-
+        <Group name="Battery" x={-123.6} y={-1900} z={5356.52}>
           {/* //collect token */}
           <Trigger
             ref={triggerBatteryRef}
-            radius={250.00}
+            radius={250.0}
             name="triggerBattery"
             targetIds="player"
-            onEnter={(() => {
-              handleOnHtmlTxt("props-coin")
-            })}
-            onExit={(() => {
-              handleOffHtmlTxt("props-coin")
-            })}
+            onEnter={() => {
+              handleOnHtmlTxt("props-coin");
+            }}
+            onExit={() => {
+              handleOffHtmlTxt("props-coin");
+            }}
             helper={true}
             visible={true}
-
           />
 
           {/* //info token */}
           <Sphere
             name="batterySphere"
-            scale={2.50}
+            scale={2.5}
             color="#ffa400"
             opacity={0.5}
             visible={true}
             intersectIds={["player"]}
-            onIntersect={(() => {
-              handleItem("Battery")
-            })}
-
+            onIntersect={() => {
+              handleItem("Battery");
+            }}
           />
 
           <Model
@@ -959,11 +964,14 @@ const Game = () => {
             animationPaused={false}
             animationRepeat={false}
             animation={{ rotationY: [0, 45, 90, 135, 180, 225, 270, 315] }}
-
           >
-            <HtmlTxt ref={htmlRef} text={"Collect your coin"} url={''} id="props-coin" />
+            <HtmlTxt
+              ref={htmlRef}
+              text={"Collect your coin"}
+              url={""}
+              id="props-coin"
+            />
           </Model>
-
         </Group>
 
         <Camera
@@ -976,9 +984,8 @@ const Game = () => {
           y={-841.35}
           z={-4588.04}
           rotationY={1.48}
-          rotationX={-5.30}
+          rotationX={-5.3}
           rotationZ={-0.99}
-
         />
 
         <ThirdPersonCamera
@@ -993,12 +1000,10 @@ const Game = () => {
           zoom={1}
           innerY={100}
         >
-
           <Dummy
             id="player"
             name="player"
             ref={dummyRef}
-
             strideMove
             strideMode="free"
             src={`${viteBaseUrl}3dCharacter/new/character1.glb`}
@@ -1006,7 +1011,6 @@ const Game = () => {
             animation={running ? "running" : "idle"}
             width={50}
             depth={50}
-
             rotationY={180.74}
             x={599.08}
             y={-2004.04}
@@ -1022,20 +1026,17 @@ const Game = () => {
               y={80}
               visible={false}
               bloom
-
             />
 
             <AreaLight
-              scale={0.20}
+              scale={0.2}
               rotationY={82.72}
               x={9.59}
               y={78.85}
-              z={-9.10}
+              z={-9.1}
               helper={true}
             />
-
           </Dummy>
-
         </ThirdPersonCamera>
 
         <Model
@@ -1052,30 +1053,26 @@ const Game = () => {
           y={arrowPosition.y + 50}
           z={arrowPosition.z}
         />
-
       </World>
 
-      {
-        isMobile && (
-          <Joystick
-            onMove={(e) => {
-              const fox = dummyRef.current;
-              if (!fox) return;
+      {isMobile && (
+        <Joystick
+          onMove={(e) => {
+            const fox = dummyRef.current;
+            if (!fox) return;
 
-              fox.strideForward = -e.y * 7;
-              fox.strideRight = -e.x * 5;
-            }}
-            onMoveEnd={() => {
-              const fox = dummyRef.current;
-              if (!fox) return;
+            fox.strideForward = -e.y * 7;
+            fox.strideRight = -e.x * 5;
+          }}
+          onMoveEnd={() => {
+            const fox = dummyRef.current;
+            if (!fox) return;
 
-              fox.strideForward = 0;
-              fox.strideRight = 0;
-            }}
-          />
-        )
-      }
-
+            fox.strideForward = 0;
+            fox.strideRight = 0;
+          }}
+        />
+      )}
     </>
   );
 };
